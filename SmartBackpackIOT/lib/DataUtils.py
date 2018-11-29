@@ -35,5 +35,6 @@ def getLeveByHum(hum):
         hum = 2
     return hum
 
+
 def roundHum(x, base=5):
     return int(base * round(float(x)/base))

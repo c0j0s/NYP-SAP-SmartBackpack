@@ -24,6 +24,20 @@
         }
     },
     "settings":{
-        "buzzer":0
+        "buzzer":0,
+        "humidity_range":{
+            "red":{
+                "min":30,
+                "max":50
+            },
+            "blue":{
+                "min":30,
+                "max":10
+            },
+            "green":{
+                "min":0,
+                "max":10
+            }
+        }
     }
 }

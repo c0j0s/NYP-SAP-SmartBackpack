@@ -91,7 +91,7 @@ def main():
 
     client_sock = None        
     client_sock, client_info = server_sock.accept()
-    
+
     # Main Bluetooth server loop
     while True:
 
@@ -103,6 +103,7 @@ def main():
 
             # Read the data sent by the client
             data = client_sock.recv(1024)
+            data = data.replace("\r\n","")
             if len(data) == 0:
                 break
 

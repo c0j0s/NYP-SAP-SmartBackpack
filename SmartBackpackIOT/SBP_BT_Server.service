@@ -7,7 +7,7 @@ Type=simple
 User=root
 Group=root
 WorkingDirectory=/home/pi/SmartBackpack
-ExecStart=/home/pi/SmartBackpack/SBP_BT_Server.py -l /home/pi/SmartBackpack/SBP_BT_Server.log
+ExecStart=/usr/bin/python2 /home/pi/SmartBackpack/SBP_BT_Server.py -l /home/pi/SmartBackpack/SBP_BT_Server.log
  
 [Install]
 WantedBy=multi-user.target
