@@ -1,4 +1,4 @@
-from SBP_LED import SBP_LED
+from lib.SBP_LED import SBP_LED
 import time
 
 class SBP_LED_Controller:
@@ -8,31 +8,33 @@ class SBP_LED_Controller:
     def __init__(self):
         self.led_port_dist = {}
 
-    def __init__(self,led_port_dist):
-        self.led_port_dist = led_port_dist
-        self.init()
-    
-    def init(self):
-        for key,val in self.led_port_dist.items():
-            self.addLED(key,val)
+    def set_LED_switch_interval(self,seconds = 1):
+        self.led_switch_interval = seconds
 
-    def addLED(name,port):
+    def addLED(self,name,port):
         self.led_port_dist[name] = SBP_LED(port)
 
-    def litSingleLED(name):
+    def getLED(self,name):
+        return self.led_port_dist[name]
+
+    def litSingleLED(self,name):
         for key,val in self.led_port_dist.items():
             if key is name:
                 val.on()
             else:
-                val.off
+                val.off()
             time.sleep(self.led_switch_interval)
     
-    def litMultipleLED(namelist)
+    def litMultipleLED(self,namelist):
         for key,val in self.led_port_dist.items():
             if key in namelist:
                 val.on()
             else:
-                val.off
+                val.off()
             time.sleep(self.led_switch_interval)
+
+    def offAllLED(self):
+        for key,val in self.led_port_dist.items():
+                val.off()
             
 

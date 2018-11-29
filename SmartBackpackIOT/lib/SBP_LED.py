@@ -7,11 +7,11 @@ class SBP_LED:
         grovepi.pinMode(LED,"OUTPUT")
     
     def on(self):
-        print("LIT " + str(self.LED))
+        #print("LIT " + str(self.LED))
         grovepi.digitalWrite(self.LED,1)
 
     def off(self):
-        print("OFF " + str(self.LED))
+        #print("OFF " + str(self.LED))
         grovepi.digitalWrite(self.LED,0)
 
     def litForSeconds(self,seconds):
