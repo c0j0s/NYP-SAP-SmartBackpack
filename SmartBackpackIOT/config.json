@@ -1,0 +1,29 @@
+{
+    "device":{
+        "sensors":{
+            "particle": 26,
+            "temp_hum": 7,
+            "button":5
+        },
+        "actuators":{
+            "led_green":2,
+            "led_blue":3,
+            "led_red":4,
+            "buzzer":6
+        }
+    },
+    "env":{
+        "mysql":{
+            "host":"localhost",
+            "user":"root",
+            "password":"root",
+	    "database":"SMARTBACKPACK"
+        },
+        "HANA":{
+
+        }
+    },
+    "settings":{
+        "buzzer":1
+    }
+}
