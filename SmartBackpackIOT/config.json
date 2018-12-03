@@ -1,7 +1,7 @@
 {
     "device":{
         "sensors":{
-            "particle": 26,
+            "particle": "/dev/ttyAMA0",
             "temp_hum": 7,
             "button":5
         },
@@ -13,11 +13,10 @@
         }
     },
     "env":{
-        "mysql":{
+        "redis":{
             "host":"localhost",
-            "user":"root",
-            "password":"root",
-	    "database":"SMARTBACKPACK"
+            "port":"6379",
+            "db":"0"
         },
         "HANA":{
 
@@ -25,6 +24,8 @@
     },
     "settings":{
         "buzzer":0,
+        "minute_to_record_data":0.2,
+        "seconds_to_update_data":5,
         "humidity_range":{
             "red":{
                 "min":30,
@@ -38,6 +39,7 @@
                 "min":0,
                 "max":10
             }
-        }
+        },
+        "device_uuid":"SBP001"
     }
 }

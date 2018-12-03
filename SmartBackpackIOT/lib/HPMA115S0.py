@@ -13,7 +13,7 @@ class HPMA115S0:
     _pm10 = None
     _dataBuf = [None] * (HPM_READ_PARTICLE_MEASUREMENT_LEN - 1)
 
-    def __init__(self, ser):
+    def __init__(self, ser, debug=False):
         """
         Constructor for the HPMA115S0 class
         """
@@ -25,11 +25,15 @@ class HPMA115S0:
         self._serial.timeout = 1
         self._serial.open()
 
+        self.debug = debug
+
     def init(self):
         """
         Function which initializes the sensor.
         """
-        print("Initializing")
+        if self.debug:
+            print("[HPMA115S0] init: Initializing")
+            
         time.sleep(0.1)
         self.startParticleMeasurement()
         time.sleep(0.1)

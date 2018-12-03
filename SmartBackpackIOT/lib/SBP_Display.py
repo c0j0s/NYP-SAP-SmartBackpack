@@ -7,7 +7,7 @@ class SBP_Display:
     DISPLAY_RGB_ADDR = 0x62
     DISPLAY_TEXT_ADDR = 0x3e
 
-    def __init__(self):
+    def __init__(self, debug=False):
         self.bus = smbus.SMBus(1)
 
     # set backlight to (R,G,B) (values from 0..255 for each)

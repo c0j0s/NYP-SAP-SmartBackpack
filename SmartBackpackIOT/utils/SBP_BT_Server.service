@@ -1,0 +1,16 @@
+[Unit]
+Description=Raspberry PI Bluetooth Server
+After=bluetooth.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/home/pi/SmartBackpackIOT
+ExecStart=/usr/bin/sudo /usr/bin/python3 /home/pi/SmartBackpackIOT/SBP_BT_Server.py
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=SBP_BT_Server
+ 
+[Install]
+WantedBy=multi-user.target

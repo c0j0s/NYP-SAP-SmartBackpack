@@ -5,36 +5,37 @@ class SBP_LED_Controller:
     led_port_dist = None
     led_switch_interval = 1
 
-    def __init__(self):
+    def __init__(self, debug=False):
         self.led_port_dist = {}
+        self.debug = debug
 
     def set_LED_switch_interval(self,seconds = 1):
         self.led_switch_interval = seconds
 
     def addLED(self,name,port):
-        self.led_port_dist[name] = SBP_LED(port)
+        self.led_port_dist[name] = SBP_LED(port,self.debug)
 
     def getLED(self,name):
         return self.led_port_dist[name]
 
     def litSingleLED(self,name):
-        for key,val in self.led_port_dist.items():
+        for key, led in self.led_port_dist.items():
             if key is name:
-                val.on()
+                led.on()
             else:
-                val.off()
+                led.off()
             time.sleep(self.led_switch_interval)
     
     def litMultipleLED(self,namelist):
-        for key,val in self.led_port_dist.items():
+        for key, led in self.led_port_dist.items():
             if key in namelist:
-                val.on()
+                led.on()
             else:
-                val.off()
+                led.off()
             time.sleep(self.led_switch_interval)
 
     def offAllLED(self):
-        for key,val in self.led_port_dist.items():
-                val.off()
+        for key, led in self.led_port_dist.items():
+                led.off()
             
 
