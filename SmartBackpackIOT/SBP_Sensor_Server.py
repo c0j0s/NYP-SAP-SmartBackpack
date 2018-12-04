@@ -252,6 +252,7 @@ def main():
                     light_level = getLeveByHum(hum)
                     if light_level is 2:
                         led_controller.litSingleLED('red')
+                        buzzer.buzzForSeconds(1)
                     elif light_level is 1:
                         led_controller.litSingleLED('blue')
                     elif light_level is 0:
@@ -268,7 +269,7 @@ def main():
                 print("-"*60)
                 traceback.print_exc(file=sys.stdout)
                 print("-"*60)
-                pass
+                break
             except:
                 print("Exception in user code:")
                 print("-"*60)

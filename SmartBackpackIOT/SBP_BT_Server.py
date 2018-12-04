@@ -118,6 +118,9 @@ def main():
                 cmd_reboot_sensor_server(client_sock)
             elif data == "cmd_reboot_bt_server":
                 cmd_reboot_bt_server(client_sock)
+            elif data == "cmd_disconnect":
+                if client_sock is not None:
+                    client_sock.close()
             else:
                 result['msg'] = "Not supported"
 
@@ -137,7 +140,7 @@ def main():
             traceback.print_exc(file=sys.stdout)
             print("-"*60)
 
-            pass
+            break
         except KeyboardInterrupt:
             if client_sock is not None:
                 client_sock.close()
@@ -219,7 +222,6 @@ def cmd_reboot_bt_server(client_sock):
         os.execv(os.path.dirname(__file__) + "/SBP_BT_Server.py","")
     except Exception as err:
         print(err)
-    
 
 if __name__ == '__main__':
     init()

@@ -36,6 +36,7 @@ class SBP_LED_Controller:
 
     def offAllLED(self):
         for key, led in self.led_port_dist.items():
-                led.off()
+            led.off()
+            time.sleep(self.led_switch_interval)
             
 
