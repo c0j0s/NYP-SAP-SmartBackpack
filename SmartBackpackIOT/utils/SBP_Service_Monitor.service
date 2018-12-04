@@ -1,0 +1,16 @@
+[Unit]
+Description=Smart Backpack Service monitoring service
+After=network.target
+ 
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/home/pi/SmartBackpackIOT
+ExecStart=/usr/bin/python3 /home/pi/SmartBackpackIOT/SBP_Service_Monitor.py 
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=SBP_Sensor_Server
+ 
+[Install]
+WantedBy=multi-user.target

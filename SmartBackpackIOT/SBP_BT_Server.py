@@ -105,7 +105,11 @@ def main():
             elif data == "ping":
                 result['msg'] = "Pong"
             elif data == "get_sensor_status":
-                result = get_sensor_status()
+                result = get_service_status('sensor')
+            elif data == "get_bt_status":
+                result = get_service_status('bt')
+            elif data == "get_sensor_data":
+                result = get_sensor_data()
             elif data == "sync_holding_zone":
                 result = sync_holding_zone()
             elif data == "cmd_reboot_now":
@@ -133,7 +137,7 @@ def main():
             traceback.print_exc(file=sys.stdout)
             print("-"*60)
 
-            break
+            pass
         except KeyboardInterrupt:
             if client_sock is not None:
                 client_sock.close()
@@ -145,8 +149,25 @@ def main():
             print("-"*60)
 
             break
+        except bluetooth.btcommon.BluetoothError as ex:
+            if client_sock is not None:
+                client_sock.close()
+            print( ord(ex.args[0][1]) + ord(ex.args[0][2]) )
+            break
 
-def get_sensor_status():
+def get_service_status(servicename):
+    result = {}
+    if servicename is 'sensor':
+        service = 'SBP_Sensor_Server.service'
+    elif servicename is 'bt':
+        service = 'SBP_BT_Server.service'
+    else:
+        service = servicename
+
+    result['msg'] = subprocess.getoutput(['sudo systemctl status ' + str(service)]).split("\n")[2]
+    return result
+
+def get_sensor_data():
     result = {}
     result['hum'] = redis_cursor.get('hum')
     result['temp'] = redis_cursor.get('temp')
