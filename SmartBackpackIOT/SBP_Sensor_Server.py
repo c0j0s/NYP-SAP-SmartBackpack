@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 #SBP libraries
 from lib.HPMA115S0 import HPMA115S0
 from lib.SBP_Display import SBP_Display
@@ -15,11 +16,12 @@ import math
 import json,csv
 import sys, traceback
 import signal
+import socket
 #datetime
 import time
 import datetime
 
-debug = True
+debug = False
 config_file = "./config.json"
 temp_hum_data_file = "./src/temp_hum_data.csv"
 testing_button_triggered = 0
@@ -39,6 +41,7 @@ def init():
         global redis_cursor
 
         global killer
+        global debug
 
         global minute_to_record_data
         global seconds_to_update_data
@@ -56,7 +59,8 @@ def init():
         actuator_path = config['device']['actuators']
         redis_path = config['env']['redis']
         hana_path = config['env']['HANA']
-        custom_settings = config['settings']
+        debug = config['settings']['debug']
+        sensor_server_settings = config['settings']['Sensor_Server_Settings']
 
         #init sensors
         pm_sensor_port = sensor_path['particle']
@@ -81,10 +85,10 @@ def init():
         led_controller.addLED('red',led_red_port)
 
         #load custom settings
-        buzzer = SBP_Buzzer(buzzer_port,custom_settings['buzzer'],debug=debug)
+        buzzer = SBP_Buzzer(buzzer_port,sensor_server_settings['buzzer'],debug=debug)
 
-        minute_to_record_data = custom_settings['minute_to_record_data']
-        seconds_to_update_data = custom_settings['seconds_to_update_data']
+        minute_to_record_data = sensor_server_settings['minute_to_record_data']
+        seconds_to_update_data = sensor_server_settings['seconds_to_update_data']
         countdown_to_record_data = calIntervalNeeded(minute_to_record_data,seconds_to_update_data)
 
         #init redis
@@ -97,6 +101,16 @@ def init():
         #start display
         display = SBP_Display()
         display.setDisplayOn()
+
+        if debug:
+            #print ip on boot
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))
+            ip = s.getsockname()[0]
+            s.close()
+            display.setDisplayText("[Debug mode]\n" + str(ip))
+            time.sleep(5)
+            display.setDisplayText_noRefresh("[Debug mode]\npress the btn >")
 
         #debug log
         if debug:
@@ -161,14 +175,12 @@ def main():
         print(temp_hum_data_file + " loaded")
 
     try:
-    #start loop
+        """
+        =================================================================================================================
+        MAIN SERVER LOOP
+        =================================================================================================================
+        """
         while True:
-
-            if countdown_to_update is 0:
-                countdown_to_update = countdown_to_record_data
-                output_data_to_hoding_file()
-            else:
-                countdown_to_update = countdown_to_update - 1
 
             #killer to handle service stopping
             if killer.kill_now:
@@ -218,6 +230,13 @@ def main():
                     redis_cursor.set('pm2_5',pm2_5)
                     redis_cursor.set('pm10',pm10)
 
+                    #handles holding zone
+                    if countdown_to_update is 0:
+                        countdown_to_update = countdown_to_record_data
+                        output_data_to_hoding_file(hum,temp,pm2_5,pm10)
+                    else:
+                        countdown_to_update = countdown_to_update - 1
+
                     #handel display output
                     if pm2_5 is 0 or pm10 is 0:
                         displayAlternate = 0
@@ -248,8 +267,8 @@ def main():
                 print("-"*60)
                 traceback.print_exc(file=sys.stdout)
                 print("-"*60)
-                break
-            except Exception as ex:
+                pass
+            except:
                 print("Exception in user code:")
                 print("-"*60)
                 traceback.print_exc(file=sys.stdout)
@@ -257,17 +276,20 @@ def main():
                 break
 
             time.sleep(5)
+
+            """
+            =================================================================================================================
+            END
+            =================================================================================================================
+            """
+
     except KeyboardInterrupt:
             #clean up devices
             closing()
             print ("Keyboard interrupted")
             exit(0)
         
-def output_data_to_hoding_file():
-    hum = redis_cursor.get("hum").decode("utf-8")
-    temp = redis_cursor.get("temp").decode("utf-8")
-    pm2_5 = redis_cursor.get("pm2_5").decode("utf-8")
-    pm10 = redis_cursor.get("pm10").decode("utf-8")
+def output_data_to_hoding_file(hum,temp,pm2_5,pm10):
     current = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 
     with open("holding_zone","a") as f:

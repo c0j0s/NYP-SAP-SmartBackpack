@@ -23,23 +23,30 @@
         }
     },
     "settings":{
-        "buzzer":0,
-        "minute_to_record_data":0.2,
-        "seconds_to_update_data":5,
-        "humidity_range":{
-            "red":{
-                "min":30,
-                "max":50
-            },
-            "blue":{
-                "min":30,
-                "max":10
-            },
-            "green":{
-                "min":0,
-                "max":10
-            }
+        "device_uuid":"SBP001",
+        "debug":true,
+        "BT_Server_Settings":{
+            "clear_holding_zone_after_sync":1
         },
-        "device_uuid":"SBP001"
+        "Sensor_Server_Settings":{
+            "buzzer":0,
+            "enable_led":0,
+            "minute_to_record_data":0.2,
+            "seconds_to_update_data":5,
+            "humidity_range":{
+                "red":{
+                    "min":30,
+                    "max":50
+                },
+                "blue":{
+                    "min":30,
+                    "max":10
+                },
+                "green":{
+                    "min":0,
+                    "max":10
+                }
+            }
+        }
     }
 }

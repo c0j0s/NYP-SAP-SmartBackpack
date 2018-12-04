@@ -17,4 +17,4 @@ class SBP_Redis_Wrapper:
     def get(self, key):
         if self.debug:
             print("[REDIS] get: " + key)
-        return self.r.get(key)
+        return self.r.get(key).decode("utf-8")

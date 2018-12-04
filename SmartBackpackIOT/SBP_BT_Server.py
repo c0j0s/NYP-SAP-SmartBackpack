@@ -1,15 +1,51 @@
-#!/usr/bin/python
-
-import sys
+#!/usr/bin/python3
+#SBP libraries
+from lib.SBP_Redis_Wrapper import SBP_Redis_Wrapper
+from lib.Common import *
+#utils
+import sys, traceback
 import os
-import time
+import signal
+import redis
+import json
 from bluetooth import *
+import subprocess
+#datetime
+import time
+import datetime
+
+debug=False
+config_file = "config.json"
+
+def init():
+    print("Initialising BT Server")
+
+    global redis_cursor
+    global debug
+    global clear_holding_zone_after_sync
+
+    #load config files
+    try:
+        with open(config_file) as f:
+            config = json.load(f)
+    except:
+        print("[INIT] Fail to load configs")
+        exit(0)
+        
+    redis_path = config['env']['redis']
+    host = redis_path['host']
+    redis_cursor = SBP_Redis_Wrapper(host,debug=debug)
+
+    debug = config['settings']['debug']
+    BT_server_settings = config['settings']['BT_Server_Settings'] 
+    clear_holding_zone_after_sync = BT_server_settings['clear_holding_zone_after_sync']
 
 # Main loop
 def main():
+
     killer = GracefulKiller()
 
-    # We need to wait until Bluetooth init is done
+    # wait until Bluetooth init is done
     time.sleep(10)
 
     # Make device visible
@@ -34,14 +70,13 @@ def main():
                        service_classes=[uuid, SERIAL_PORT_CLASS],
                        profiles=[SERIAL_PORT_PROFILE])
 
-    # These are the operations the service supports
-    # Feel free to add more
     operations = ["ping", "example"]
+
+    print("Startup complete waiting for connection")
 
     client_sock = None        
     client_sock, client_info = server_sock.accept()
 
-    # Main Bluetooth server loop
     while True:
 
         #killer to handle service stopping
@@ -55,7 +90,6 @@ def main():
             
             print("Accepted connection from ", client_info)
 
-            # Read the data sent by the client
             data = client_sock.recv(1024)
             data = data.decode("utf-8").replace("\r\n","")
             if len(data) == 0:
@@ -63,32 +97,109 @@ def main():
 
             print("Received [%s]" % data)
 
+            result = {}
+
             # Handle the request
             if data == "getop":
-                response = "op:%s" % ",".join(operations)
+                result['msg'] = "op:%s" % ",".join(operations)
             elif data == "ping":
-                response = "msg:Pong"
-            elif data == "example":
-                response = "msg:This is an example"
-            # Insert more here
+                result['msg'] = "Pong"
+            elif data == "get_sensor_status":
+                result = get_sensor_status()
+            elif data == "sync_holding_zone":
+                result = sync_holding_zone()
+            elif data == "cmd_reboot_now":
+                cmd_reboot_now(client_sock)
+            elif data == "cmd_reboot_sensor_server":
+                cmd_reboot_sensor_server(client_sock)
+            elif data == "cmd_reboot_bt_server":
+                cmd_reboot_bt_server(client_sock)
             else:
-                response = "msg:Not supported"
+                result['msg'] = "Not supported"
 
-            client_sock.send(response)
-            print("Sent back [%s]" % response)
+            if result is not {}:
+                response = json.dumps(result)
+                client_sock.send(response)
+                print("Sent back : %s" % response)
             
         except IOError: 
             print ("IOError ")
-            pass
-
-        except KeyboardInterrupt:
-
             if client_sock is not None:
                 client_sock.close()
-
             server_sock.close()
-
             print("Server going down")
+
+            print("-"*60)
+            traceback.print_exc(file=sys.stdout)
+            print("-"*60)
+
+            break
+        except KeyboardInterrupt:
+            if client_sock is not None:
+                client_sock.close()
+            server_sock.close()
+            print("Server going down")
+
+            print("-"*60)
+            traceback.print_exc(file=sys.stdout)
+            print("-"*60)
+
             break
 
-main()
+def get_sensor_status():
+    result = {}
+    result['hum'] = redis_cursor.get('hum')
+    result['temp'] = redis_cursor.get('temp')
+    result['pm2_5'] = redis_cursor.get('pm2_5')
+    result['pm10'] = redis_cursor.get('pm10')
+    return result
+
+def sync_holding_zone():
+    result = {}
+    with open("holding_zone","r+") as f:
+        lines = [line.rstrip('\n') for line in f]
+        result['data'] = lines
+
+        if clear_holding_zone_after_sync is 1:
+            f.truncate(0)
+        f.close()
+
+    return result
+
+def cmd_reboot_now(client_sock):
+    client_sock.send("{'msg':'System rebooting now, reconnect after reboot'}")
+    os.system("sudo reboot")
+
+def cmd_reboot_sensor_server(client_sock):
+    client_sock.send("{'msg':'Restarting Sensor Service'}")
+    print("Sent back : {'msg':'Restarting Sensor Service'}")
+
+    try:
+        return_code = os.system("sudo systemctl restart SBP_Sensor_Server.service")
+        if(return_code is 0):
+            time.sleep(5)
+            status = subprocess.getoutput(['sudo systemctl status SBP_Sensor_Server.service']).split("\n")[2]
+        else:
+            status = "Fail to reboot sensor service"
+
+        print("Sent back : %s" % status)
+        client_sock.send("{'msg':'"+str(status)+"'}")
+    except subprocess.CalledProcessError as err:
+        print(err)
+
+
+def cmd_reboot_bt_server(client_sock):
+    """
+    NOT WORKING, PENDING FOR REVIEW
+    """
+    client_sock.send("{'msg':'Restarting BT Service'}")
+    print("Sent back : {'msg':'Restarting BT Service'}")
+    try:
+        os.execv(os.path.dirname(__file__) + "/SBP_BT_Server.py","")
+    except Exception as err:
+        print(err)
+    
+
+if __name__ == '__main__':
+    init()
+    main()
