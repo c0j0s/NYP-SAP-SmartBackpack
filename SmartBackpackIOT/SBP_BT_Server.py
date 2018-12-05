@@ -121,6 +121,8 @@ def main():
             elif data == "cmd_disconnect":
                 if client_sock is not None:
                     client_sock.close()
+            elif data == "cmd_toggle_debug":
+                result = cmd_toggle_debug()
             elif "sh_" in data :
                 sh_execute_command(client_sock,data)
             else:
@@ -209,6 +211,18 @@ def cmd_reboot_bt_server(client_sock):
         os.execv(os.path.dirname(__file__) + "/SBP_BT_Server.py","")
     except Exception as err:
         print(err)
+
+def cmd_toggle_debug():
+    with open(config_file) as f:
+        config = json.load(f)
+        if debug:
+            config["settings"]["debug"] = False
+        else:
+            config["settings"]["debug"] = True
+        f.close()
+    with open(config_file,'w',encoding='utf-8') as outfile:
+        json.dump(config, outfile, ensure_ascii=False,indent = 4)
+    return "{'msg':'Debug mode for sensor server changed to: " + str(config["settings"]["debug"]) +"'}"
 
 def sh_execute_command(client_sock,data):
     """

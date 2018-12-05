@@ -76,7 +76,8 @@ class HPMA115S0:
                             respIdx += 1
                         calChecksum = (65536 - calChecksum) % 256
                         if (calChecksum == respBuf[2 + respBuf[1]]):
-                            print("received valid data")
+                            if self.debug:
+                                print("[HPMA115S0] readCmdResp: received valid data")
                             for i in range(0, len(self._dataBuf)):
                                 self._dataBuf[i] = 0
                             j = 0

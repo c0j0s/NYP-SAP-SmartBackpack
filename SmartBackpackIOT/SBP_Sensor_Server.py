@@ -14,7 +14,7 @@ import redis
 import subprocess
 import math
 import json,csv
-import sys, traceback
+import sys, traceback, os
 import signal
 import socket
 #datetime
@@ -216,8 +216,8 @@ def main():
                         pm10 = pm_sensor._pm10
 
                         if debug:
-                            print("PM2.5: %d ug/m3" % (pm2_5))
-                            print("PM 10: %d ug/m3" % (pm10))
+                            print("[HPMA115S0] PM2.5: %d ug/m3" % (pm2_5))
+                            print("[HPMA115S0] PM 10: %d ug/m3" % (pm10))
 
                     #temp and hum sensor
                     [temp,hum] = grovepi.dht(temp_hum,0)  
@@ -234,10 +234,12 @@ def main():
                     #check sensor data
                     if temp is -1 and hum is -1:
                         #sensor error disconnect power and reboot device
-                        print("[Fatal] SENSOR ERROR, disconnect power and reboot the device")
-                        print("[Fatal] Stopping monitoring service to prevent service boot loop")
-                        os.system("sudo systemctl stop SBP_Service_Monitor.service")
-                        print("[Fatal] Exiting sensor server")
+                        print("[Fatal] SENSOR ERROR, sensor service suiciding and wait for reboot")
+                        #print("[Fatal] SENSOR ERROR, disconnect power and reboot the device")
+                        print("[Fatal] SENSOR ERROR, hum:{} temp:{}".format(temp,hum))
+                        #print("[Fatal] Stopping monitoring service to prevent service boot loop")
+                        #os.system("sudo systemctl stop SBP_Service_Monitor.service")
+                        #print("[Fatal] Exiting sensor server")
                         eixt(0)
 
                     #store in redis
