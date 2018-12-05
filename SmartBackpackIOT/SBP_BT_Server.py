@@ -29,14 +29,14 @@ def init():
         with open(config_file) as f:
             config = json.load(f)
     except:
-        print("[INIT] Fail to load configs")
+        closing(None,msg="[INIT] Fail to load configs")
         exit(0)
         
+    debug = config['settings']['debug']
+
     redis_path = config['env']['redis']
     host = redis_path['host']
     redis_cursor = SBP_Redis_Wrapper(host,debug=debug)
-
-    debug = config['settings']['debug']
     BT_server_settings = config['settings']['BT_Server_Settings'] 
     clear_holding_zone_after_sync = BT_server_settings['clear_holding_zone_after_sync']
 
@@ -121,6 +121,8 @@ def main():
             elif data == "cmd_disconnect":
                 if client_sock is not None:
                     client_sock.close()
+            elif "sh_" in data :
+                sh_execute_command(client_sock,data)
             else:
                 result['msg'] = "Not supported"
 
@@ -130,32 +132,13 @@ def main():
                 print("Sent back : %s" % response)
             
         except IOError: 
-            print ("IOError ")
-            if client_sock is not None:
-                client_sock.close()
-            server_sock.close()
-            print("Server going down")
-
-            print("-"*60)
-            traceback.print_exc(file=sys.stdout)
-            print("-"*60)
-
+            closing(client_sock,msg="IOError ")
             break
         except KeyboardInterrupt:
-            if client_sock is not None:
-                client_sock.close()
-            server_sock.close()
-            print("Server going down")
-
-            print("-"*60)
-            traceback.print_exc(file=sys.stdout)
-            print("-"*60)
-
+            closing(client_sock,msg="Server going down")
             break
-        except bluetooth.btcommon.BluetoothError as ex:
-            if client_sock is not None:
-                client_sock.close()
-            print( ord(ex.args[0][1]) + ord(ex.args[0][2]) )
+        except:
+            closing(client_sock,msg="Error in main loop")
             break
 
 def get_service_status(servicename):
@@ -195,6 +178,9 @@ def cmd_reboot_now(client_sock):
     os.system("sudo reboot")
 
 def cmd_reboot_sensor_server(client_sock):
+    """
+    admin function
+    """
     client_sock.send("{'msg':'Restarting Sensor Service'}")
     print("Sent back : {'msg':'Restarting Sensor Service'}")
 
@@ -215,6 +201,7 @@ def cmd_reboot_sensor_server(client_sock):
 def cmd_reboot_bt_server(client_sock):
     """
     NOT WORKING, PENDING FOR REVIEW
+    admin function
     """
     client_sock.send("{'msg':'Restarting BT Service'}")
     print("Sent back : {'msg':'Restarting BT Service'}")
@@ -222,6 +209,33 @@ def cmd_reboot_bt_server(client_sock):
         os.execv(os.path.dirname(__file__) + "/SBP_BT_Server.py","")
     except Exception as err:
         print(err)
+
+def sh_execute_command(client_sock,data):
+    """
+    admin function
+    """
+    command = data.replace("sh_","")
+    client_sock.send("\r\nExecuting: " + command)
+    print("Sent back : %s" % command)
+    output = subprocess.getoutput([str(command)])
+
+    if output is not None:
+        status = output
+    else:
+        status = "Fail to execute command"
+    
+    client_sock.send("\r\n" + status)
+    print("Sent back : %s" % status)
+
+def closing(client_sock,msg="Closing",exception=""):
+    print(msg + ": " + str(exception))
+    if client_sock is not None:
+        client_sock.close()
+
+    if debug:
+        print("-"*60)
+        traceback.print_exc(file=sys.stdout)
+        print("-"*60)
 
 if __name__ == '__main__':
     init()

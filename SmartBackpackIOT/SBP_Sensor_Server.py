@@ -103,14 +103,18 @@ def init():
         display.setDisplayOn()
 
         if debug:
+            display.setDisplayText("[Debug mode]\nWait for network")
+            #wait for network to connect
+            time.sleep(5)
             #print ip on boot
-            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            s.connect(("8.8.8.8", 80))
-            ip = s.getsockname()[0]
-            s.close()
+            try:
+                ip = (([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) + ["no IP found"])[0]
+            except:
+                ip = "Cant get IP"
+
             display.setDisplayText("[Debug mode]\n" + str(ip))
             time.sleep(5)
-            display.setDisplayText_noRefresh("[Debug mode]\npress the btn >")
+            display.setDisplayText_noRefresh("[Debug mode]\nPress the btn >")
 
         #debug log
         if debug:
@@ -131,6 +135,8 @@ def init():
         print("-"*60)
         traceback.print_exc(file=sys.stdout)
         print("-"*60)
+        #terminate itself when error and wait for monitoring service to restart
+        exit(0)
 
 def initTesting():
     global testing_button_triggered
@@ -225,6 +231,15 @@ def main():
                                 desc = getComfortLevel(level) 
                                 #print("desc:{} x:{} y:{} h:{} t:{}".format(desc,x,y,hum,temp))
                     
+                    #check sensor data
+                    if temp is -1 and hum is -1:
+                        #sensor error disconnect power and reboot device
+                        print("[Fatal] SENSOR ERROR, disconnect power and reboot the device")
+                        print("[Fatal] Stopping monitoring service to prevent service boot loop")
+                        os.system("sudo systemctl stop SBP_Service_Monitor.service")
+                        print("[Fatal] Exiting sensor server")
+                        eixt(0)
+
                     #store in redis
                     redis_cursor.set('hum',hum)
                     redis_cursor.set('temp',temp)
@@ -277,7 +292,7 @@ def main():
                 print("-"*60)
                 break
 
-            time.sleep(5)
+            time.sleep(seconds_to_update_data)
 
             """
             =================================================================================================================
@@ -301,7 +316,9 @@ def output_data_to_hoding_file(hum,temp,pm2_5,pm10):
 
 def closing():
     display.setDisplayOff()
+    time.sleep(1)
     led_controller.offAllLED()
+    time.sleep(1)
     buzzer.off()
 
 if __name__ == '__main__':

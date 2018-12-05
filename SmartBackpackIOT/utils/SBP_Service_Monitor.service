@@ -10,7 +10,7 @@ WorkingDirectory=/home/pi/SmartBackpackIOT
 ExecStart=/usr/bin/python3 /home/pi/SmartBackpackIOT/SBP_Service_Monitor.py 
 StandardOutput=syslog
 StandardError=syslog
-SyslogIdentifier=SBP_Sensor_Server
+SyslogIdentifier=SBP_Service_Monitor
  
 [Install]
 WantedBy=multi-user.target
