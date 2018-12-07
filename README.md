@@ -1,6 +1,6 @@
 # Smart Backpack
 A NYP FYPJ collaboration project with SAP Digital Labs.  
-Embedding technologies into a backpack designed for people with asmatic conditions.
+Embedding technologies into a backpack designed for people with asthmatic conditions.
 
 ## Software Architecture of SmartBackpack
 ![software architecture](https://github.com/c0j0s/SmartBackpack/blob/master/Documents/software%20architecture.jpg)
