@@ -22,7 +22,7 @@ def calIntervalNeeded(duration,interval):
 
 def getComfortLevel(level):
     levels = {
-    '0' : 'nil',
+    '0' : 'very bad',
     '1' : 'dry',
     '2' : 'ok',
     '3' : 'ok ~',
@@ -31,17 +31,15 @@ def getComfortLevel(level):
     '6' : 'very uncomfortable',
     '7' : 'very uncomfortable ~',
     }
-
     return levels[level]
+
 def getTempByRange(temp):
     y = 46 - int(temp)
     return y
 
 def getHumByRange(hum):
     hum = roundHum(int(hum))
-
     x = round(hum/5) - 1
-
     return x
 
 def getLeveByHum(hum):

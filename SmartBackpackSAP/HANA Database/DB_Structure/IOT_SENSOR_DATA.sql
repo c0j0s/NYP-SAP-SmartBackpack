@@ -1,0 +1,12 @@
+create column table "NYPFYPJ03"."IOT_SENSOR_DATA"( "DATA_ID" BIGINT not null,
+	 "DEVICE_ID" BIGINT not null,
+	 "ACCOUNT_ID" BIGINT not null,
+	 "TEMPERATURE" DOUBLE null,
+	 "HUMIDITY" DOUBLE null,
+	 "PM2_5" DOUBLE null,
+	 "PM10" DOUBLE null,
+	 "COMFORT_LEVEL" VARCHAR (1) null,
+	 "DATETIME" TIMESTAMP null,
+	 "ALERTED" VARCHAR (1) null default 'N',
+	 "GEO_LOCATION" VARCHAR (50) null,
+	 primary key ("DATA_ID") )

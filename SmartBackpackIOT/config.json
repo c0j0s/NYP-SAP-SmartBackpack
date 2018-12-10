@@ -23,13 +23,13 @@
         }
     },
     "settings":{
-        "device_uuid":"SBP001",
+        "device_sn":"SBP001",
         "debug":true,
         "BT_Server_Settings":{
             "clear_holding_zone_after_sync":1
         },
         "Sensor_Server_Settings":{
-            "buzzer":0,
+            "enable_buzzer":0,
             "enable_led":0,
             "minute_to_record_data":0.2,
             "seconds_to_update_data":5,

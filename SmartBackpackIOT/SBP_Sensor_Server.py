@@ -85,7 +85,7 @@ def init():
         led_controller.addLED('red',led_red_port)
 
         #load custom settings
-        buzzer = SBP_Buzzer(buzzer_port,sensor_server_settings['buzzer'],debug=debug)
+        buzzer = SBP_Buzzer(buzzer_port,sensor_server_settings['enable_buzzer'],debug=debug)
 
         minute_to_record_data = sensor_server_settings['minute_to_record_data']
         seconds_to_update_data = sensor_server_settings['seconds_to_update_data']

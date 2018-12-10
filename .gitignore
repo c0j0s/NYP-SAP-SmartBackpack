@@ -2,3 +2,7 @@
 .vscode/*
 .vscode/settings.json
 .ipynb_checkpoints/*
+SmartBackpackML/.ipynb_checkpoints/SBP_ML.py-checkpoint.ipynb
+SmartBackpackML/.vscode/settings.json
+SmartBackpackML/src/__pycache__/generate_data.cpython-37.pyc
+SmartBackpackML/src/temp.txt

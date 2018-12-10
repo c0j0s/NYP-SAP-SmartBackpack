@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Constraints="http://www.sap.com/ndb/SQLCoreModelConstraints.ecore" xmlns:DataTypes="http://www.sap.com/ndb/SQLCoreModelDataTypes.ecore" xmlns:Tables="http://www.sap.com/ndb/SQLCoreModelTables.ecore" xmlns:model="http://com.sap.ndb.studio.sqldesigner.model">
+  <model:SQLDesigner>
+    <tables id="IOT_SENSOR_DATA" tableType="columnstore" sqlDesigner="/0" alias="T0">
+      <descriptions/>
+      <columns id="DATA_ID" nullable="false" position="1">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:CharacterStringSQLDataType" id="VARCHAR" primitiveSQLType="VARCHAR" length="10"/>
+      </columns>
+      <columns id="DEVICE_ID" nullable="false" position="2">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:CharacterStringSQLDataType" id="VARCHAR" primitiveSQLType="VARCHAR" length="10"/>
+      </columns>
+      <columns id="ACCOUNT_ID" nullable="false" position="3">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:CharacterStringSQLDataType" id="VARCHAR" primitiveSQLType="VARCHAR" length="10"/>
+      </columns>
+      <columns id="TEMPERATURE" position="4">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:FixedPrecisionSQLDataType" id="DOUBLE" primitiveSQLType="DOUBLE" precision="15"/>
+      </columns>
+      <columns id="HUMIDITY" position="5">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:FixedPrecisionSQLDataType" id="DOUBLE" primitiveSQLType="DOUBLE" precision="15"/>
+      </columns>
+      <columns id="PM2_5" position="6">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:FixedPrecisionSQLDataType" id="DOUBLE" primitiveSQLType="DOUBLE" precision="15"/>
+      </columns>
+      <columns id="PM10" position="7">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:FixedPrecisionSQLDataType" id="DOUBLE" primitiveSQLType="DOUBLE" precision="15"/>
+      </columns>
+      <columns id="COMFORT_LEVEL" position="8">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:CharacterStringSQLDataType" id="VARCHAR" primitiveSQLType="VARCHAR" length="1"/>
+      </columns>
+      <columns id="GEOMETRY" position="9">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:CharacterStringSQLDataType" id="VARCHAR" primitiveSQLType="VARCHAR" length="1"/>
+      </columns>
+      <columns id="DATETIME" position="10">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:TimeDateSQLDataType" id="TIMESTAMP" primitiveSQLType="TIMESTAMP"/>
+      </columns>
+      <columns id="ALERTED" defaultValue="0" position="11">
+        <descriptions defaultDescription="if buzzer is disable, alert will be false"/>
+        <datatypeSQL xsi:type="DataTypes:FixedPrecisionSQLDataType" id="BOOLEAN" primitiveSQLType="BOOLEAN" precision="2"/>
+      </columns>
+      <schema href="#/1"/>
+      <constraints xsi:type="Constraints:PrimaryKey" href="#/2"/>
+    </tables>
+    <tables id="ACCOUNT" sqlDesigner="/0" alias="T1">
+      <descriptions/>
+      <columns id="ACCOUNT_ID" nullable="false" position="1">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:CharacterStringSQLDataType" id="VARCHAR" primitiveSQLType="VARCHAR" length="10"/>
+      </columns>
+      <columns id="EMAIL" nullable="false" position="2">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:CharacterStringSQLDataType" id="VARCHAR" primitiveSQLType="VARCHAR" length="20"/>
+      </columns>
+      <columns id="PASSWORD" nullable="false" position="3">
+        <descriptions defaultDescription="Encrypted password"/>
+        <datatypeSQL xsi:type="DataTypes:CharacterStringSQLDataType" id="VARCHAR" primitiveSQLType="VARCHAR" length="32"/>
+      </columns>
+      <columns id="REGISTERED_ON" position="4">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:TimeDateSQLDataType" id="TIMESTAMP" primitiveSQLType="TIMESTAMP"/>
+      </columns>
+      <columns id="LAST_ONLINE" position="5">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:TimeDateSQLDataType" id="TIMESTAMP" primitiveSQLType="TIMESTAMP"/>
+      </columns>
+      <schema href="#/3"/>
+      <constraints xsi:type="Constraints:PrimaryKey" href="#/4"/>
+    </tables>
+    <tables id="USER_PROFILE" sqlDesigner="/0" alias="T2">
+      <descriptions/>
+      <columns id="PROFILE_ID" nullable="false" position="1">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:CharacterStringSQLDataType" id="VARCHAR" primitiveSQLType="VARCHAR" length="10"/>
+      </columns>
+      <columns id="ACCOUNT_ID" nullable="false" position="2">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:CharacterStringSQLDataType" id="VARCHAR" primitiveSQLType="VARCHAR" length="10"/>
+      </columns>
+      <columns id="GENDER" nullable="false" position="3">
+        <descriptions defaultDescription="M/F"/>
+        <datatypeSQL xsi:type="DataTypes:CharacterStringSQLDataType" id="VARCHAR" primitiveSQLType="VARCHAR" length="1"/>
+      </columns>
+      <columns id="NAME" nullable="false" position="4">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:CharacterStringSQLDataType" id="VARCHAR" primitiveSQLType="VARCHAR" length="50"/>
+      </columns>
+      <columns id="IS_ASTHMATIC" nullable="false" defaultValue="0" position="5">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:FixedPrecisionSQLDataType" id="BOOLEAN" primitiveSQLType="BOOLEAN" precision="2"/>
+      </columns>
+      <columns id="DOB" position="6">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:TimeDateSQLDataType" id="DATE" primitiveSQLType="DATE"/>
+      </columns>
+      <columns id="AGE" position="7">
+        <descriptions defaultDescription="Compute base on DOB"/>
+        <datatypeSQL xsi:type="DataTypes:IntegerSQLDataType" id="INTEGER" primitiveSQLType="INTEGER"/>
+      </columns>
+      <schema href="#/5"/>
+      <constraints xsi:type="Constraints:PrimaryKey" href="#/6"/>
+    </tables>
+    <tables id="DEVICE" sqlDesigner="/0" alias="T3">
+      <descriptions/>
+      <columns id="DEVICE_ID" nullable="false" position="1">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:CharacterStringSQLDataType" id="VARCHAR" primitiveSQLType="VARCHAR" length="10"/>
+      </columns>
+      <columns id="LAST_ONLINE" position="2">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:TimeDateSQLDataType" id="TIMESTAMP" primitiveSQLType="TIMESTAMP"/>
+      </columns>
+      <columns id="SENSOR_HUMIDITY" defaultValue="1" position="3">
+        <descriptions defaultDescription="Active status: enable or disable/lost"/>
+        <datatypeSQL xsi:type="DataTypes:FixedPrecisionSQLDataType" id="BOOLEAN" primitiveSQLType="BOOLEAN" precision="2"/>
+      </columns>
+      <columns id="SENSOR_TEMPERATURE" defaultValue="1" position="4">
+        <descriptions defaultDescription="Active status: enable or disable/lost"/>
+        <datatypeSQL xsi:type="DataTypes:FixedPrecisionSQLDataType" id="BOOLEAN" primitiveSQLType="BOOLEAN" precision="2"/>
+      </columns>
+      <columns id="SENSOR_AIR_QUALITY" defaultValue="1" position="5">
+        <descriptions defaultDescription="Active status: enable or disable/lost"/>
+        <datatypeSQL xsi:type="DataTypes:FixedPrecisionSQLDataType" id="BOOLEAN" primitiveSQLType="BOOLEAN" precision="2"/>
+      </columns>
+      <columns id="SENSOR_BUTTON" defaultValue="1" position="6">
+        <descriptions defaultDescription="Active status: enable or disable/lost"/>
+        <datatypeSQL xsi:type="DataTypes:FixedPrecisionSQLDataType" id="BOOLEAN" primitiveSQLType="BOOLEAN" precision="2"/>
+      </columns>
+      <columns id="ACTUATOR_BUZZER" defaultValue="1" position="7">
+        <descriptions defaultDescription="Active status: enable or disable/lost"/>
+        <datatypeSQL xsi:type="DataTypes:FixedPrecisionSQLDataType" id="BOOLEAN" primitiveSQLType="BOOLEAN" precision="2"/>
+      </columns>
+      <columns id="ACTUATOR_LED" defaultValue="1" position="8">
+        <descriptions defaultDescription="Active status: enable or disable/lost"/>
+        <datatypeSQL xsi:type="DataTypes:FixedPrecisionSQLDataType" id="BOOLEAN" primitiveSQLType="BOOLEAN" precision="2"/>
+      </columns>
+      <columns id="ACTUATOR_DISPLAY" defaultValue="1" position="9">
+        <descriptions defaultDescription="Active status: enable or disable/lost"/>
+        <datatypeSQL xsi:type="DataTypes:FixedPrecisionSQLDataType" id="BOOLEAN" primitiveSQLType="BOOLEAN" precision="2"/>
+      </columns>
+      <schema href="#/7"/>
+      <constraints xsi:type="Constraints:PrimaryKey" href="#/8"/>
+    </tables>
+    <tables id="ACCOUNT_DEVICE" sqlDesigner="/0" alias="T4">
+      <descriptions/>
+      <columns id="ACCOUNT_ID" nullable="false" position="1">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:CharacterStringSQLDataType" id="VARCHAR" primitiveSQLType="VARCHAR" length="10"/>
+      </columns>
+      <columns id="DEVICE_ID" nullable="false" position="2">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:CharacterStringSQLDataType" id="VARCHAR" primitiveSQLType="VARCHAR" length="10"/>
+      </columns>
+      <columns id="REGISTED_ON" position="3">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:TimeDateSQLDataType" id="TIMESTAMP" primitiveSQLType="TIMESTAMP"/>
+      </columns>
+      <columns id="CONNECTED_THROUGH" position="4">
+        <descriptions defaultDescription="Android version"/>
+        <datatypeSQL xsi:type="DataTypes:CharacterStringSQLDataType" id="VARCHAR" primitiveSQLType="VARCHAR" length="50"/>
+      </columns>
+      <columns id="CONNECTED_IP" position="5">
+        <descriptions defaultDescription="IP Address"/>
+        <datatypeSQL xsi:type="DataTypes:CharacterStringSQLDataType" id="VARCHAR" primitiveSQLType="VARCHAR" length="32"/>
+      </columns>
+      <columns id="MINUTE_TO_RECORD_DATA" defaultValue="0.2" position="6">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:FixedPrecisionSQLDataType" id="DOUBLE" primitiveSQLType="DOUBLE" precision="15"/>
+      </columns>
+      <columns id="SECONDS_TO_UPDATE_DATA" defaultValue="5" position="7">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:IntegerSQLDataType" id="INTEGER" primitiveSQLType="INTEGER"/>
+      </columns>
+      <columns id="ENABLE_LED" defaultValue="1" position="8">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:FixedPrecisionSQLDataType" id="BOOLEAN" primitiveSQLType="BOOLEAN" precision="2"/>
+      </columns>
+      <columns id="ENABLE_BUZZER" defaultValue="1" position="9">
+        <descriptions/>
+        <datatypeSQL xsi:type="DataTypes:FixedPrecisionSQLDataType" id="BOOLEAN" primitiveSQLType="BOOLEAN" precision="2"/>
+      </columns>
+      <schema href="#/9"/>
+      <constraints xsi:type="Constraints:PrimaryKey" href="#/10"/>
+    </tables>
+    <joins leftColumns="/0/@tables.1/@columns.0" rightColumns="/0/@tables.2/@columns.1" leftTable="/0/@tables.1" rightTable="/0/@tables.2" cardinality="C_1_1" sqlDesigner="/0"/>
+    <joins leftColumns="/0/@tables.0/@columns.1" rightColumns="/0/@tables.3/@columns.0" leftTable="/0/@tables.0" rightTable="/0/@tables.3" cardinality="C_1_1" sqlDesigner="/0"/>
+    <joins leftColumns="/0/@tables.4/@columns.1" rightColumns="/0/@tables.3/@columns.0" leftTable="/0/@tables.4" rightTable="/0/@tables.3" cardinality="C_1_1" sqlDesigner="/0"/>
+    <joins leftColumns="/0/@tables.4/@columns.0" rightColumns="/0/@tables.1/@columns.0" leftTable="/0/@tables.4" rightTable="/0/@tables.1" cardinality="C_1_1" sqlDesigner="/0"/>
+    <joins leftColumns="/0/@tables.0/@columns.2" rightColumns="/0/@tables.1/@columns.0" leftTable="/0/@tables.0" rightTable="/0/@tables.1" cardinality="C_1_1" sqlDesigner="/0"/>
+    <joinGroups joins="/0/@joins.0" leftTable="/0/@tables.1" rightTable="/0/@tables.2" sqlDesigner="/0"/>
+    <joinGroups joins="/0/@joins.1" leftTable="/0/@tables.0" rightTable="/0/@tables.3" sqlDesigner="/0"/>
+    <joinGroups joins="/0/@joins.2" leftTable="/0/@tables.4" rightTable="/0/@tables.3" sqlDesigner="/0"/>
+    <joinGroups joins="/0/@joins.3" leftTable="/0/@tables.4" rightTable="/0/@tables.1" sqlDesigner="/0"/>
+    <joinGroups joins="/0/@joins.4" leftTable="/0/@tables.0" rightTable="/0/@tables.1" sqlDesigner="/0"/>
+    <sqlDesignerView name="" sqlDesigner="/0">
+      <tableViews table="/0/@tables.0" bounds="[261,228,-1,-1]"/>
+      <tableViews table="/0/@tables.1" bounds="[544,176,-1,-1]"/>
+      <tableViews table="/0/@tables.2" bounds="[777,144,-1,-1]"/>
+      <tableViews table="/0/@tables.3" bounds="[16,128,-1,-1]"/>
+      <tableViews table="/0/@tables.4" bounds="[261,16,-1,-1]"/>
+    </sqlDesignerView>
+    <sqlDesignerColumns sqlDesigner="/0"/>
+  </model:SQLDesigner>
+  <Tables:Schema id="NYPFYPJ03"/>
+  <Constraints:PrimaryKey>
+    <constraintColumns id="DATA_ID"/>
+  </Constraints:PrimaryKey>
+  <Tables:Schema id="NYPFYPJ03"/>
+  <Constraints:PrimaryKey>
+    <constraintColumns id="ACCOUNT_ID"/>
+  </Constraints:PrimaryKey>
+  <Tables:Schema id="NYPFYPJ03"/>
+  <Constraints:PrimaryKey>
+    <constraintColumns id="PROFILE_ID"/>
+  </Constraints:PrimaryKey>
+  <Tables:Schema id="NYPFYPJ03"/>
+  <Constraints:PrimaryKey>
+    <constraintColumns id="DEVICE_ID"/>
+  </Constraints:PrimaryKey>
+  <Tables:Schema id="NYPFYPJ03"/>
+  <Constraints:PrimaryKey>
+    <constraintColumns id="ACCOUNT_ID"/>
+    <constraintColumns id="DEVICE_ID"/>
+  </Constraints:PrimaryKey>
+</xmi:XMI>
