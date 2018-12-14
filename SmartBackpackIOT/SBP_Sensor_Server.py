@@ -235,12 +235,12 @@ def main():
                     if temp is -1 and hum is -1:
                         #sensor error disconnect power and reboot device
                         print("[Fatal] SENSOR ERROR, sensor service suiciding and wait for reboot")
-                        #print("[Fatal] SENSOR ERROR, disconnect power and reboot the device")
+                        print("[Fatal] SENSOR ERROR, disconnect power and reboot the device")
                         print("[Fatal] SENSOR ERROR, hum:{} temp:{}".format(temp,hum))
-                        #print("[Fatal] Stopping monitoring service to prevent service boot loop")
-                        #os.system("sudo systemctl stop SBP_Service_Monitor.service")
-                        #print("[Fatal] Exiting sensor server")
-                        eixt(0)
+                        print("[Fatal] Stopping monitoring service to prevent service boot loop")
+                        os.system("sudo systemctl stop SBP_Service_Monitor.service")
+                        print("[Fatal] Exiting sensor server")
+                        exit(0)
 
                     #store in redis
                     redis_cursor.set('hum',hum)

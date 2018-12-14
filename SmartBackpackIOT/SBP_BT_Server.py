@@ -215,7 +215,8 @@ def cmd_reboot_bt_server(client_sock):
 def cmd_toggle_debug():
     with open(config_file) as f:
         config = json.load(f)
-        if debug:
+        localdebug = config['settings']['debug']
+        if localdebug:
             config["settings"]["debug"] = False
         else:
             config["settings"]["debug"] = True
