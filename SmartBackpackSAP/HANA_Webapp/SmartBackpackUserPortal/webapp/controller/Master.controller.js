@@ -2,17 +2,17 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
 	"use strict";
 	return Controller.extend("HANA_Webapp.controller.Master", {
 		onInit: function () {
-			var userid = 1;
+			var userid = 'P2000000001';
 			//load user profile
 			var userProfileTile = this.getView().byId("userProfileTile");
-			userProfileTile.bindElement("/USER_PROFILE(" + userid + ")");
+			userProfileTile.bindElement("/user('" + userid + "')");
 			//load user devices
 			var userDevices = this.getView().byId("userDevices");
-			var oFilter = new sap.ui.model.Filter("ACCOUNT_ID", sap.ui.model.FilterOperator.EQ, userid);
+			var oFilter = new sap.ui.model.Filter("USER_ID", sap.ui.model.FilterOperator.EQ, userid);
 			userDevices.bindItems({
-				path: "/ACCOUNT_DEVICE",
+				path: "/userDevices",
 				template: userDevices.getBindingInfo("items").template,
-				//filters: [oFilter]
+				filters: [oFilter]
 			});
 		},
 		/**
@@ -32,11 +32,11 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
 		 *@memberOf HANA_Webapp.controller.Master
 		 */
 		tableItemPress: function (oEvent) {
-			var userid = 1;
+			var userid = 'P2000000001';
 			
 		    var oItem = oEvent.getSource();
 		    var oContext = oItem.getBindingContext();
-		    var deviceid = oContext.getObject().DEVICE_ID;
+		    var deviceid = oContext.getObject().DEVICE_SN;
 		    console.log(deviceid)
 		    var oPath = oContext.getPath();
 		    
@@ -47,11 +47,11 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
 		    deviceDetailsPanel.bindElement(oPath);
 		    
 		    var deviceDataTable = this.getView().byId("deviceDataTable");
-		    var accountFilter = new sap.ui.model.Filter("ACCOUNT_ID", sap.ui.model.FilterOperator.EQ, userid);
-		    var deviceFilter = new sap.ui.model.Filter("DEVICE_ID", sap.ui.model.FilterOperator.EQ, deviceid);
+		    var accountFilter = new sap.ui.model.Filter("USER_ID", sap.ui.model.FilterOperator.EQ, userid);
+		    var deviceFilter = new sap.ui.model.Filter("DEVICE_SN", sap.ui.model.FilterOperator.EQ, deviceid);
 
 			deviceDataTable.bindItems({
-				path: "/IOT_DATA",
+				path: "/iotData",
 				template: deviceDataTable.getBindingInfo("items").template,
 				filters: [accountFilter,deviceFilter]
 			});

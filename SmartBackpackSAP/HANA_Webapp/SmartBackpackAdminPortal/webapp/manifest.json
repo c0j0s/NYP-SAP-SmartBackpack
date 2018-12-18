@@ -1,0 +1,150 @@
+{
+	"_version": "1.9.0",
+	"sap.app": {
+		"id": "sbp.SmartBackpackAdmin",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}",
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"dataSources": {
+			"mainService": {
+				"uri": "/NYPFYPJ_SMARTBACKPACK/sbp.xsodata/",
+				"type": "OData",
+				"settings": {
+					"odataVersion": "2.0",
+					"localUri": "localService/metadata.xml"
+				}
+			}
+		},
+		"sourceTemplate": {
+			"id": "sap.ui.ui5-template-plugin.2masterdetail",
+			"version": "1.58.1"
+		}
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"icons": {
+			"icon": "sap-icon://detail-view",
+			"favIcon": "",
+			"phone": "",
+			"phone@2": "",
+			"tablet": "",
+			"tablet@2": ""
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+	"sap.ui5": {
+		"rootView": {
+			"viewName": "sbp.SmartBackpackAdmin.view.App",
+			"type": "XML",
+			"async": true,
+			"id": "app"
+		},
+		"dependencies": {
+			"minUI5Version": "1.42.0",
+			"libs": {
+				"sap.ui.core": {},
+				"sap.m": {},
+				"sap.f": {},
+				"sap.ushell": {},
+				"sap.ui.layout": {},
+				"sap.collaboration": {
+					"lazy": true
+				}
+			}
+		},
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "sbp.SmartBackpackAdmin.i18n.i18n"
+				}
+			},
+			"": {
+				"dataSource": "mainService",
+				"preload": true
+			}
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.f.routing.Router",
+				"viewType": "XML",
+				"viewPath": "sbp.SmartBackpackAdmin.view",
+				"controlId": "layout",
+				"controlAggregation": "beginColumnPages",
+				"bypassed": {
+					"target": "notFound"
+				},
+				"async": true
+			},
+			"routes": [{
+				"pattern": "",
+				"name": "master",
+				"target": "master"
+			}, {
+				"pattern": "user/{objectId}",
+				"name": "object",
+				"target": ["master", "object"]
+			}, {
+				"name": "userDeviceOvp",
+				"pattern": "user/{userid}/device/{devicesn}",
+				"titleTarget": "",
+				"greedy": false,
+				"target": ["master", "userDeviceOvp"]
+			}],
+			"targets": {
+				"master": {
+					"viewName": "Master",
+					"viewLevel": 1,
+					"viewId": "master"
+				},
+				"object": {
+					"viewName": "Detail",
+					"viewId": "detail",
+					"viewLevel": 1,
+					"controlAggregation": "midColumnPages"
+				},
+				"detailObjectNotFound": {
+					"viewName": "DetailObjectNotFound",
+					"viewId": "detailObjectNotFound",
+					"controlAggregation": "midColumnPages"
+				},
+				"notFound": {
+					"viewName": "NotFound",
+					"viewId": "notFound"
+				},
+				"deviceOvp": {
+					"viewType": "XML",
+					"transition": "slide",
+					"clearControlAggregation": false,
+					"viewName": "DeviceOverview",
+					"title": "IOT Device Overview",
+					"viewId": "deviceovp",
+					"viewLevel": 1,
+					"controlAggregation": "midColumnPages"
+				},
+				"userDeviceOvp": {
+					"viewType": "XML",
+					"transition": "slide",
+					"clearControlAggregation": false,
+					"viewName": "DeviceOverview",
+					"title": "User Device Overview",
+					"viewId": "userdeviceovp",
+					"viewLevel": 1,
+					"controlAggregation": "midColumnPages"
+				}
+			}
+		}
+	}
+}

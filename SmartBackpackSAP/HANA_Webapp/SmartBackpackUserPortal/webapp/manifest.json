@@ -17,13 +17,12 @@
 			"version": "0.0.0"
 		},
 		"dataSources": {
-			"SmartBackpackOData": {
-				"uri": "/NYPFYPJ_SMARTBACKPACK/smartbackpack.xsodata/",
+			"sbp.xsodata": {
+				"uri": "/NYPFYPJ_SMARTBACKPACK/sbp.xsodata/",
 				"type": "OData",
 				"settings": {
 					"odataVersion": "2.0",
-					"localUri": "localService/SmartBackpackOData/metadata.xml",
-					"annotations": []
+					"localUri": "localService/metadata.xml"
 				}
 			}
 		}
@@ -75,13 +74,14 @@
 				}
 			},
 			"": {
+				"uri": "/NYPFYPJ_SMARTBACKPACK/sbp.xsodata/",
 				"type": "sap.ui.model.odata.v2.ODataModel",
 				"settings": {
 					"defaultOperationMode": "Server",
-					"defaultBindingMode": "Default",
+					"defaultBindingMode": "OneWay",
 					"defaultCountMode": "Request"
 				},
-				"dataSource": "SmartBackpackOData",
+				"dataSource": "sbp.xsodata",
 				"preload": true
 			}
 		},

@@ -1,0 +1,204 @@
+<mvc:View xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:csdata="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" controllerName="sbp.SmartBackpackAdmin.controller.DeviceOverview">
+	<semantic:SemanticPage id="detailPage" busy="{deviceOvp>/busy}" busyIndicatorDelay="{deviceOvp>/delay}" cd:w5g.dt.context="/userDevices">
+		<semantic:titleHeading>
+			<Title text="{DEVICE_NAME}"/>
+		</semantic:titleHeading>
+		<semantic:headerContent>
+			<ObjectAttribute title="Device SN"/>
+			<ObjectNumber id="objectHeaderNumber" number="{DEVICE_SN}"/>
+		</semantic:headerContent>
+		<!--Semantic ShareMenu Buttons-->
+		<semantic:sendEmailAction>
+			<semantic:SendEmailAction id="shareEmail" press="onSendEmailPress"/>
+		</semantic:sendEmailAction>
+		<semantic:shareInJamAction>
+			<semantic:ShareInJamAction id="shareInJam" visible="{FLP>/isShareInJamActive}" press="onShareInJamPress"/>
+		</semantic:shareInJamAction>
+		<semantic:saveAsTileAction>
+			<footerbar:AddBookmarkButton id="shareTile" title="{deviceOvp>/saveAsTileTitle}"/>
+		</semantic:saveAsTileAction>
+		<semantic:closeAction>
+			<semantic:CloseAction id="closeColumn" press="onCloseDetailPress"/>
+		</semantic:closeAction>
+		<semantic:fullScreenAction>
+			<semantic:FullScreenAction id="enterFullScreen" visible="{= !${device>/system/phone} &amp;&amp; !${appView>/actionButtonsInfo/midColumn/fullScreen}}" press="toggleFullScreen"/>
+		</semantic:fullScreenAction>
+		<semantic:exitFullScreenAction>
+			<semantic:ExitFullScreenAction id="exitFullScreen" visible="{= !${device>/system/phone} &amp;&amp; ${appView>/actionButtonsInfo/midColumn/fullScreen}}" press="toggleFullScreen"/>
+		</semantic:exitFullScreenAction>
+		<semantic:content>
+			<VBox width="100%" direction="Column" id="vbox0">
+				<items>
+					<Panel xmlns="sap.m" width="auto" expandable="true" expanded="true" id="aboutDevicePanel" cd:w5g.dt.context="/iotDevice">
+					    <headerToolbar>
+					        <Toolbar id="toolbar1_1545114842119">
+					            <Title text="About Device"/>
+					            <ToolbarSpacer/>
+					            <Button icon="sap-icon://settings" visible="false"/>
+					            </Toolbar>
+					        
+					    </headerToolbar>
+					    <content>
+					        <sap.ui.layout:Grid xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:csdata="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:sap.m.semantic="sap.m.semantic" xmlns:sap.ui.layout="sap.ui.layout" id="aboutDevicePanelContent" defaultSpan="XL6 L6 M6 S12" position="Center" cd:w5g.dt.context="/iotDevice">
+					            <sap.ui.layout:content>
+					                <sap.ui.layout:VerticalLayout width="100%" id="layout0_copy">
+					                    <sap.ui.layout:content>
+					                        <Label xmlns="sap.m" text="System Platform:" width="100%" id="label0_1545035902474_copy"/>
+					                        <Text xmlns="sap.m" text="{SYSTEM_PLATFORM}" id="text17_copy"/>
+					                        </sap.ui.layout:content>
+					                    
+					                </sap.ui.layout:VerticalLayout>
+					                <sap.ui.layout:VerticalLayout width="100%" id="layout0_1544767473430_copy">
+					                    <sap.ui.layout:content>
+					                        <Label xmlns="sap.m" text="Service Version:" width="100%" id="label1_1545035902474_copy"/>
+					                        <Text xmlns="sap.m" text="{APPLICATION_VERSION}" id="text18_copy"/>
+					                        </sap.ui.layout:content>
+					                    
+					                </sap.ui.layout:VerticalLayout>
+					                <sap.ui.layout:VerticalLayout width="100%" id="layout2_copy">
+					                    <sap.ui.layout:content>
+					                        <Label xmlns="sap.m" text="Primary Sensors:" width="100%" id="label3_copy"/>
+					                        <Text xmlns="sap.m" text="Humidity: {= ${SENSOR_HUMIDITY} === 'Y' ? 'Yes':'Nil'}" id="text20_copy"/>
+					                        <Text xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:csdata="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:sap.m.semantic="sap.m.semantic" xmlns:sap.ui.layout="sap.ui.layout" xmlns="sap.m" text="Temperature: {= ${SENSOR_TEMPERATURE} === 'Y' ? 'Yes':'Nil'}" id="text20_copy2"/>
+					                        <Text xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:csdata="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:sap.m.semantic="sap.m.semantic" xmlns:sap.ui.layout="sap.ui.layout" xmlns="sap.m" text="Air Quality: {= ${SENSOR_AIR_QUALITY} === 'Y' ? 'Yes':'Nil'}" id="text20_copy3"/>
+					                        </sap.ui.layout:content>
+					                    
+					                </sap.ui.layout:VerticalLayout>
+					                <sap.ui.layout:VerticalLayout xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:csdata="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:sap.m.semantic="sap.m.semantic" xmlns:sap.ui.layout="sap.ui.layout" width="100%" id="layout2_copy2">
+					                            <sap.ui.layout:content>
+					                                <Label xmlns="sap.m" text="Other Features:" width="100%" id="label3_copy2"/>
+					                                <Text xmlns="sap.m" text="LED: {= ${ACTUATOR_LED} === 'Y' ? 'Yes':'Nil'}" id="text20_copy4"/>
+					                                <Text xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:csdata="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:sap.m.semantic="sap.m.semantic" xmlns:sap.ui.layout="sap.ui.layout" xmlns="sap.m" text="Buzzer: {= ${ACTUATOR_BUZZER} === 'Y' ? 'Yes':'Nil'}" id="text20_copy6"/>
+					                                <Text xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:csdata="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:sap.m.semantic="sap.m.semantic" xmlns:sap.ui.layout="sap.ui.layout" xmlns="sap.m" text="Display: {= ${ACTUATOR_DISPLAY} === 'Y' ? 'Yes':'Nil'}" id="text20_copy5"/>
+					                                <Text xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:csdata="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:sap.m.semantic="sap.m.semantic" xmlns:sap.ui.layout="sap.ui.layout" xmlns="sap.m" text="Button: {= ${SENSOR_BUTTON} === 'Y' ? 'Yes':'Nil'}" id="text20_copy7"/>
+					                                </sap.ui.layout:content>
+					                            
+					                        </sap.ui.layout:VerticalLayout>
+					                <sap.ui.layout:VerticalLayout xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:sap.m.semantic="sap.m.semantic" xmlns:sap.ui.layout="sap.ui.layout" width="100%" id="layout3_copy2">
+					                    <sap.ui.layout:content>
+					                        <Label xmlns="sap.m" text="Manufactured on:" width="100%" id="label4_copy2"/>
+					                        <Text xmlns="sap.m" text="{path: 'MANUFACTURED_ON',type: 'sap.ui.model.type.Date',formatOptions: {pattern: 'yyyy/MM/dd hh:mm a'}}" id="text21_copy2"/>
+					                        </sap.ui.layout:content>
+					                    
+					                </sap.ui.layout:VerticalLayout>
+					                </sap.ui.layout:content>
+					            
+					        </sap.ui.layout:Grid>
+					    </content>
+					    </Panel>
+					<Panel xmlns="sap.m" width="auto" expandable="true" expanded="true" id="panel0">
+					    <headerToolbar>
+					        <Toolbar id="toolbar1_1545114485839">
+					            <Title text="Device Settings"/>
+					            <ToolbarSpacer/>
+					            <Button icon="sap-icon://settings"/>
+					            </Toolbar>
+					        
+					    </headerToolbar>
+					    <content>
+					        <sap.ui.layout:Grid xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:csdata="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:sap.m.semantic="sap.m.semantic" xmlns:sap.ui.layout="sap.ui.layout" id="grid0" defaultSpan="XL6 L6 M6 S12" position="Center">
+					            <sap.ui.layout:content>
+					                <sap.ui.layout:VerticalLayout width="100%" id="layout0">
+					                    <sap.ui.layout:content>
+					                        <Label xmlns="sap.m" text="Buzzer:" width="100%" id="label0_1545035902474"/>
+					                        <Text xmlns="sap.m" text="{= ${CONFIG_ENABLE_BUZZER} === 'Y' ? 'Enable':'Disabled'}" id="text17"/>
+					                        </sap.ui.layout:content>
+					                    
+					                </sap.ui.layout:VerticalLayout>
+					                <sap.ui.layout:VerticalLayout width="100%" id="layout0_1544767473430">
+					                    <sap.ui.layout:content>
+					                        <Label xmlns="sap.m" text="LED:" width="100%" id="label1_1545035902474"/>
+					                        <Text xmlns="sap.m" text="{= ${CONFIG_ENABLE_LED} === 'Y' ? 'Enable':'Disabled'}" id="text18"/>
+					                        </sap.ui.layout:content>
+					                    
+					                </sap.ui.layout:VerticalLayout>
+					                <sap.ui.layout:VerticalLayout width="100%" id="layout1">
+					                    <sap.ui.layout:content>
+					                        <Label xmlns="sap.m" text="Data Recording Interval" width="100%" id="label2_1545035902475"/>
+					                        <Text xmlns="sap.m" text="{MINUTES_TO_RECORD_DATA} Minutes" id="text19"/>
+					                        </sap.ui.layout:content>
+					                    
+					                </sap.ui.layout:VerticalLayout>
+					                <sap.ui.layout:VerticalLayout width="100%" id="layout2">
+					                    <sap.ui.layout:content>
+					                        <Label xmlns="sap.m" text="Last Online:" width="100%" id="label3"/>
+					                        <Text xmlns="sap.m" text="{path: 'LAST_ONLINE',type: 'sap.ui.model.type.Date',formatOptions: {pattern: 'yyyy/MM/dd hh:mm a'}}" id="text20"/>
+					                        </sap.ui.layout:content>
+					                    
+					                </sap.ui.layout:VerticalLayout>
+					                <sap.ui.layout:VerticalLayout xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:sap.m.semantic="sap.m.semantic" xmlns:sap.ui.layout="sap.ui.layout" width="100%" id="layout3_copy">
+					                    <sap.ui.layout:content>
+					                        <Label xmlns="sap.m" text="Registered on:" width="100%" id="label4_copy"/>
+					                        <Text xmlns="sap.m" text="{path: 'REGISTERED_ON',type: 'sap.ui.model.type.Date',formatOptions: {pattern: 'yyyy/MM/dd hh:mm a'}}" id="text21_copy"/>
+					                        </sap.ui.layout:content>
+					                    
+					                </sap.ui.layout:VerticalLayout>
+					                </sap.ui.layout:content>
+					            
+					        </sap.ui.layout:Grid>
+					        
+					    </content>
+					    </Panel>
+					<Panel xmlns="sap.m" width="auto" id="iotDataOverviewPanel" expandable="true" visible="true" expanded="true">
+						<headerToolbar>
+							<Toolbar id="toolbar1">
+								<Title text="Data Overview"/>
+								<ToolbarSpacer/>
+								<Button icon="sap-icon://settings" visible="false"/>
+							</Toolbar>
+						</headerToolbar>
+						<content>
+							<Table ariaLabelledBy="__xmlview0--label1" noDataText="No Data" id="iotDataTable" visible="true" items="{/dummy}">
+								<items>
+									<ColumnListItem type="Active">
+										<cells>
+											<Text xmlns="sap.m" text="{path: 'RECORDED_ON',type: 'sap.ui.model.type.Date',formatOptions: {pattern: 'yyyy/MM/dd hh:mm a'}}" id="text4"/>
+											<Text xmlns="sap.m" text="{HUMIDITY}%" id="text5"/>
+											<Text xmlns="sap.m" text="{TEMPERATURE}°C" id="text6"/>
+											<Text xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns="sap.m" text="{PM2_5} µg/m³" id="text6_copy"/>
+											<Text xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns="sap.m" text="{PM10} µg/m³" id="text6_copy2"/>
+											<Text xmlns="sap.m" text="{CITY} [{GEO_LAT},{GEO_LNG}]" id="text7"/>
+										</cells>
+									</ColumnListItem>
+								</items>
+								<columns>
+									<Column id="column1_1545097882894">
+										<header>
+											<Label text="Recorded on" id="label0_1545097882894"/>
+										</header>
+									</Column>
+									<Column id="HUMIDITY">
+										<header>
+											<Label text="Humidity" id="label1_1545097882895"/>
+										</header>
+									</Column>
+									<Column id="column3">
+										<header>
+											<Label text="Temperature" id="label2_1545097882896"/>
+										</header>
+									</Column>
+									<Column id="column0_1545098053712">
+										<header>
+											<Text text="PM2.5" id="text1_1545098053711"/>
+										</header>
+									</Column>
+									<Column id="column1_1545098067143">
+										<header>
+											<Text text="PM10" id="text2"/>
+										</header>
+									</Column>
+									<Column id="column2_1545098091442">
+										<header>
+											<Text text="Location" id="text3"/>
+										</header>
+									</Column>
+								</columns>
+							</Table>
+						</content>
+					</Panel>
+					
+				</items>
+			</VBox>
+		</semantic:content>
+	</semantic:SemanticPage>
+</mvc:View>

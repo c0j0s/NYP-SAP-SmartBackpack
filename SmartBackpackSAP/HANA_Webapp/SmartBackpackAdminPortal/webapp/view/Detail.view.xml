@@ -1,0 +1,139 @@
+<mvc:View xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:csdata="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" controllerName="sbp.SmartBackpackAdmin.controller.Detail">
+	<semantic:SemanticPage id="detailPage" busy="{deviceOvp>/busy}" busyIndicatorDelay="{deviceOvp>/delay}">
+		<semantic:titleHeading>
+			<Title text="{NAME}"/>
+		</semantic:titleHeading>
+		<semantic:headerContent>
+			<ObjectAttribute title="User ID"/>
+			<ObjectNumber id="objectHeaderNumber" number="{USER_ID}"/>
+		</semantic:headerContent>
+		<!--Semantic ShareMenu Buttons-->
+		<semantic:sendEmailAction>
+			<semantic:SendEmailAction id="shareEmail" press="onSendEmailPress"/>
+		</semantic:sendEmailAction>
+		<semantic:shareInJamAction>
+			<semantic:ShareInJamAction id="shareInJam" visible="{FLP>/isShareInJamActive}" press="onShareInJamPress"/>
+		</semantic:shareInJamAction>
+		<semantic:saveAsTileAction>
+			<footerbar:AddBookmarkButton id="shareTile" title="{detailView>/saveAsTileTitle}"/>
+		</semantic:saveAsTileAction>
+		<semantic:closeAction>
+			<semantic:CloseAction id="closeColumn" press="onCloseDetailPress"/>
+		</semantic:closeAction>
+		<semantic:fullScreenAction>
+			<semantic:FullScreenAction id="enterFullScreen" visible="{= !${device>/system/phone} &amp;&amp; !${appView>/actionButtonsInfo/midColumn/fullScreen}}" press="toggleFullScreen"/>
+		</semantic:fullScreenAction>
+		<semantic:exitFullScreenAction>
+			<semantic:ExitFullScreenAction id="exitFullScreen" visible="{= !${device>/system/phone} &amp;&amp; ${appView>/actionButtonsInfo/midColumn/fullScreen}}" press="toggleFullScreen"/>
+		</semantic:exitFullScreenAction>
+		<semantic:content>
+			<VBox width="100%" direction="Column" id="vbox0">
+				<items>
+					<Panel xmlns="sap.m" width="auto" expandable="true" expanded="true" id="panel4">
+						<headerToolbar>
+							<Toolbar id="toolbar5">
+								<Title text="{NAME}'s Profile"/>
+								<ToolbarSpacer/>
+								<Button icon="sap-icon://edit"/>
+							</Toolbar>
+						</headerToolbar>
+						<content>
+							<sap.ui.layout:Grid xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:sap.m.semantic="sap.m.semantic" xmlns:sap.ui.layout="sap.ui.layout" id="grid0" defaultSpan="XL6 L6 M6 S12" position="Center">
+								<sap.ui.layout:content>
+									<sap.ui.layout:VerticalLayout width="100%" id="layout0">
+										<sap.ui.layout:content>
+											<Label xmlns="sap.m" text="Email:" width="100%" id="label0_1545035902474"/>
+											<Text xmlns="sap.m" text="{EMAIL}" id="text17"/>
+										</sap.ui.layout:content>
+									</sap.ui.layout:VerticalLayout>
+									<sap.ui.layout:VerticalLayout width="100%" id="layout0_1544767473430">
+										<sap.ui.layout:content>
+											<Label xmlns="sap.m" text="Contact Number:" width="100%" id="label1_1545035902474"/>
+											<Text xmlns="sap.m" text="{CONTACT_NO}" id="text18"/>
+										</sap.ui.layout:content>
+									</sap.ui.layout:VerticalLayout>
+									<sap.ui.layout:VerticalLayout width="100%" id="layout1">
+										<sap.ui.layout:content>
+											<Label xmlns="sap.m" text="Date of birth/Age:" width="100%" id="label2_1545035902475"/>
+											<Text xmlns="sap.m" text="{path: 'DOB',type: 'sap.ui.model.type.Date',formatOptions: {pattern: 'yyyy/MM/dd'}} ({AGE})" id="text19"/>
+										</sap.ui.layout:content>
+									</sap.ui.layout:VerticalLayout>
+									<sap.ui.layout:VerticalLayout width="100%" id="layout2">
+										<sap.ui.layout:content>
+											<Label xmlns="sap.m" text="Race:" width="100%" id="label3"/>
+											<Text xmlns="sap.m" text="{RACE}" id="text20"/>
+										</sap.ui.layout:content>
+									</sap.ui.layout:VerticalLayout>
+									<sap.ui.layout:VerticalLayout width="100%" id="layout3">
+										<sap.ui.layout:content>
+											<Label xmlns="sap.m" text="Gender:" width="100%" id="label4"/>
+											<Text xmlns="sap.m" text="{= ${GENDER} === 'M' ? 'Male':'Female'}" id="text21"/>
+										</sap.ui.layout:content>
+									</sap.ui.layout:VerticalLayout>
+									<sap.ui.layout:VerticalLayout xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:sap.m.semantic="sap.m.semantic" xmlns:sap.ui.layout="sap.ui.layout" width="100%" id="layout3_copy">
+										<sap.ui.layout:content>
+											<Label xmlns="sap.m" text="Registered on:" width="100%" id="label4_copy"/>
+											<Text xmlns="sap.m" text="{path: 'REGISTERED_ON',type: 'sap.ui.model.type.Date',formatOptions: {pattern: 'yyyy/MM/dd hh:mm a'}}" id="text21_copy"/>
+										</sap.ui.layout:content>
+									</sap.ui.layout:VerticalLayout>
+									<sap.ui.layout:VerticalLayout xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:csdata="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:sap.m.semantic="sap.m.semantic" xmlns:sap.ui.layout="sap.ui.layout" width="100%" id="layout2_copy">
+									    <sap.ui.layout:content>
+									        <Label xmlns="sap.m" text="Asthmatic Level:" width="100%" id="label3_copy"/>
+									        <Text xmlns="sap.m" text="Level {ASTHMATIC_LEVEL}" id="text20_copy" tooltip="level 0 - Nil&#10;level 1 - Intermittent Asthma&#10;level 2 - Mild Persistent Asthma&#10;level 3 - Moderate Persistent Asthma&#10;level 4 - Severe Persistent Asthma"/>
+									        </sap.ui.layout:content>
+									    
+									</sap.ui.layout:VerticalLayout>
+								</sap.ui.layout:content>
+							</sap.ui.layout:Grid>
+						</content>
+					</Panel>
+					<Panel xmlns="sap.m" width="auto" expandable="true" expanded="true" id="panel3">
+						<headerToolbar>
+							<Toolbar id="toolbar4">
+								<Title text="{NAME}'s Backpack"/>
+								<ToolbarSpacer/>
+								<Button icon="sap-icon://settings"/>
+							</Toolbar>
+						</headerToolbar>
+						<content>
+							<Table noDataText="No Backpack Found" id="userDeviceTable" items="{/dummy}">
+								<items>
+									<ColumnListItem type="Active" id="item0">
+										<cells>
+											<Text text="{DEVICE_SN}" id="text8"/>
+											<Text text="{DEVICE_NAME}" id="text9"/>
+											<Text text="{path: 'LAST_ONLINE',type: 'sap.ui.model.type.Date',formatOptions: {pattern: 'yyyy/MM/dd hh:mm a'}}" id="text10"/>
+											<Button xmlns="sap.m" text="View IOT Details" id="btn001" icon="sap-icon://bbyd-dashboard" width="auto" press="expandIotDataOverview" csdata:device-sn="{DEVICE_SN}"/>
+											</cells>
+									</ColumnListItem>
+								</items>
+								<columns>
+									<Column id="column0">
+										<header>
+											<Label text="Device SN" id="label0"/>
+										</header>
+									</Column>
+									<Column id="column1">
+										<header>
+											<Label text="Device Name" id="label1"/>
+										</header>
+									</Column>
+									<Column id="column2">
+										<header>
+											<Label text="Last Online" id="label2"/>
+										</header>
+									</Column>
+									<Column id="column0_1545097358189">
+									    <header>
+									        <Text text="Actions" id="text1"/>
+									    </header>
+									</Column>
+								</columns>
+							</Table>
+						</content>
+					</Panel>
+				</items>
+			</VBox>
+		</semantic:content>
+	</semantic:SemanticPage>
+</mvc:View>

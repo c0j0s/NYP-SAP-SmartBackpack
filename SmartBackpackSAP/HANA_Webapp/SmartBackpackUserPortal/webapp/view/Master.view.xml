@@ -26,7 +26,7 @@
 														<items>
 															<ColumnListItem type="Active" cd:w5g.dt.context="UserDevices&gt;/ACCOUNT_DEVICE" press="tableItemPress">
 																<cells>
-																	<Text text="{DEVICE_ID}" id="text186"/>
+																	<Text text="{DEVICE_SN}" id="text186"/>
 																	<Text id="text187" text="{DEVICE_NAME}"/>
 																	<Text id="text188" text="{LAST_ONLINE}"/>
 																</cells>
@@ -168,9 +168,9 @@
 													</sap.ui.layout:VerticalLayout>
 												</items>
 											</VBox>
-											<VBox width="100%" direction="Column" id="deviceDetailsPanelBlank" height="100%" backgroundDesign="Solid">
+											<VBox width="100%" direction="Column" id="deviceDetailsPanelBlank" height="100%">
 											<items>
-											    <Bar id="bar0">
+											    <Bar id="bar0" design="SubHeader">
 											        <contentMiddle>
 											            <Text xmlns="sap.m" id="text12" text="Choose a device"/>
 											        </contentMiddle>
