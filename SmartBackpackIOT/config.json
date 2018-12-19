@@ -23,7 +23,7 @@
         }
     },
     "settings":{
-        "device_sn":"SBPSG000001",
+        "device_sn":"SBP001",
         "debug":true,
         "BT_Server_Settings":{
             "clear_holding_zone_after_sync":1
