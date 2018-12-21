@@ -57,6 +57,12 @@
 				"sap.ui.layout": {},
 				"sap.collaboration": {
 					"lazy": true
+				},
+				"sap.viz": {
+					"minVersion": ""
+				},
+				"sap.ui.vbm": {
+					"minVersion": ""
 				}
 			}
 		},
@@ -102,6 +108,12 @@
 				"titleTarget": "",
 				"greedy": false,
 				"target": ["master", "userDeviceOvp"]
+			}, {
+				"name": "DataDashboard",
+				"pattern": "dataovp/",
+				"titleTarget": "",
+				"greedy": false,
+				"target": ["master", "DataDashboard"]
 			}],
 			"targets": {
 				"master": {
@@ -143,6 +155,15 @@
 					"viewId": "userdeviceovp",
 					"viewLevel": 1,
 					"controlAggregation": "midColumnPages"
+				},
+				"DataDashboard": {
+					"viewType": "XML",
+					"viewName": "DataDashboard",
+					"viewLevel": 1,
+					"viewId": "datadashboard",
+					"title": "Data Analytic Dashboard",
+					"controlAggregation": "midColumnPages",
+					"clearControlAggregation": true
 				}
 			}
 		}

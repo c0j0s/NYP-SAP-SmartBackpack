@@ -91,7 +91,7 @@
 					        <Toolbar id="toolbar1_1545114485839">
 					            <Title text="Device Settings"/>
 					            <ToolbarSpacer/>
-					            <Button icon="sap-icon://settings"/>
+					            <Button icon="sap-icon://settings" visible="false"/>
 					            </Toolbar>
 					        
 					    </headerToolbar>
@@ -200,5 +200,8 @@
 				</items>
 			</VBox>
 		</semantic:content>
+	<semantic:titleMainAction>
+	    <semantic:TitleMainAction text="Update Device Settigs" id="action1" press="openCustomiseDeviceDialog"/>
+	</semantic:titleMainAction>
 	</semantic:SemanticPage>
 </mvc:View>

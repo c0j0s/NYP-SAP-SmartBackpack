@@ -1,6 +1,6 @@
 <mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:semantic="sap.f.semantic" controllerName="sbp.SmartBackpackAdmin.controller.Master">
 
-	<semantic:SemanticPage id="masterPage" preserveHeaderStateOnScroll="true" toggleHeaderOnTitleClick="false">
+	<semantic:SemanticPage id="masterPage" preserveHeaderStateOnScroll="true" toggleHeaderOnTitleClick="false" headerPinnable="false">
 		<semantic:titleHeading>
 			<Title id="masterPageTitle" text="{masterView>/title}"/>
 		</semantic:titleHeading>
@@ -12,17 +12,17 @@
 						<Title id="filterBarLabel" text="{masterView>/filterBarLabel}"/>
 					</Toolbar>
 				</infoToolbar>
-				<headerToolbar>
-					<OverflowToolbar>
-						<SearchField id="searchField" showRefreshButton="true" tooltip="{i18n>masterSearchTooltip}" search="onSearch" width="auto">
-							<layoutData>
-								<OverflowToolbarLayoutData minWidth="150px" maxWidth="240px" shrinkable="true" priority="NeverOverflow"/>
-							</layoutData>
-						</SearchField>
+				<headerToolbar><OverflowToolbar>
 						<ToolbarSpacer/>
 						<Button id="sortButton" press="onOpenViewSettings" icon="sap-icon://sort" type="Transparent"/>
 						<Button id="filterButton" press="onOpenViewSettings" icon="sap-icon://filter" type="Transparent"/>
 						<Button id="groupButton" press="onOpenViewSettings" icon="sap-icon://group-2" type="Transparent"/>
+					<content><SearchField xmlns="sap.m" id="searchField" showRefreshButton="true" tooltip="{i18n>masterSearchTooltip}" search="onSearch" width="auto">
+							<layoutData>
+								<OverflowToolbarLayoutData minWidth="150px" maxWidth="240px" shrinkable="true" priority="NeverOverflow"/>
+							</layoutData>
+						</SearchField>
+					</content>
 					</OverflowToolbar>
 				</headerToolbar>
 				<items>
@@ -31,5 +31,12 @@
 				</items>
 			</List>
 		</semantic:content>
+	<semantic:headerContent>
+	    <Bar id="bar1" design="SubHeader" translucent="true">
+	        <contentLeft>
+	            <Button xmlns="sap.m" text="Data Dashboard" id="button0" icon="sap-icon://bbyd-dashboard" press="toDataDashboard"/>
+	        </contentLeft>
+	    </Bar>
+	</semantic:headerContent>
 	</semantic:SemanticPage>
 </mvc:View>

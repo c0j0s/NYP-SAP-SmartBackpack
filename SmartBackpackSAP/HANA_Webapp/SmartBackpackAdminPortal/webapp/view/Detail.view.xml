@@ -34,7 +34,7 @@
 							<Toolbar id="toolbar5">
 								<Title text="{NAME}'s Profile"/>
 								<ToolbarSpacer/>
-								<Button icon="sap-icon://edit"/>
+								<Button icon="sap-icon://edit" text="Edit Profile" press="openEditProfileDialog"/>
 							</Toolbar>
 						</headerToolbar>
 						<content>
@@ -92,7 +92,8 @@
 							<Toolbar id="toolbar4">
 								<Title text="{NAME}'s Backpack"/>
 								<ToolbarSpacer/>
-								<Button icon="sap-icon://settings"/>
+								<Button icon="sap-icon://add" tooltip="Add Device" text="Add Device" press="openAddDeviceDialog"/>
+							<content/>
 							</Toolbar>
 						</headerToolbar>
 						<content>
@@ -103,7 +104,12 @@
 											<Text text="{DEVICE_SN}" id="text8"/>
 											<Text text="{DEVICE_NAME}" id="text9"/>
 											<Text text="{path: 'LAST_ONLINE',type: 'sap.ui.model.type.Date',formatOptions: {pattern: 'yyyy/MM/dd hh:mm a'}}" id="text10"/>
-											<Button xmlns="sap.m" text="View IOT Details" id="btn001" icon="sap-icon://bbyd-dashboard" width="auto" press="expandIotDataOverview" csdata:device-sn="{DEVICE_SN}"/>
+											<sap.ui.layout:HorizontalLayout xmlns:sap.ui.layout="sap.ui.layout" id="layout0_1545284546224">
+											    <sap.ui.layout:content>
+											    	<Button xmlns="sap.m" text="Details" id="btn001" icon="sap-icon://machine" width="auto" press="expandIotDataOverview" csdata:device-sn="{DEVICE_SN}" tooltip="View Device Details" type="Transparent"/>
+													<Button xmlns="sap.m" id="button3" icon="sap-icon://delete" type="Transparent" tooltip="Remove Device" press="openDeleteConfirmDialog" csdata:device-sn="{DEVICE_SN}"/>
+											    </sap.ui.layout:content>
+											</sap.ui.layout:HorizontalLayout>
 											</cells>
 									</ColumnListItem>
 								</items>
