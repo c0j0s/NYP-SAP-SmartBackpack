@@ -2,7 +2,7 @@
 Services writen in Python for Raspberry Pi to handle sensor data and communication with Android App.
 
 ## Software Architecture of SmartBackpackIOT
-![software architecture](https://github.com/c0j0s/SmartBackpack/blob/master/Documents/software%20architecture.jpg)
+![software architecture](https://github.com/c0j0s/SmartBackpack/blob/master/Documents/2_iot_software_architecture.jpg)
 
 ## Components of SmartBackpackIOT
 The BT, Sensor and Service monitor processes will startup automatically on boot.

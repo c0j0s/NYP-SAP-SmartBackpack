@@ -1,0 +1,244 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:vbm="sap.ui.vbm" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:viz="sap.viz.ui5.controls" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds" xmlns:viz.data="sap.viz.ui5.data" controllerName="sbp.SmartBackpackAdmin.controller.DataDashboard" beforeRendering="toggleFullScreen">
+	<App>
+		<pages>
+			<Page title="Data Analytic Dashboard">
+				<content>
+					<IconTabBar selectedKey="__filter0" id="bar0_1545278439131" expandable="false">
+						<items>
+							<IconTabFilter text="Incident Panel" count="{INCIDENT_COUNT}" icon="sap-icon://status-inactive" id="filter0" design="Horizontal"/>
+							<IconTabFilter xmlns="sap.m" text="Users" count="100{USER_COUNT}" showAll="true" id="filter18" design="Horizontal">
+								<content>
+									<vbm:AnalyticMap scaleVisible="false" id="analyticalmap" enableAnimation="true" width="auto" height="400px" regions="{/Regions}" regionClick="onRegionClick">
+												<vbm:regions>
+													<vbm:Region code="{code}" color="{color}" tooltip="{country}"/>
+												</vbm:regions>
+											</vbm:AnalyticMap>
+									<SegmentedButton xmlns="sap.m" selectedKey="one" id="button4">
+												<items><SegmentedButtonItem text="Button One" key="one" id="item2"/>
+													<SegmentedButtonItem text="Button Two" key="two" id="item3"/>
+													<SegmentedButtonItem text="Button Three" key="three" id="item4"/>
+												</items>
+											</SegmentedButton>
+									<Button xmlns="sap.m" text="Clear" id="button2" press="onRegionDeselect"/>
+									<Table noDataText="No Data" id="allUserTables" items="{path:'/user',sorter:[{path:'REGISTERED_ON',descending:false}]}">
+									    <items>
+									        <ColumnListItem type="Active" id="item0">
+									            <cells>
+									                <Text text="{USER_ID}" id="text6"/>
+									                <Text text="{NAME}" id="text7"/>
+									                <Text text="{CITY}, {COUNTRY_CODE}" id="text8"/></cells>
+									        </ColumnListItem>
+									    </items>
+									    <columns>
+									        <Column id="column1_1545896754631">
+									            <header>
+									                <Label text="Header 1" id="label1_1545896754631"/>
+									            </header>
+									        </Column>
+									        <Column id="column2_1545896754631">
+									            <header>
+									                <Label text="Header 2" id="label2_1545896754631"/>
+									            </header>
+									        </Column>
+									        <Column id="column3_1545896754632">
+									            <header>
+									                <Label text="Header 3" id="label3"/>
+									            </header>
+									        </Column></columns></Table>
+								</content>
+							</IconTabFilter>
+							<IconTabFilter xmlns="sap.m" text="Backpacks" count="{DEVICE_COUNT}" icon="sap-icon://machine" iconColor="Neutral" id="filter19" design="Horizontal">
+								<content>
+									<Panel xmlns="sap.m" width="auto" expandable="true" expanded="true" id="panel0_1545283548419">
+										<headerToolbar>
+											<Toolbar id="toolbar1_1545283548419">
+												<Title text="All Backpack IOTs"/>
+												<ToolbarSpacer/>
+												<Button icon="sap-icon://settings" visible="false"/>
+											</Toolbar>
+										</headerToolbar>
+										<content>
+											<Table xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:csdata="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns="sap.m" noDataText="No Backpack Found" id="userDeviceTable" items="{/iotDevice}">
+												<items>
+													<ColumnListItem type="Active" id="item0_userDeviceTable_0">
+														<cells>
+															<Text text="{DEVICE_SN}" id="text8_userDeviceTable_0"/>
+															<Text text="{DEVICE_NAME}" id="text9_userDeviceTable_0"/>
+															<Text text="{SySTEM_PALTFORM}"/>
+															<Text text="{path: 'MANUFACTURED_ON',type: 'sap.ui.model.type.Date',formatOptions: {pattern: 'yyyy/MM/dd hh:mm a'}}"/>
+															<Text text="{path: 'LAST_ONLINE',type: 'sap.ui.model.type.Date',formatOptions: {pattern: 'yyyy/MM/dd hh:mm a'}}" id="text10_userDeviceTable_0"/>
+														</cells>
+													</ColumnListItem>
+												</items>
+												<columns>
+													<Column id="column0_copy">
+														<header>
+															<Label text="Device SN" id="label0"/>
+														</header>
+													</Column>
+													<Column id="column1">
+														<header>
+															<Label text="Device Name" id="label1"/>
+														</header>
+													</Column>
+													<Column>
+														<header>
+															<Label text="OS"/>
+														</header>
+													</Column>
+													<Column id="column2">
+														<header>
+															<Label text="Manufactured On" id="label2"/>
+														</header>
+													</Column>
+													<Column id="column0_1545097358189">
+														<header>
+															<Text text="Last Online" id="text1"/>
+														</header>
+													</Column>
+												</columns>
+											</Table>
+										</content>
+									</Panel>
+								</content>
+							</IconTabFilter>
+							<IconTabFilter xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns:html="http://www.w3.org/1999/xhtml" xmlns="sap.m" text="Data records" count="{IOT_DATA_COUNT}" icon="sap-icon://along-stacked-chart" iconColor="Neutral" id="filter19_copy2" design="Horizontal">
+								<content>
+									<Panel xmlns="sap.m" width="auto" expandable="true" expanded="true" id="panel1_1545278068336">
+										<headerToolbar>
+											<Toolbar id="toolbar4">
+												<Title text="All IOT Sensor Readings"/>
+												<ToolbarSpacer/>
+												<Button icon="sap-icon://settings" visible="false"/>
+												<content/>
+											</Toolbar>
+										</headerToolbar>
+										<content>
+											<Table xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:csdata="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns="sap.m" ariaLabelledBy="__xmlview0--label1" noDataText="No Data" id="iotDataTable" visible="true" items="{/iotData}">
+												<items>
+													<ColumnListItem type="Active" id="item0_iotDataTable_0">
+														<cells>
+															<Text xmlns="sap.m" text="{path: 'RECORDED_ON',type: 'sap.ui.model.type.Date',formatOptions: {pattern: 'yyyy/MM/dd hh:mm a'}}" id="text4_iotDataTable_0"/>
+															<Text xmlns="sap.m" text="{DEVICE_SN}" id="text3_iotDataTable_0"/>
+															<Text xmlns="sap.m" text="{HUMIDITY}%" id="text5_iotDataTable_0"/>
+															<Text xmlns="sap.m" text="{TEMPERATURE}°C" id="text6_iotDataTable_0"/>
+															<Text xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns="sap.m" text="{PM2_5} µg/m³" id="text6_copy_iotDataTable_0"/>
+															<Text xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns="sap.m" text="{PM10} µg/m³" id="text6_copy2_iotDataTable_0"/>
+															<Text xmlns="sap.m" text="{CITY} [{GEO_LAT},{GEO_LNG}]" id="text7_iotDataTable_0"/>
+														</cells>
+													</ColumnListItem>
+												</items>
+												<columns>
+													<Column id="column1_1545097882894">
+														<header>
+															<Label text="Recorded on" id="label0_1545097882894"/>
+														</header>
+													</Column>
+													<Column id="column0">
+														<header>
+															<Text text="Device" id="text0"/>
+														</header>
+													</Column>
+													<Column id="HUMIDITY">
+														<header>
+															<Label text="Humidity" id="label1_1545097882895"/>
+														</header>
+													</Column>
+													<Column id="column3">
+														<header>
+															<Label text="Temperature" id="label2_1545097882896"/>
+														</header>
+													</Column>
+													<Column id="column0_1545098053712">
+														<header>
+															<Text text="PM2.5" id="text1_1545098053711"/>
+														</header>
+													</Column>
+													<Column id="column1_1545098067143">
+														<header>
+															<Text text="PM10" id="text2"/>
+														</header>
+													</Column>
+													<Column id="column2_1545098091442">
+														<header>
+															<Text text="Location" id="text3"/>
+														</header>
+													</Column>
+												</columns>
+											</Table>
+										</content>
+									</Panel>
+								</content>
+							</IconTabFilter>
+						</items>
+						<content>
+							<sap.ui.layout:ResponsiveSplitter xmlns:sap.ui.layout="sap.ui.layout" id="splitter0">
+								<sap.ui.layout:rootPaneContainer>
+									<sap.ui.layout:PaneContainer id="container2">
+										<sap.ui.layout:panes>
+											<sap.ui.layout:SplitPane requiredParentWidth="200" id="pane3">
+												<sap.ui.layout:content>
+													<Panel height="100%" backgroundDesign="Transparent" id="panel3">
+														<layoutData>
+															<sap.ui.layout:SplitterLayoutData id="data34"/>
+														</layoutData>
+														<content>
+															<ObjectListItem type="Active" title="username" number="city,country" numberUnit="lat, lng" intro="Alert Triggered For" id="item14" highlight="Error">
+																<attributes>
+																	<ObjectAttribute text="0" id="attribute515" title="Temperature"/>
+																	<ObjectAttribute text="0" id="attribute0" title="Humidity"/>
+																	<ObjectAttribute text="2 - ..." id="attribute2" title="Asthmatic level"/>
+																</attributes>
+																<firstStatus>
+																	<ObjectStatus text="100" id="status774" title="PM 2.5"/>
+																</firstStatus>
+																<secondStatus>
+																	<ObjectStatus text="100" id="status775" title="PM 10"/>
+																</secondStatus>
+															</ObjectListItem>
+															<List noDataText="Drop list items here" id="list1" growingThreshold="10" showUnread="true">
+																<items>
+																	<StandardListItem type="Navigation" title="username" description="temp:100 hum:100 pm2.5:100 pm10:100" icon="sap-icon://picture" id="item11" highlight="Warning"/>
+																	<StandardListItem xmlns:core="sap.ui.core" xmlns:vbm="sap.ui.vbm" xmlns:mvc="sap.ui.core.mvc" xmlns:viz="sap.viz.ui5.controls" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds" xmlns:viz.data="sap.viz.ui5.data" xmlns:sap.ui.layout="sap.ui.layout" xmlns="sap.m" type="Navigation" title="username" description="temp:100 hum:100 pm2.5:100 pm10:100" icon="sap-icon://picture" id="item11_copy" highlight="Warning"/>
+																	<StandardListItem xmlns:core="sap.ui.core" xmlns:vbm="sap.ui.vbm" xmlns:mvc="sap.ui.core.mvc" xmlns:viz="sap.viz.ui5.controls" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds" xmlns:viz.data="sap.viz.ui5.data" xmlns:sap.ui.layout="sap.ui.layout" xmlns="sap.m" type="Navigation" title="username" description="temp:100 hum:100 pm2.5:100 pm10:100" icon="sap-icon://picture" id="item11_copy2" highlight="Error"/>
+																	<StandardListItem xmlns:core="sap.ui.core" xmlns:vbm="sap.ui.vbm" xmlns:mvc="sap.ui.core.mvc" xmlns:viz="sap.viz.ui5.controls" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds" xmlns:viz.data="sap.viz.ui5.data" xmlns:sap.ui.layout="sap.ui.layout" xmlns="sap.m" type="Navigation" title="username" description="temp:100 hum:100 pm2.5:100 pm10:100" icon="sap-icon://picture" id="item11_copy3" highlight="Warning"/>
+																	<StandardListItem xmlns:core="sap.ui.core" xmlns:vbm="sap.ui.vbm" xmlns:mvc="sap.ui.core.mvc" xmlns:viz="sap.viz.ui5.controls" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds" xmlns:viz.data="sap.viz.ui5.data" xmlns:sap.ui.layout="sap.ui.layout" xmlns="sap.m" type="Navigation" title="username" description="temp:100 hum:100 pm2.5:100 pm10:100" icon="sap-icon://picture" id="item11_copy4" highlight="Warning"/>
+																</items>
+															</List>
+														</content>
+														<headerToolbar>
+															<Toolbar width="100%" id="toolbar1_1545894843433">
+																<content>
+																	<Label text="Latest Incident" width="100%" id="label1_1545894851708"/>
+																</content>
+															</Toolbar>
+														</headerToolbar>
+													</Panel>
+												</sap.ui.layout:content>
+											</sap.ui.layout:SplitPane>
+											<sap.ui.layout:SplitPane id="pane4" requiredParentWidth="500">
+												<sap.ui.layout:content>
+													<Panel height="100%" backgroundDesign="Transparent" id="panel4">
+														<layoutData>
+															<sap.ui.layout:SplitterLayoutData id="data37"/>
+														</layoutData>
+													<content>
+													    <vbm:AnalyticMap scaleVisible="false" id="map1" width="100%"/>
+													</content>
+													</Panel>
+												</sap.ui.layout:content>
+											</sap.ui.layout:SplitPane>
+										</sap.ui.layout:panes>
+									</sap.ui.layout:PaneContainer>
+								</sap.ui.layout:rootPaneContainer>
+							</sap.ui.layout:ResponsiveSplitter>
+						</content>
+					</IconTabBar>
+				</content>
+				<headerContent>
+					<Button xmlns="sap.m" id="exitFullScreen" icon="sap-icon://exit-full-screen" press="toggleFullScreen"/>
+				</headerContent>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>

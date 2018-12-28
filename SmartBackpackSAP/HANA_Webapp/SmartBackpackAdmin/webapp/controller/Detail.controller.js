@@ -75,6 +75,7 @@ sap.ui.define([
 				});
 				this._bindView("/" + sObjectPath);
 			}.bind(this));
+			
 			var userDeviceTable = this.getView().byId("userDeviceTable");
 			userDeviceTable.bindItems({
 				path: "/userDevices",

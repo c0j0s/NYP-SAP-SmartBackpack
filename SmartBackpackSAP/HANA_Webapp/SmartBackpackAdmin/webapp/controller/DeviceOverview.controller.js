@@ -6,7 +6,7 @@ sap.ui.define([
 	"sap/m/Button",
 	"sap/m/MessageBox",
 	"sap/m/MessageToast",
-	"sbp/SmartBackpackAdmin/model/formatter"
+	"sbp/SmartBackpackAdmin/model/formatter",
 ], function (BaseController, JSONModel, formatter, Dialog, Button, MessageBox, MessageToast) {
 	"use strict";
 	return BaseController.extend("sbp.SmartBackpackAdmin.controller.DeviceOverview", {
@@ -132,15 +132,7 @@ sap.ui.define([
 			// Restore original busy indicator delay for the detail view
 			oViewModel.setProperty("/delay", iOriginalViewBusyDelay);
 		},
-		/**
-		 * Set the full screen mode to false and navigate to master page
-		 */
-		onCloseDetailPress: function () {
-			this.getModel("appView").setProperty("/actionButtonsInfo/midColumn/fullScreen", false);
-			// No item should be selected on master after detail page is closed
-			this.getOwnerComponent().oListSelector.clearMasterListSelection();
-			this.getRouter().navTo("master");
-		},
+
 		/**
 		 * Toggle between full and non full screen mode.
 		 */
@@ -219,10 +211,10 @@ sap.ui.define([
 							
 							oModel.update("/userDevices(USER_ID='" + oObject.USER_ID + "',DEVICE_SN='" + oObject.DEVICE_SN + "')", oEntry, { 
 						    success: function() { 
-						        MessageToast.show("Device Confguration Updated");
+						        MessageToast.show("Device Settings Updated");
 						    },
 						    error: function() { 
-						        MessageToast.show("Fail to Update Device Configuration");
+						        MessageToast.show("Fail to Update Device Settings");
 						    }
 							});
 							pressDialog.destroy();

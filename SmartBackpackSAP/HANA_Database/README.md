@@ -2,7 +2,7 @@
 This repo contains archives for database configuration, structures and data.
 
 ## Database Struture 
-![Database Struture ](https://github.com/c0j0s/SmartBackpack/blob/master/Documents/hana%20database%20structure.jpeg)
+![Database Struture ](https://github.com/c0j0s/SmartBackpack/blob/master/Documents/0_hana_database_structure.jpeg)
 
 ## Database Tables
 USER_PROFILE:  

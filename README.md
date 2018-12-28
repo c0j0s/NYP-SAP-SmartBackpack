@@ -3,7 +3,7 @@ A NYP FYPJ collaboration project with SAP Digital Labs.
 Embedding technologies into a backpack designed for people with asthmatic conditions.
 
 ## Overview of Smart Backpack Project
-![overview](https://github.com/c0j0s/SmartBackpack/blob/master/Documents/solution.jpg)
+![overview](https://github.com/c0j0s/SmartBackpack/blob/master/Documents/1_integrated_overview.jpg)
 
 ### SmartBackpackIOT
 Services writen in Python for Raspberry Pi to handle sensor data and communication with Android App.
