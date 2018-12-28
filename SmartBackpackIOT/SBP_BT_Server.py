@@ -62,7 +62,7 @@ def main():
     port = server_sock.getsockname()[1]
 
     # The service UUID to advertise
-    uuid = "7be1fcb3-5776-42fb-91fd-2ee7b5bbb86d"
+    uuid = "00001101-0000-1000-8000-00805f9b34fb"
 
     # Start advertising the service
     advertise_service(server_sock, "SmartBackpackIOT",
