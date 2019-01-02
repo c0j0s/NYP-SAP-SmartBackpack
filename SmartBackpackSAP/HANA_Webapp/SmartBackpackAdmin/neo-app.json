@@ -43,6 +43,14 @@
         "name": "SmartBackpack"
       },
       "description": "SmartBackpack"
+    },
+    {
+      "path": "/NYPFYPJ_SMARTBACKPACK/sbpview.xsodata",
+      "target": {
+        "type": "destination",
+        "name": "SmartBackpack_view"
+      },
+      "description": "SmartBackpack_view"
     }
   ],
   "welcomeFile": "/webapp/test/flpSandbox.html",

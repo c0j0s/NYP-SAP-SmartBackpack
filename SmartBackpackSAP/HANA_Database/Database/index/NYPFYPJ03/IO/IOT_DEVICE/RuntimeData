@@ -1,0 +1,28 @@
+# SAP NewDB - do not edit
+# indexid: NYPFYPJ03:IOT_DEVICE (t 4065)
+creationtimestamp=1545022910065
+modifytimestamp=0
+lastmergetimestamp=1545076922912
+lasthistorizationmergetid=0
+lastreplaylogtimestamp=1545028752022
+lastcorrectiontimestamp=0
+lasttruncationtimestamp=0
+lastoctimestamp=0
+rawcountmain=7
+rawcountdelta=0
+lastoptimizedcompressionrowcount=0
+changedrowcountsincelastoptimizecompression=7
+deletedrowsinmainafterlastmerge=0
+visiblecountmain=7
+visiblecountdelta=0
+estimatedmaxmemsizemain=301342
+estimatedmaxmemsizedelta=129732
+lastestimatedmemsize=421174
+lastestimatedmemsizetime=1545076922912
+maxrowid=7
+maxhashid=4294967296
+hashidcounters=
+maxudiv0=7
+maxudiv1=0
+maxmergecid=0
+singlevaluecache=203,204,205,206,207,208,209,210,211

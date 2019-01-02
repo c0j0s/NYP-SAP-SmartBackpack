@@ -1,5 +1,5 @@
 <mvc:View xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:csdata="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" controllerName="sbp.SmartBackpackAdmin.controller.DeviceOverview">
-	<semantic:SemanticPage id="detailPage" busy="{deviceOvp>/busy}" busyIndicatorDelay="{deviceOvp>/delay}" cd:w5g.dt.context="/userDevices">
+	<semantic:SemanticPage id="detailPage" busy="{deviceOvp>/busy}" busyIndicatorDelay="{deviceOvp>/delay}" cd:w5g.dt.context="SbpView&gt;/iotdeviceinfo">
 		<semantic:titleHeading>
 			<Title text="{DEVICE_NAME}"/>
 		</semantic:titleHeading>
@@ -29,7 +29,7 @@
 		<semantic:content>
 			<VBox width="100%" direction="Column" id="vbox0">
 				<items>
-					<Panel xmlns="sap.m" width="auto" expandable="true" expanded="true" id="aboutDevicePanel" cd:w5g.dt.context="/iotDevice">
+					<Panel xmlns="sap.m" width="auto" expandable="true" expanded="true" id="aboutDevicePanel">
 					    <headerToolbar>
 					        <Toolbar id="toolbar1_1545114842119">
 					            <Title text="About Device"/>
@@ -39,7 +39,7 @@
 					        
 					    </headerToolbar>
 					    <content>
-					        <sap.ui.layout:Grid xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:csdata="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:sap.m.semantic="sap.m.semantic" xmlns:sap.ui.layout="sap.ui.layout" id="aboutDevicePanelContent" defaultSpan="XL6 L6 M6 S12" position="Center" cd:w5g.dt.context="/iotDevice">
+					        <sap.ui.layout:Grid xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:csdata="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:sap.m.semantic="sap.m.semantic" xmlns:sap.ui.layout="sap.ui.layout" id="aboutDevicePanelContent" defaultSpan="XL6 L6 M6 S12" position="Center">
 					            <sap.ui.layout:content>
 					                <sap.ui.layout:VerticalLayout width="100%" id="layout0_copy">
 					                    <sap.ui.layout:content>
@@ -201,7 +201,7 @@
 			</VBox>
 		</semantic:content>
 	<semantic:titleMainAction>
-	    <semantic:TitleMainAction text="Update Device Settigs" id="action1" press="openCustomiseDeviceDialog"/>
+	    <semantic:TitleMainAction text="Update Device Settings" id="action1" press="openCustomiseDeviceDialog"/>
 	</semantic:titleMainAction>
 	</semantic:SemanticPage>
 </mvc:View>

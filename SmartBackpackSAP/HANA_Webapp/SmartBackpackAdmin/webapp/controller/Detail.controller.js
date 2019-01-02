@@ -70,7 +70,7 @@ sap.ui.define([
 			this.getModel("appView").setProperty("/layout", "TwoColumnsMidExpanded");
 			this.getModel("appView").setProperty("/detailsexpended", true);
 			this.getModel().metadataLoaded().then(function () {
-				var sObjectPath = this.getModel().createKey("user", {
+				var sObjectPath = this.getModel().createKey("userinfos", {
 					USER_ID: sObjectId
 				});
 				this._bindView("/" + sObjectPath);

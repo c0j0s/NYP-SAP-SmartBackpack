@@ -2,7 +2,7 @@
 Services writen in Python for Raspberry Pi to handle sensor data and communication with Android App.
 
 ## Software Architecture of SmartBackpackIOT
-![software architecture](https://github.com/c0j0s/SmartBackpack/blob/master/Documents/2_iot_software_architecture.jpeg)
+![software architecture](https://github.com/c0j0s/SmartBackpack/blob/master/Documentations/2_iot_software_architecture.jpeg)
 
 ## Components of SmartBackpackIOT
 The BT, Sensor and Service monitor processes will startup automatically on boot.
@@ -44,7 +44,7 @@ Others:
 ## Start Services Manually
 1. Change to service folder directory
     ```sh
-    $ cd /home/pi/Smartbackpack
+    $ cd /home/pi/SmartbackpackIOT
     ```
 2. Execute following command
     ```sh
@@ -84,7 +84,7 @@ Others:
 
 ## Bluetooth Commands
 | BT Commands              | Functionality                               | Sample Output  |
-| -------------------------|:---------------------------------------     | --------------------:|
+| -------------------------|----------------------------------------     | --------------------|
 | get_sensor_status        | get the status of sensor server             | Active/dead |
 | get_bt_status            | get the status of bluetooth server          | Active/dead |
 | get_sensor_data          | get real time sensor reading                | JSON:  {humidity:0,temperature:0}|
@@ -98,15 +98,16 @@ Others:
 | sh_(Bash commands)       | execute custom shell commands               | [Command output] |
 
 # SmartBackpackIOT Project Structures
-Main Server Scripts:  
+### Main Server Scripts:  
 - SBP_BT_Server.py  
 - SBP_Sensor_Server.py  
 - SBP_Service_Monitor.py  
 
-Data and configuration storage:  
+### Data and configuration storage:  
 - config.json  
 - holding_zone
 
+### Project Structures
 /lib  
 contains sensor libraries and wrapper classes.
 
