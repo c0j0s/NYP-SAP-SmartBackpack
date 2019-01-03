@@ -12,16 +12,24 @@ class SBP_Display:
 
     # set backlight to (R,G,B) (values from 0..255 for each)
     def setDisplayRGB(self,r,g,b):
-        self.bus.write_byte_data(self.DISPLAY_RGB_ADDR,0,0)
-        self.bus.write_byte_data(self.DISPLAY_RGB_ADDR,1,0)
-        self.bus.write_byte_data(self.DISPLAY_RGB_ADDR,0x08,0xaa)
-        self.bus.write_byte_data(self.DISPLAY_RGB_ADDR,4,r)
-        self.bus.write_byte_data(self.DISPLAY_RGB_ADDR,3,g)
-        self.bus.write_byte_data(self.DISPLAY_RGB_ADDR,2,b)
+        try:
+            self.bus.write_byte_data(self.DISPLAY_RGB_ADDR,0,0)
+            self.bus.write_byte_data(self.DISPLAY_RGB_ADDR,1,0)
+            self.bus.write_byte_data(self.DISPLAY_RGB_ADDR,0x08,0xaa)
+            self.bus.write_byte_data(self.DISPLAY_RGB_ADDR,4,r)
+            self.bus.write_byte_data(self.DISPLAY_RGB_ADDR,3,g)
+            self.bus.write_byte_data(self.DISPLAY_RGB_ADDR,2,b)
+        except:
+            print("[DISPLAY] falal: Display bus write_byte_data() error in setDisplayRGB")
+            pass
 
     # send command to display (no need for external use)    
     def textCommand(self,cmd):
-        self.bus.write_byte_data(self.DISPLAY_TEXT_ADDR,0x80,cmd)
+        try:
+            self.bus.write_byte_data(self.DISPLAY_TEXT_ADDR,0x80,cmd)
+        except:
+            print("[DISPLAY] falal: Display bus write_byte_data() error in textCommand")
+            pass
 
     # set display text \n for second line(or auto wrap)     
     def setDisplayText(self,text):
