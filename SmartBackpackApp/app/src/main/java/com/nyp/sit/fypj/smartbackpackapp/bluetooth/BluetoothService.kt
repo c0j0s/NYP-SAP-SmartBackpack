@@ -53,7 +53,7 @@ class BluetoothService(private val mHandler: Handler) {
         mConnectedThread?.start()
 
         // Send the name of the connected device back to the UI Activity
-        val msg = mHandler.obtainMessage(0)
+        val msg = mHandler.obtainMessage(Constants.HANDLER_STATE_CHANGE)
         val bundle = Bundle()
         bundle.putString(Constants.DEVICE_NAME, device.name)
         msg.data = bundle
@@ -74,6 +74,13 @@ class BluetoothService(private val mHandler: Handler) {
         mConnectedThread = null
 
         mState = STATE_NONE
+
+        // Send the name of the connected device back to the UI Activity
+        val msg = mHandler.obtainMessage(Constants.HANDLER_TOAST)
+        val bundle = Bundle()
+        bundle.putString(Constants.TOAST, "Disconnected")
+        msg.data = bundle
+        mHandler.sendMessage(msg)
     }
 
     /**

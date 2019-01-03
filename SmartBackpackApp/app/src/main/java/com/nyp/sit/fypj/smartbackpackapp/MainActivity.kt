@@ -18,6 +18,7 @@ import com.nyp.sit.fypj.smartbackpackapp.bluetooth.DeviceListActivity
 class MainActivity : AppCompatActivity() {
 
     lateinit var button: Button
+    lateinit var stop_button: Button
     var REQUEST_CONNECT_DEVICE_SECURE = 1
     private var mBluetoothAdapter: BluetoothAdapter? = null
     private var mChatService: BluetoothService? = null
@@ -36,11 +37,17 @@ class MainActivity : AppCompatActivity() {
             this!!.finish()
         }
 
-        button = findViewById<Button>(R.id.button)
+        button = findViewById(R.id.button)
         button.setOnClickListener {
             val serverIntent = Intent(this, DeviceListActivity::class.java)
             startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE)
         }
+
+        stop_button = findViewById(R.id.btn_stop)
+        stop_button.setOnClickListener {
+            mChatService!!.stop();
+        }
+
 
         var editText = findViewById<EditText>(R.id.editText)
         this.display = findViewById(R.id.display)
@@ -105,11 +112,15 @@ class MainActivity : AppCompatActivity() {
                     display!!.setText(readMessage)
                 }
                 Constants.HANDLER_TOAST -> {
-                    var mConnectedDeviceName = msg.data.getString(Constants.DEVICE_NAME)
-                    Toast.makeText(this@MainActivity, "Connected to $mConnectedDeviceName", Toast.LENGTH_SHORT).show()
+                    var content = msg.data.getString(Constants.TOAST)
+                    Toast.makeText(this@MainActivity, content, Toast.LENGTH_LONG).show()
                 }
                 Constants.HANDLER_MESSAGE_SEND -> {
                     Toast.makeText(this@MainActivity,"Message Send", Toast.LENGTH_SHORT).show()
+                }
+                Constants.HANDLER_STATE_CHANGE -> {
+                    var mConnectedDeviceName = msg.data.getString(Constants.DEVICE_NAME)
+                    Toast.makeText(this@MainActivity, "Connected to $mConnectedDeviceName", Toast.LENGTH_SHORT).show()
                 }
             }
         }
