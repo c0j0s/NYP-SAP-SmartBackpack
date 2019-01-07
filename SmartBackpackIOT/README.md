@@ -7,10 +7,10 @@ Services writen in Python for Raspberry Pi to handle sensor data and communicati
 ## Components of SmartBackpackIOT
 The BT, Sensor and Service monitor processes will startup automatically on boot.
 
-BT Server:  
-A bluetooth server that is responsible for communicating with the Android companion app.
+BT Service:  
+A bluetooth service that is responsible for communicating with the Android companion app.
 
-Sensor Server:  
+Sensor Service:  
 Responsible for handling sensor readings.
 
 Service Monitor:  
@@ -56,26 +56,26 @@ Others:
 ```json
 {
     "device":{
-        //Device Configurations
+        "//Device Configurations"
     },
     "env":{
-        //Environment Configurations
+        "//Environment Configurations"
     },
     "settings":{
-        //Service options
+        "//Service options"
         "device_sn":"SBPSG000001",
         "debug":true,
         "BT_Server_Settings":{
             "clear_holding_zone_after_sync":1
         },
         "Sensor_Server_Settings":{
-            //User perference options, can be customised
+            "//User perference options, can be customised"
             "enable_buzzer":0,
             "enable_led":0,
             "minute_to_record_data":0.2,
             "seconds_to_update_data":5,
             "humidity_range":{
-                //Not final
+                "//Not final"
             }
         }
     }
@@ -96,6 +96,75 @@ Others:
 | cmd_disconnect           | disconnect bluetooth connections            | Disconnected |
 | cmd_toggle_debug         | toggle server debug mode                    | Debug:True/False |
 | sh_(Bash commands)       | execute custom shell commands               | [Command output] |
+
+### Next version of bluetooth communication command syntax
+The entire transmission string in __JSON__ array format consist of 3 parts:  
+```JSON
+[
+    {function code},
+    {data},
+    {end status},
+    {debug info [optional], only trassmited in debug mode}
+]
+```
+__Function code__  
+The first array item is reserved for function identifier code
+```JSON
+[
+    "00001",
+    "...",
+    "..."
+]
+```
+IOT Device Function Codes
+| Function Code | Description                         | 
+| --------------|-------------------------------------| 
+| 00000 | terminate bluetooth connections             |
+| 10000 | restart device                              |
+| 11000 | restart sensor server                       |
+| 11500 | get the status of sensor server             |
+| 12000 | restart bluetooth server [NOT IMPLEMENTED]  |
+| 12500 | get the status of bluetooth server          |
+| 30000 | get real time sensor reading                |
+| 31000 | set user perferences [NOT IMPLEMENTED]      |
+| 32000 | get holding_zone SQL data                   |
+| 41000 | toggle server debug mode                    |
+| 42000 | execute custom shell commands               |
+
+Android App Function Codes
+| Function Code | Description                         | 
+| --------------|-------------------------------------| 
+| 00000 | command executed successfully               |
+| 10000 | command executed with error occurred, retry |
+| 20000 | fatal error                                 |
+
+__Data__  
+The Second array item is reserved for data body
+```JSON
+[
+    "...",
+    {
+        JSON Object
+    },
+    "..."
+]
+```
+
+__End Status__  
+The Third array item is reserved for transmission ending status
+```JSON
+[
+    "...",
+    "...",
+    "EOT"
+]
+```
+Proposed status codes:
+| Status Code              | Description                               |
+| -------------------------|----------------------------------------     | 
+| EOT | end of transmission |
+| MSE | maintain session, more data transmitting |
+| ERR | error occured, transmission terminated and services schedule for reboot |
 
 # SmartBackpackIOT Project Structures
 ### Main Server Scripts:  
