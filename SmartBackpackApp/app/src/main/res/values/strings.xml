@@ -1,3 +1,10 @@
-<resources>
-    <string name="app_name">SmartBackpackApp</string>
+<resources  xmlns:tools="http://schemas.android.com/tools"
+             tools:ignore="MissingTranslation" >
+    <string name="application_name">SmartBackpackApp</string>
+    <string name="eset_iotdata">IotData</string>
+    <string name="eset_iotdevice">IotDevice</string>
+    <string name="eset_iotdeviceinfo">Iotdeviceinfo</string>
+    <string name="eset_user">User</string>
+    <string name="eset_userdevices">UserDevices</string>
+    <string name="eset_userinfos">Userinfos</string>
 </resources>

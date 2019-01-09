@@ -1,30 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.nyp.sit.fypj.smartbackpackapp">
+    package="com.nyp.fypj.smartbackpackapp" >
 
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
 
     <application
-            android:allowBackup="true"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
-            android:supportsRtl="true"
-            android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+        android:name=".app.SAPWizardApplication"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/application_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme" >
+        <meta-data
+            android:name="android.content.APP_RESTRICTIONS"
+            android:resource="@xml/app_restrictions" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+        <activity
+            android:name=".logon.LogonActivity"
+            android:label="@string/application_name"
+            android:theme="@style/splashScreenTheme" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".mdui.EntitySetListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/application_name"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name="com.sap.cloud.mobile.onboarding.launchscreen.LaunchScreenActivity"
+            android:label="@string/application_name" >
+            <meta-data
+                android:name="action_handler"
+                android:value="com.nyp.fypj.smartbackpackapp.logon.LaunchScreenActionHandlerImpl" />
+        </activity>
+        <activity
+            android:name=".mdui.ItemListActivity"
+            android:label="@string/application_name"
+            android:launchMode="singleTop"
+            android:parentActivityName=".mdui.EntitySetListActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".mdui.EntitySetListActivity" />
+        </activity>
+        <activity
+            android:name=".mdui.ItemDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/application_name"
+            android:parentActivityName=".mdui.ItemListActivity"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".mdui.ItemListActivity" />
+        </activity>
+        <activity
+            android:name=".mdui.SettingsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/settings_activity_name"
+            android:launchMode="singleTop"
+            android:parentActivityName=".mdui.EntitySetListActivity"
+            android:screenOrientation="sensor" >
+        </activity>
+        <activity
+            android:name="com.sap.cloud.mobile.onboarding.passcode.SetPasscodeActivity"
+            android:label="@string/application_name"
+            android:parentActivityName=".logon.LogonActivity" >
+            <meta-data
+                android:name="action_handler"
+                android:value="com.nyp.fypj.smartbackpackapp.logon.PasscodeActionHandlerImpl" />
+            <meta-data
+                android:name="validation_action_handler"
+                android:value="com.nyp.fypj.smartbackpackapp.logon.PasscodeValidationActionHandler" />
+        </activity>
+        <activity
+            android:name="com.sap.cloud.mobile.onboarding.passcode.ConfirmPasscodeActivity"
+            android:label="@string/application_name"
+            android:parentActivityName=".logon.LogonActivity" >
+            <meta-data
+                android:name="action_handler"
+                android:value="com.nyp.fypj.smartbackpackapp.logon.PasscodeActionHandlerImpl" />
+            <meta-data
+                android:name="validation_action_handler"
+                android:value="com.nyp.fypj.smartbackpackapp.logon.PasscodeValidationActionHandler" />
+        </activity>
+        <activity
+            android:name="com.sap.cloud.mobile.onboarding.passcode.EnterPasscodeActivity"
+            android:label="@string/application_name"
+            android:parentActivityName=".logon.LogonActivity" >
+            <meta-data
+                android:name="action_handler"
+                android:value="com.nyp.fypj.smartbackpackapp.logon.PasscodeActionHandlerImpl" />
+            <meta-data
+                android:name="validation_action_handler"
+                android:value="com.nyp.fypj.smartbackpackapp.logon.PasscodeValidationActionHandler" />
+        </activity>
+        <activity
+            android:name="com.sap.cloud.mobile.onboarding.fingerprint.FingerprintActivity"
+            android:label="@string/application_name" >
+            <meta-data
+                android:name="action_handler"
+                android:value="com.nyp.fypj.smartbackpackapp.logon.FingerprintActionHandlerImpl" />
+        </activity>
+        <activity
+            android:name="com.sap.cloud.mobile.onboarding.fingerprint.FingerprintErrorActivity"
+            android:label="@string/application_name" >
+            <meta-data
+                android:name="action_handler"
+                android:value="com.nyp.fypj.smartbackpackapp.logon.FingerprintActionHandlerImpl" />
+        </activity>
+        <activity android:name=".logon.UnlockActivity" >
+        </activity>
+        <activity
+            android:name="com.sap.cloud.mobile.onboarding.passcode.ChangePasscodeActivity"
+            android:label="@string/application_name" >
+            <meta-data
+                android:name="action_handler"
+                android:value="com.nyp.fypj.smartbackpackapp.logon.PasscodeActionHandlerImpl" />
+            <meta-data
+                android:name="validation_action_handler"
+                android:value="com.nyp.fypj.smartbackpackapp.logon.PasscodeValidationActionHandlerImpl" />
+        </activity>
+        <activity
+            android:name=".app.ErrorNotificationDialog"
+            android:theme="@android:style/Theme.Holo.Light.Dialog.MinWidth" >
+        </activity>
+
+        <activity android:name=".mdui.MainActivitytest">
         </activity>
 
         <activity
-                android:name=".bluetooth.DeviceListActivity"
-                android:theme="@android:style/Theme.Material.Dialog"
-                android:label="select_device"
-                android:configChanges="orientation|keyboardHidden"/>
+            android:name=".bluetooth.DeviceListActivity"
+            android:theme="@android:style/Theme.Material.Dialog"
+            android:label="select_device"
+            android:configChanges="orientation|keyboardHidden"/>
+
     </application>
 
 </manifest>

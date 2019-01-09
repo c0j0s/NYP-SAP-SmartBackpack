@@ -97,6 +97,15 @@ def main():
 
             print("Received [%s]" % data)
 
+            received = decodeBTObject(data)
+            if debug:
+                print("===============")
+                print(received.function_code)
+                print(received.data)
+                print(received.end_code)
+                if received.debug is not "":
+                    print(received.debug)
+
             result = {}
 
             # Handle the request
@@ -142,6 +151,31 @@ def main():
         except:
             closing(client_sock,msg="Error in main loop")
             break
+
+def decodeBTObject(arr):
+    obj = json.loads(arr)
+    result = {}
+    result.function_code = obj[0]
+    result.data = obj[1]
+    result.end_code = obj[2]
+
+    if debug and obj[3] is not "":
+        result.debug = obj[3]
+    else:
+        result.debug = ""
+
+    return result
+
+def toBTObject(function_code,data,end_code,debug=""):
+    result = []
+    result[0] = function_code
+    result[1] = data
+    result[2] = end_code
+
+    if debug and debug is not "":
+        result[3] = debug
+    
+    return result
 
 def get_service_status(servicename):
     result = {}

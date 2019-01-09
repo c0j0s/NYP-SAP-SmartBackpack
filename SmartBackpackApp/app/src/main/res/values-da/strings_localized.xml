@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><resources>
+    <!-- XTIT: The title of the create Activity, will appear at the top of the screen -->
+    <string name="title_create_fragment">"Opret %1$s element"</string>
+
+    <!-- XTIT: The title of the update Activity, will appear at the top of the screen -->
+    <string name="title_update_fragment">"Opdater"</string>
+
+    <!-- XMSG: Error message for the mandatory input fields, will appear in the edit field left empty -->
+    <string name="mandatory_warning">"Dette er et obligatorisk felt"</string>
+
+    <!-- XTIT: The title of the welcome screen, will appear at the top of the screen -->
+    <string name="welcome_screen_headline_label">"Velkommen"</string>
+
+    <!-- YINS: Short description on the welcome screen -->
+    <string name="welcome_screen_detail_label">"Udforsk SAP Cloud Platform SDK for Android med denne genererede app"</string>
+
+    <!-- XFLD: label at the bottom of the welcome screen -->
+    <string name="welcome_screen_footnote_label">"Du kan prøve SDK-funktionerne i demotilstand."</string>
+
+    <!-- XBUT: Text of the Save button -->
+    <string name="save">"Gem"</string>
+
+    <!-- XBUT: Text of the Update button -->
+    <string name="update">"Opdater"</string>
+
+    <!-- XBUT: Text of the Delete button -->
+    <string name="delete">"Slet"</string>
+
+    <!-- XBUT: Text of the Cancel button -->
+    <string name="cancel">"Annuller"</string>
+
+    <!-- XBUT: Text of the OK button -->
+    <string name="ok">"OK"</string>
+
+    <!-- XBUT: Text of the Delete button -->
+    <string name="yes">"Ja"</string>
+
+    <!-- XTIT: The title of the delete dialog -->
+    <string name="delete_dialog_title">"SLET"</string>
+
+    <!-- XMSG: The title of the delete dialog -->
+    <string name="delete_one_item">"Vil du slette det valgte element?"</string>
+
+    <!-- XMSG: The title of the delete dialog (plural) -->
+    <string name="delete_more_items">"Vil du slette de valgte elementer?"</string>
+
+    <!-- XMSG: Error message, can be presented in a Toast or Dialog -->
+    <string name="entity_download_error">"Der opstod en fejl under en baggrundshandling."</string>
+
+    <!-- XMIT: Refresh menu item -->
+    <string name="menu_refresh">"Opdater"</string>
+
+    <!-- XMIT: Update menu item -->
+    <string name="menu_update">"Opdater"</string>
+
+    <!-- XMIT: Delete menu item -->
+    <string name="menu_delete">"Slet"</string>
+
+    <!-- NOTR: No translation needed, just placeholder text -->
+    <string name="object_header_headline">"Headline"</string>
+
+    <!-- NOTR: No translation needed, just placeholder text -->
+    <string name="object_header_subheadline">"Subheadline"</string>
+
+    <!-- NOTR: No translation needed, just placeholder text -->
+    <string name="object_header_body">"Body text"</string>
+
+    <!-- NOTR: No translation needed, just placeholder text -->
+    <string name="object_header_footnote">"Footnote"</string>
+
+    <!-- NOTR: No translation needed, just placeholder text -->
+    <string name="object_header_tag1">"TAG1"</string>
+
+    <!-- NOTR: No translation needed, just placeholder text -->
+    <string name="object_header_tag2">"TAG2"</string>
+
+    <!-- NOTR: No translation needed, just placeholder text -->
+    <string name="object_header_tag3">"TAG3"</string>
+
+    <!-- NOTR: No translation needed, just placeholder text -->
+    <string name="object_header_description">"Item description"</string>
+
+    <!-- NOTR: No translation needed, just placeholder text -->
+    <string name="object_header_status">"Status"</string>
+
+    <!-- NOTR: No translation needed, just placeholder text -->
+    <string name="error">"Error"</string>
+
+    <!-- error messages -->
+
+    <!-- XTIT: The title of the delete dialog -->
+    <string name="read_failed">"Download mislykkedes"</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="read_failed_detail">"Downloadhandlingen mislykkedes. Prøv at genstarte applikationen."</string>
+
+    <!-- XTIT: The title of the delete dialog -->
+    <string name="create_failed">"Oprettelse mislykkedes"</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="create_failed_detail">"Oprettelseshandlingen mislykkedes. Prøv at udføre den igen senere."</string>
+
+    <!-- XTIT: The title of the delete dialog -->
+    <string name="update_failed">"Opdatering mislykkedes"</string>
+    <string name="update_failed_detail">"Opdateringshandlingen mislykkedes. Opdater de lokale data, og prøv at udføre den igen senere."</string>
+
+    <!-- XTIT: The title of the delete dialog -->
+    <string name="delete_failed">"Sletning mislykkedes"</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="delete_failed_detail">"Sletningshandlingen mislykkedes. Opdater de lokale data, og prøv at udføre den igen senere."</string>
+
+    <!-- XTIT: The message of the upload toast in case of success -->
+    
+
+    <!-- XTIT: The message of the upload toast in case of failing -->
+    <string name="log_upload_failed">"Upload af protokol mislykkedes"</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="log_upload_failed_detail">"Forkert udformet URL blev modtaget til upload af protokol. Applikationen virker muligvis stadig, men protokoller uploades ikke til serveren."</string>
+
+    <!-- XTIT: The title of the delete dialog -->
+    <string name="push_error">"Fejl ved push"</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="push_token_upload_failed_detail">"Pushfunktionen virker ikke, da pushtoken ikke kunne uploades til SAP-serveren. Du modtager ikke pushmeddelelser."</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="push_invalid_push_format">"Pushmeddelelse modtaget, men den kunne ikke behandles, da formatet er ugyldigt."</string>
+
+    <!-- XTIT: The title of the error dialog -->
+    <string name="policy_download_failed">"Download af politik mislykkedes"</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="policy_download_failed_details">"Download af klientpolitik fra serveren mislykkedes. Der anvendes en standardpolitik."</string>
+
+    <!-- XTIT: The title of an error dialog -->
+    <string name="configuration_invalid">"Ugyldig konfiguration"</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="configuration_contained_malformed_url">"Konfiguration indeholdt forkert udformet URL: %s"</string>
+
+    <!-- XTIT: The title of the error dialog -->
+    <string name="secure_store_error">"Fejl ved sikkert lager"</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="secure_store_open_default_error_detail">"Sikkert lager med standardadgangskode kunne ikke åbnes."</string>
+
+    <!-- XTIT: The title of the error dialog -->
+    <string name="passcode_change_error">"Fejl ved ændring af adgangskode"</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="passcode_change_error_detail">"Adgangskoden til sikkert lager kunne ikke ændres. Applikationen virker stadig med den seneste kode."</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="passcode_change_error_detail_default">"Standardadgangskoden kunne ikke angives. Applikationen virker stadig med den seneste brugeradgangskode."</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="error_back_navigation">"Applikationen er adgangskodebeskyttet. Den kan ikke åbnes uden den korrekte adgangskode."</string>
+    <!-- XTIT: The title of the error dialog -->
+
+    <string name="config_data_error_title">"Kunne ikke hente konfigurationsdata fra det faste lager."</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="config_data_bad_field_description">"Kunne ikke udpakke et anmodet datafelt."</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="config_data_bad_service_url_description">"Værdien for service-URL, \"%s\", er ikke en gyldig URL."</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="config_data_build_json_description">"Kunne ikke generere JSON-objektet."</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="config_data_no_data_description">"Der var ikke konfigurationsdata i det faste lager."</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="config_data_reflection_exception">"Brug getInstance i stedet for refleksion til at instantiere denne klasse."</string>
+
+    <!-- XTIT: The title of the error dialog -->
+    <string name="config_loader_complete_error_title">"Kunne ikke indlæse konfigurationsdata"</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="config_loader_complete_error_description">"Konfigurationsindlæseren kunne ikke hente konfigurationsdata."</string>
+
+    <!-- XTIT: The title of the error dialog -->
+    <string name="config_loader_on_error_title">"Fejl ved konfigurationsprovider"</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="config_loader_on_error_description">"Konfigurationsprovider, \"%s\", fandt en fejl. %s"</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="config_data_corrupted_description">"De tidligere gemte data er korrupte og kan ikke indlæses."</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="server_auth_not_supported_saml">"Fejl: Denne applikation understøtter ikke SAML-autentifikation."</string>
+
+    <!-- error messages -->
+
+    <!-- XTIT: The title of the settings dialog -->
+    <string name="settings_activity_name">"Indstillinger"</string>
+    <!-- XTIT: The title of the settings menu -->
+    <string name="menu_item_settings">"Indstillinger"</string>
+
+    <!-- XTIT: The title of the change passcode menu item -->
+    <string name="manage_passcode">"Administrer adgangskode"</string>
+    <!-- XTIT: The title of the reset app menu item -->
+    <string name="reset_app">"Nulstil app"</string>
+    <!-- XTIT: The title of a confirmation dialog -->
+    <string name="reset_app_confirmation">"Alle tilknyttede oplysninger til denne applikation fjernes. Vil du fortsætte?"</string>
+    <!-- XTIT: The title of an error dialog -->
+    <string name="invalid_passcode">"Ugyldig adgangskode"</string>
+    <!-- XTIT: The title of an error dialog -->
+    <string name="passcode_error">"Adgangskodefejl"</string>
+    <!-- XTIT: The title of an error dialog -->
+    <string name="failed_to_change_passcode">"Kunne ikke ændre adgangskode"</string>
+    <!-- XTIT: The title of an error dialog -->
+    <string name="successful_passcode_change">"Adgangskoden er ændret"</string>
+    <!-- XMSG: Detailed error description -->
+    <string name="disabled_passcode">"Standardadgangskoden kan ikke åbne det sikre lager, når adgangskoden er deaktiveret."</string>
+    <!-- XMSG: Detailed error description -->
+    <string name="invalid_passcode_detail">"Den angivne adgangskode kunne ikke bruges til at oprette det sikre lager."</string>
+    <!-- XTIT: The title of an alert dialog for when the current passcode doesn't satisfy the new passcode policy, or the passcode has expired -->
+    <string name="new_passcode_required">"Ny adgangskode kræves"</string>
+    <!-- XMSG: The message of an alert dialog for when the current passcode doesn't satisfy the new passcode policy, or the passcode has expired -->
+    <string name="new_passcode_required_detail">"Adgangskoden er udløbet, eller politikken for adgangskoden er ændret. Du skal angive en ny adgangskode."</string>
+    <!-- XTIT: The title of an alert dialog for when no passcode is set but the new policy requires one -->
+    <string name="passcode_required">"Adgangskode kræves"</string>
+    <!-- XMSG: The message of an alert dialog for when no passcode is set but the new policy requires one -->
+    <string name="passcode_required_detail">"Politikken for adgangskoden er ændret. Du skal angive en adgangskode."</string>
+    <!-- XTIT: The title of a dialog informing the user the passcode policy has changed and they need to take action -->
+    <string name="policy_changed">"Ændret politik"</string>
+    <!-- XMSG: The message of a dialog informing the user they can no longer use fingerprint to unlock the app because the new passcode policy doesn't allow it -->
+    <string name="fingerprint_no_longer_allowed">"Åbning af denne app med fingeraftryk er deaktiveret i henhold til den nye politik. Fra nu af skal du i stedet indtaste en adgangskode."</string>
+    <!-- XTIT: The title of a dialog -->
+    <string name="max_retries_title">"For mange forsøg"</string>
+    <!-- XMSG: The message of a dialog -->
+    <string name="max_retries_message">"Du har nået det maksimale antal forsøg. Appen nulstilles."</string>
+    <!-- XTIT: The title of a menu item -->
+    <string name="upload_log">"Upload protokol"</string>
+    <!-- XMSG: The message of a log level toast -->
+    <string name="log_level_changed">"Standardprotokolniveau ændret fra serverpolitikken til: %s"</string>
+    <!-- XMSG: The message of a log level toast -->
+    <string name="log_level_default">"Protokolpolitik er ikke angivet på serveren, standardprotokolniveau er angivet til: %s"</string>
+    <!-- XTIT: The title of a menu item -->
+    <string name="log_level">"Protokolniveau"</string>
+    <!-- XTIT: The title of a menu item -->
+    <string name="dialog_title_choose_log_level">"Vælg protokolniveau"</string>
+    <!-- XTIT: Log level title -->
+    <string name="log_level_none">"Intet"</string>
+    <!-- XTIT: Log level title -->
+    <string name="log_level_fatal">"Alvorlig"</string>
+    <!-- XTIT: Log level title -->
+    <string name="log_level_error">"Fejl"</string>
+    <!-- XTIT: Log level title -->
+    <string name="log_level_warning">"Advar"</string>
+    <!-- XTIT: Log level title -->
+    <string name="log_level_info">"Info"</string>
+    <!-- XTIT: Log level title -->
+    <string name="log_level_debug">"Fejlfind"</string>
+    <!-- XTIT: Log level title -->
+    <string name="log_level_path">"Sti"</string>
+    <!-- XMSG: Authentication error message -->
+    <string name="authentication_failed">"Godkendelse mislykkedes"</string>
+
+    <!-- restrictions -->
+
+    <!-- XTIT: The title of the error dialog -->
+    <string name="restriction_service_url_title">"Service-URL"</string>
+
+    <!-- XMSG: Detailed error description -->
+    <string name="restriction_service_url_description">"URL for OData-servicen."</string>
+    <!-- restrictions -->
+
+    <!-- XBUT: Text of the Skip button on the Create Passcode Screen -->
+    <string name="skip_passcode">"Spring over"</string>
+
+</resources>

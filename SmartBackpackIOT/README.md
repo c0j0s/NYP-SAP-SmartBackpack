@@ -101,10 +101,10 @@ Others:
 The entire transmission string in __JSON__ array format consist of 3 parts:  
 ```JSON
 [
-    {function code},
-    {data},
-    {end status},
-    {debug info [optional], only trassmited in debug mode}
+    "function code",
+    "data",
+    "end status",
+    "debug info [optional], only trassmited in debug mode"
 ]
 ```
 __Function code__  
@@ -144,7 +144,7 @@ The Second array item is reserved for data body
 [
     "...",
     {
-        JSON Object
+        "JSON Object"
     },
     "..."
 ]
