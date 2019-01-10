@@ -21,7 +21,20 @@ import com.nyp.sit.fypj.smartbackpackapp.bluetooth.BluetoothService
 
 class MainActivitytest : AppCompatActivity() {
 
-
+    /**
+     * Old main activity class for bluetooth testing purposes only
+     * codes bellow for reference on how to implement the wrapper class
+     *
+     * handler class is needed to make changes to the ui when a response is received
+     *
+     * on start is needed only when the activity need bluetooth capabilities
+     *
+     *
+     *
+     *
+     *
+     *
+     */
     var REQUEST_CONNECT_DEVICE = 1
 
     private var mBluetoothAdapter: BluetoothAdapter? = null
@@ -58,18 +71,14 @@ class MainActivitytest : AppCompatActivity() {
 
         stop_button = findViewById(R.id.btn_stop)
         stop_button!!.setOnClickListener {
-            //mChatService!!.stop();
             mBtWrapper!!.disconnectDevice()
         }
 
-
-        var editText = findViewById<EditText>(R.id.editText)
         this.display = findViewById(R.id.display)
 
         var senbtn = findViewById<Button>(R.id.button2)
         senbtn.setOnClickListener {
-            //var byte = editText.text.toString().toByteArray()
-            //mChatService!!.write(byte)
+            //send the command to the device
             mBtWrapper!!.getSensorData()
         }
     }
@@ -136,6 +145,7 @@ class MainActivitytest : AppCompatActivity() {
                  * Active
                  */
                 Constants.HANDLER_ACTION.DISPLAY_SENSOR_DATA.value ->{
+                    //receive the response and handle the UI Changes
                     var mBtCommandObject = msg.obj as BtCommandObject
                     var text = mBtCommandObject.data.toString()
                     display!!.setText(text)

@@ -278,15 +278,23 @@ public class LogonActivity extends AppCompatActivity {
 	}
 
 	private void startEntitySetListActivity() {
+		/**
+		 * This method will start the correct activities once SAP authentication is completed
+		 *
+		 */
+
+		//Sap demo activities
 //		sapServiceManager.openODataStore(() -> {
 //			Intent intent = new Intent(LogonActivity.this, EntitySetListActivity.class);
 //			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 //			startActivityForResult(intent, ENTITYSET_LIST);
 //		});
 
+		//Old bluetooth testing activity
 //		Intent intent = new Intent(LogonActivity.this, MainActivitytest.class);
 //		startActivity(intent);
 
+		//Official Main activities
 		Intent intent = new Intent(LogonActivity.this, MainActivity.class);
 		startActivity(intent);
 	}
