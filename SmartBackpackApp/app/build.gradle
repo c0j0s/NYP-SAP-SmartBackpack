@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.sap.odata.android'
+apply plugin: 'org.jetbrains.kotlin.android.extensions'
+apply plugin: 'kotlin-android-extensions'
 
 buildscript {
     repositories {
@@ -11,23 +13,21 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath group: 'com.sap.cloud.android', name:'odata-android-gradle-plugin', version:sdkVersion
+        classpath group: 'com.sap.cloud.android', name: 'odata-android-gradle-plugin', version: sdkVersion
     }
 }
 
 odata {
-   verbose true
+    verbose true
     services {
-      // connection id: SmartBackpack
-      sbp{
-        schemaFile file("src/main/res/raw/smartbackpack.xml")
-        packageName "com.sap.cloud.android.odata.sbp"
-        serviceClass "sbp"
-      }
-   }
+        // connection id: SmartBackpack
+        sbp {
+            schemaFile file("src/main/res/raw/smartbackpack.xml")
+            packageName "com.sap.cloud.android.odata.sbp"
+            serviceClass "sbp"
+        }
+    }
 }
-
-
 
 android {
     compileSdkVersion 28
@@ -47,7 +47,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -55,6 +55,10 @@ android {
 
     testOptions {
         execution 'ANDROID_TEST_ORCHESTRATOR'
+    }
+
+    androidExtensions {
+        experimental = true
     }
 }
 
@@ -81,20 +85,21 @@ dependencies {
     implementation group: 'android.arch.lifecycle', name: 'extensions', version: androidArchVersion
 
     // JUnit dependency
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     testImplementation 'junit:junit:4.12'
 
     // SAP Cloud Android SDK dependencies
-     implementation group: 'com.sap.cloud.android', name: 'fiori', version: sdkVersion
-     implementation group: 'com.sap.cloud.android', name: 'onboarding', version: sdkVersion
-     implementation group:'com.sap.cloud.android', name:'odata', version: sdkVersion
-     implementation group: 'com.sap.cloud.android', name: 'foundation', version: sdkVersion
+    implementation group: 'com.sap.cloud.android', name: 'fiori', version: sdkVersion
+    implementation group: 'com.sap.cloud.android', name: 'onboarding', version: sdkVersion
+    implementation group: 'com.sap.cloud.android', name: 'odata', version: sdkVersion
+    implementation group: 'com.sap.cloud.android', name: 'foundation', version: sdkVersion
 
-     // Logging dependency
-     implementation 'com.github.tony19:logback-android:1.1.1-13'
-
+    // Logging dependency
+    implementation 'com.github.tony19:logback-android:1.1.1-13'
 
     // Glide for loading of Media Resources
-    implementation ('com.github.bumptech.glide:glide:4.7.1') {
+    implementation('com.github.bumptech.glide:glide:4.7.1') {
         exclude group: 'com.android.support'
     }
     implementation 'com.github.bumptech.glide:okhttp3-integration:4.7.1'
@@ -105,7 +110,7 @@ dependencies {
         exclude group: 'com.google.code.findbugs'
     })
 
-    androidTestImplementation ('com.android.support.test.espresso:espresso-contrib:3.0.1'){
+    androidTestImplementation('com.android.support.test.espresso:espresso-contrib:3.0.1') {
         exclude module: 'support-annotations'
         exclude module: 'support-v4'
         exclude module: 'support-v13'
@@ -113,15 +118,15 @@ dependencies {
         exclude module: 'design'
     }
 
-     // For UI testing
-     androidTestImplementation 'com.pgs-soft:espressodoppio:1.0.0'
-     androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
-     androidTestUtil 'com.android.support.test:orchestrator:1.0.2'
+    // For UI testing
+    androidTestImplementation 'com.pgs-soft:espressodoppio:1.0.0'
+    androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
+    androidTestUtil 'com.android.support.test:orchestrator:1.0.2'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
 repositories {
     mavenCentral()
 }
-
-

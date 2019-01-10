@@ -13,41 +13,53 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.nyp.fypj.smartbackpackapp.R
+import com.nyp.fypj.smartbackpackapp.bluetooth.BtCommandObject
+import com.nyp.fypj.smartbackpackapp.bluetooth.BtWrapper
 import com.nyp.fypj.smartbackpackapp.bluetooth.DeviceListActivity
 import com.nyp.sit.fypj.smartbackpackapp.Constants
 import com.nyp.sit.fypj.smartbackpackapp.bluetooth.BluetoothService
 
 class MainActivitytest : AppCompatActivity() {
 
-    lateinit var button: Button
-    lateinit var stop_button: Button
-    var REQUEST_CONNECT_DEVICE_SECURE = 1
+
+    var REQUEST_CONNECT_DEVICE = 1
+
     private var mBluetoothAdapter: BluetoothAdapter? = null
-    private var mChatService: BluetoothService? = null
+    private var mBtWrapper : BtWrapper? = null
 
     var display: EditText? = null
+    var button: Button? = null
+    var stop_button: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_test)
 
+        /**
+         * Setup bluetooth communication layer
+         */
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-        mChatService = BluetoothService(mHandler)
+        mBtWrapper = BtWrapper(mHandler)
 
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show()
             this!!.finish()
         }
 
+
+        /**
+         * Controls
+         */
         button = findViewById(R.id.button)
-        button.setOnClickListener {
+        button!!.setOnClickListener {
             val serverIntent = Intent(this, DeviceListActivity::class.java)
-            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE)
+            startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE)
         }
 
         stop_button = findViewById(R.id.btn_stop)
-        stop_button.setOnClickListener {
-            mChatService!!.stop();
+        stop_button!!.setOnClickListener {
+            //mChatService!!.stop();
+            mBtWrapper!!.disconnectDevice()
         }
 
 
@@ -56,25 +68,26 @@ class MainActivitytest : AppCompatActivity() {
 
         var senbtn = findViewById<Button>(R.id.button2)
         senbtn.setOnClickListener {
-            var byte = editText.text.toString().toByteArray()
-            mChatService!!.write(byte)
+            //var byte = editText.text.toString().toByteArray()
+            //mChatService!!.write(byte)
+            mBtWrapper!!.getSensorData()
         }
     }
 
     public override fun onStart() {
+        /**
+         * Check for Bluetooth capabilities, if none, ask for access
+         */
         super.onStart()
-        // If BT is not on, request that it be enabled.
-        // setupChat() will then be called during onActivityResult
         if (!mBluetoothAdapter!!.isEnabled) {
             val enableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             startActivityForResult(enableIntent, 3)
-            // Otherwise, setup the chat session
         }
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
-            REQUEST_CONNECT_DEVICE_SECURE ->
+            REQUEST_CONNECT_DEVICE ->
                 // When DeviceListActivity returns with a device to connect
                 if (resultCode == Activity.RESULT_OK) {
                     connectDevice(data!!, true)
@@ -82,47 +95,50 @@ class MainActivitytest : AppCompatActivity() {
         }
     }
 
-    /**
-     * Establish connection with other device
-     *
-     * @param data   An [Intent] with [DeviceListActivity.EXTRA_DEVICE_ADDRESS] extra.
-     * @param secure Socket Security type - Secure (true) , Insecure (false)
-     */
     private fun connectDevice(data: Intent, secure: Boolean) {
         // Get the device MAC address
         val address = data.extras!!
             .getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS)
-        // Get the BluetoothDevice object
-        val device = mBluetoothAdapter!!.getRemoteDevice(address)
-        // Attempt to connect to the device
-        mChatService!!.connect(device, secure)
+        // Connect to IOT Device
+        mBtWrapper!!.connectDevice(address)
     }
 
     /**
-     * The Handler that gets information back from the BluetoothChatService
+     * The Handler that gets information back from the BluetoothService
+     * Handler identifiers can be found in Constants Class
      */
     private val mHandler = @SuppressLint("HandlerLeak")
     object : Handler() {
         override fun handleMessage(msg: Message) {
             Log.d(TAG, msg.what.toString())
             when (msg.what) {
-                Constants.HANDLER_MESSAGE_RECEIVED -> {
-                    val readBuf = msg.obj as ByteArray
-                    // construct a string from the valid bytes in the buffer
-                    val readMessage = String(readBuf, 0, msg.arg1)
-
-                    display!!.setText(readMessage)
-                }
-                Constants.HANDLER_TOAST -> {
-                    var content = msg.data.getString(Constants.TOAST)
-                    Toast.makeText(this@MainActivitytest, content, Toast.LENGTH_LONG).show()
-                }
-                Constants.HANDLER_MESSAGE_SEND -> {
-                    Toast.makeText(this@MainActivitytest,"Message Send", Toast.LENGTH_SHORT).show()
-                }
-                Constants.HANDLER_STATE_CHANGE -> {
-                    var mConnectedDeviceName = msg.data.getString(Constants.DEVICE_NAME)
-                    Toast.makeText(this@MainActivitytest, "Connected to $mConnectedDeviceName", Toast.LENGTH_SHORT).show()
+                /**
+                 * Depreciated
+                 */
+//                Constants.HANDLER_MESSAGE_RECEIVED -> {
+//                    val readBuf = msg.obj as ByteArray
+//                    // construct a string from the valid bytes in the buffer
+//                    val readMessage = String(readBuf, 0, msg.arg1)
+//                    display!!.setText(readMessage)
+//                }
+//                Constants.HANDLER_ACTION.TOAST.value -> {
+//                    var content = msg.data.getString(Constants.HANDLER_DATA_KEY.TOAST_CONTENT.value)
+//                    Toast.makeText(this@MainActivitytest, content, Toast.LENGTH_LONG).show()
+//                }
+//                Constants.HANDLER_MESSAGE_SEND -> {
+//                    Toast.makeText(this@MainActivitytest,"Message Send", Toast.LENGTH_SHORT).show()
+//                }
+//                Constants.HANDLER_STATE_CHANGE -> {
+//                    var mConnectedDeviceName = msg.data.getString(Constants.DEVICE_NAME)
+//                    Toast.makeText(this@MainActivitytest, "Connected to $mConnectedDeviceName", Toast.LENGTH_SHORT).show()
+//                }
+                /**
+                 * Active
+                 */
+                Constants.HANDLER_ACTION.DISPLAY_SENSOR_DATA.value ->{
+                    var mBtCommandObject = msg.obj as BtCommandObject
+                    var text = mBtCommandObject.data.toString()
+                    display!!.setText(text)
                 }
             }
         }

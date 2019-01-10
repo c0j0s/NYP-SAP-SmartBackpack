@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.nyp.fypj.smartbackpackapp" >
+    package="com.nyp.fypj.smartbackpackapp">
 
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:name=".app.SAPWizardApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/application_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <meta-data
             android:name="android.content.APP_RESTRICTIONS"
             android:resource="@xml/app_restrictions" />
@@ -18,7 +18,7 @@
         <activity
             android:name=".logon.LogonActivity"
             android:label="@string/application_name"
-            android:theme="@style/splashScreenTheme" >
+            android:theme="@style/splashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,11 +30,10 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/application_name"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name="com.sap.cloud.mobile.onboarding.launchscreen.LaunchScreenActivity"
-            android:label="@string/application_name" >
+            android:label="@string/application_name">
             <meta-data
                 android:name="action_handler"
                 android:value="com.nyp.fypj.smartbackpackapp.logon.LaunchScreenActionHandlerImpl" />
@@ -44,7 +43,7 @@
             android:label="@string/application_name"
             android:launchMode="singleTop"
             android:parentActivityName=".mdui.EntitySetListActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".mdui.EntitySetListActivity" />
@@ -54,7 +53,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/application_name"
             android:parentActivityName=".mdui.ItemListActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".mdui.ItemListActivity" />
@@ -65,12 +64,11 @@
             android:label="@string/settings_activity_name"
             android:launchMode="singleTop"
             android:parentActivityName=".mdui.EntitySetListActivity"
-            android:screenOrientation="sensor" >
-        </activity>
+            android:screenOrientation="sensor"></activity>
         <activity
             android:name="com.sap.cloud.mobile.onboarding.passcode.SetPasscodeActivity"
             android:label="@string/application_name"
-            android:parentActivityName=".logon.LogonActivity" >
+            android:parentActivityName=".logon.LogonActivity">
             <meta-data
                 android:name="action_handler"
                 android:value="com.nyp.fypj.smartbackpackapp.logon.PasscodeActionHandlerImpl" />
@@ -81,7 +79,7 @@
         <activity
             android:name="com.sap.cloud.mobile.onboarding.passcode.ConfirmPasscodeActivity"
             android:label="@string/application_name"
-            android:parentActivityName=".logon.LogonActivity" >
+            android:parentActivityName=".logon.LogonActivity">
             <meta-data
                 android:name="action_handler"
                 android:value="com.nyp.fypj.smartbackpackapp.logon.PasscodeActionHandlerImpl" />
@@ -92,7 +90,7 @@
         <activity
             android:name="com.sap.cloud.mobile.onboarding.passcode.EnterPasscodeActivity"
             android:label="@string/application_name"
-            android:parentActivityName=".logon.LogonActivity" >
+            android:parentActivityName=".logon.LogonActivity">
             <meta-data
                 android:name="action_handler"
                 android:value="com.nyp.fypj.smartbackpackapp.logon.PasscodeActionHandlerImpl" />
@@ -102,23 +100,22 @@
         </activity>
         <activity
             android:name="com.sap.cloud.mobile.onboarding.fingerprint.FingerprintActivity"
-            android:label="@string/application_name" >
+            android:label="@string/application_name">
             <meta-data
                 android:name="action_handler"
                 android:value="com.nyp.fypj.smartbackpackapp.logon.FingerprintActionHandlerImpl" />
         </activity>
         <activity
             android:name="com.sap.cloud.mobile.onboarding.fingerprint.FingerprintErrorActivity"
-            android:label="@string/application_name" >
+            android:label="@string/application_name">
             <meta-data
                 android:name="action_handler"
                 android:value="com.nyp.fypj.smartbackpackapp.logon.FingerprintActionHandlerImpl" />
         </activity>
-        <activity android:name=".logon.UnlockActivity" >
-        </activity>
+        <activity android:name=".logon.UnlockActivity"></activity>
         <activity
             android:name="com.sap.cloud.mobile.onboarding.passcode.ChangePasscodeActivity"
-            android:label="@string/application_name" >
+            android:label="@string/application_name">
             <meta-data
                 android:name="action_handler"
                 android:value="com.nyp.fypj.smartbackpackapp.logon.PasscodeActionHandlerImpl" />
@@ -128,18 +125,16 @@
         </activity>
         <activity
             android:name=".app.ErrorNotificationDialog"
-            android:theme="@android:style/Theme.Holo.Light.Dialog.MinWidth" >
-        </activity>
-
-        <activity android:name=".mdui.MainActivitytest">
-        </activity>
-
+            android:theme="@android:style/Theme.Holo.Light.Dialog.MinWidth"></activity>
+        <activity android:name=".mdui.MainActivitytest"></activity>
         <activity
             android:name=".bluetooth.DeviceListActivity"
-            android:theme="@android:style/Theme.Material.Dialog"
+            android:configChanges="orientation|keyboardHidden"
             android:label="select_device"
-            android:configChanges="orientation|keyboardHidden"/>
-
+            android:theme="@android:style/Theme.Material.Dialog" />
+        <activity
+            android:name=".mdui.MainActivity"
+            android:label="@string/title_activity_main"></activity>
     </application>
 
 </manifest>

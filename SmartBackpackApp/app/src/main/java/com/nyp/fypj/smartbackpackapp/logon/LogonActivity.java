@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 
+import com.nyp.fypj.smartbackpackapp.mdui.MainActivity;
+import com.nyp.fypj.smartbackpackapp.mdui.MainActivitytest;
 import com.nyp.fypj.smartbackpackapp.service.SAPServiceManager;
 import com.nyp.fypj.smartbackpackapp.R;
 import com.nyp.fypj.smartbackpackapp.app.ConfigurationData;
@@ -276,13 +278,17 @@ public class LogonActivity extends AppCompatActivity {
 	}
 
 	private void startEntitySetListActivity() {
-		sapServiceManager.openODataStore(() -> {
-			Intent intent = new Intent(LogonActivity.this, EntitySetListActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-			startActivityForResult(intent, ENTITYSET_LIST);
-		});
+//		sapServiceManager.openODataStore(() -> {
+//			Intent intent = new Intent(LogonActivity.this, EntitySetListActivity.class);
+//			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//			startActivityForResult(intent, ENTITYSET_LIST);
+//		});
+
 //		Intent intent = new Intent(LogonActivity.this, MainActivitytest.class);
 //		startActivity(intent);
+
+		Intent intent = new Intent(LogonActivity.this, MainActivity.class);
+		startActivity(intent);
 	}
 
 	private void openApplicationStore() {

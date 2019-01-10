@@ -34,6 +34,9 @@ http://wiki.seeedstudio.com/
 - Android + Bluetooth  
 https://github.com/googlesamples/android-BluetoothChat
 
+- Android Fragments  
+https://medium.com/@oluwabukunmi.aluko/bottom-navigation-view-with-fragments-a074bfd08711
+
 #### SmartBackpackSAP
 - SAPUI5  
 https://openui5.hana.ondemand.com/#

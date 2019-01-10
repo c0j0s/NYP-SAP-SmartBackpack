@@ -11,5 +11,45 @@ class Constants {
         //Key names
         val DEVICE_NAME = "bluetooth_device_name"
         val TOAST = "toast_content"
+
+    }
+
+    enum class HANDLER_ACTION(val value: Int) {
+        //system action
+        TOAST(10),
+
+        //iot status action
+        CONNECTED(20),
+        DISCONNECTED(21),
+
+        //app action status
+        COMMAND_SEND(30),
+        RECEIVE_RESPONSE(31),
+
+        //iot response actions
+        DISPLAY_SENSOR_DATA(40),
+        HANDLE_HOLDING_ZONE_DATA(41),
+    }
+
+    enum class HANDLER_DATA_KEY(val value: String) {
+        DEVICE_NAME("bluetooth_device_name"),
+        TOAST_CONTENT("toast_content"),
+    }
+
+    //Bluetooth communication commands
+    enum class BT_FUN_CODE(val code: String) {
+        DISCONNECT("00000"),
+        REBOOT_DEVICE("10000"),
+        GET_SENSOR_STATUS("11500"),
+        GET_BLUETOOTH_STATUS("12500"),
+        GET_SENSOR_DATA("30000"),
+        SYNC_HOLDING_ZONE("32000"),
+        TOGGLE_DEBUG("41000")
+    }
+
+    enum class BT_END_CODE(val code: String) {
+        EOT("EOT"),
+        MSE("MSE"),
+        ERR("ERR")
     }
 }
