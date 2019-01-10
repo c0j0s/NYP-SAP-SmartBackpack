@@ -3,6 +3,7 @@ Util class
 """
 import signal
 import time
+import json
 
 class GracefulKiller:
   kill_now = False
@@ -13,6 +14,20 @@ class GracefulKiller:
   def exit_gracefully(self,signum, frame):
     self.kill_now = True
 
+class BtCommandObject:
+    def newCommandObject(self, function_code, data, end_code, debug = "",debug_mode=False):
+        self.function_code = function_code
+        self.data = data
+        self.end_code = end_code
+        if debug_mode:
+            self.debug = debug
+    
+    def convertToCommandObject(self,raw_data):
+        obj = json.loads(raw_data)
+        self.function_code = obj["function_code"]
+        self.data = obj["data"]
+        self.end_code = obj["end_code"]
+        self.debug = obj["debug"]
 
 """
 Static functions

@@ -83,6 +83,8 @@ Others:
 ```
 
 ## Bluetooth Commands
+
+### Previous version of bluetooth communication command syntax
 | BT Commands              | Functionality                               | Sample Output  |
 | -------------------------|----------------------------------------     | --------------------|
 | get_sensor_status        | get the status of sensor server             | Active/dead |
@@ -97,71 +99,75 @@ Others:
 | cmd_toggle_debug         | toggle server debug mode                    | Debug:True/False |
 | sh_(Bash commands)       | execute custom shell commands               | [Command output] |
 
-### Next version of bluetooth communication command syntax
+### New version of bluetooth communication command syntax
 The entire transmission string in __JSON__ array format consist of 3 parts:  
 ```JSON
-[
-    "function code",
-    "data",
-    "end status",
-    "debug info [optional], only trassmited in debug mode"
-]
+{
+    "function_code":"",
+    "data":"",
+    "end_code":"",
+    "debug":"debug info [optional], only trassmited in debug mode"
+}
 ```
 __Function code__  
 The first array item is reserved for function identifier code
 ```JSON
-[
-    "00001",
-    "...",
-    "..."
-]
+{
+    "function_code":"00001",
+    .
+    .
+    .
+}
 ```
-IOT Device Function Codes
-| Function Code | Description                         | 
-| --------------|-------------------------------------| 
-| 00000 | terminate bluetooth connections             |
-| 10000 | restart device                              |
-| 11000 | restart sensor server                       |
-| 11500 | get the status of sensor server             |
-| 12000 | restart bluetooth server [NOT IMPLEMENTED]  |
-| 12500 | get the status of bluetooth server          |
-| 30000 | get real time sensor reading                |
-| 31000 | set user perferences [NOT IMPLEMENTED]      |
-| 32000 | get holding_zone SQL data                   |
-| 41000 | toggle server debug mode                    |
-| 42000 | execute custom shell commands               |
+#### IOT Device Function Codes:  
+| Function Code  | Description                        | Enum      |
+|:-------------- |:-----------------------------------|:--------- |
+| 00000 | terminate bluetooth connections             | DISCONNECT |
+| 10000 | restart device                              | REBOOT_DEVICE |
+| 11000 | restart sensor server                       ||
+| 11500 | get the status of sensor server             | GET_SENSOR_STATUS|
+| 12000 | restart bluetooth server [NOT IMPLEMENTED]  ||
+| 12500 | get the status of bluetooth server          |GET_BLUETOOTH_STATUS|
+| 30000 | get real time sensor reading                | GET_SENSOR_DATA|
+| 31000 | set user perferences [NOT IMPLEMENTED]      ||
+| 32000 | get holding_zone SQL data                   | SYNC_HOLDING_ZONE|
+| 41000 | toggle server debug mode                    | TOOGLE_DEBUG|
+| 42000 | execute custom shell commands               ||
 
-Android App Function Codes
+#### Android App Function Codes:  
 | Function Code | Description                         | 
-| --------------|-------------------------------------| 
+|:--------------|:------------------------------------| 
 | 00000 | command executed successfully               |
 | 10000 | command executed with error occurred, retry |
 | 20000 | fatal error                                 |
 
 __Data__  
-The Second array item is reserved for data body
+The Second array item is reserved for data body  
 ```JSON
-[
-    "...",
-    {
-        "JSON Object"
+{
+    .
+    "data":{
+
     },
-    "..."
-]
+    .
+    .
+}
 ```
 
-__End Status__  
-The Third array item is reserved for transmission ending status
+__End Status Code__  
+The Third array item is reserved for transmission ending status  
 ```JSON
-[
-    "...",
-    "...",
-    "EOT"
-]
+{
+    .
+    .
+    "end_code":"EOT"
+    .
+}
 ```
-Proposed status codes:
+
+#### Proposed status codes:  
 | Status Code              | Description                               |
-| -------------------------|----------------------------------------     | 
+| -------------------------|----------------------------------------     |
 | EOT | end of transmission |
 | MSE | maintain session, more data transmitting |
 | ERR | error occured, transmission terminated and services schedule for reboot |

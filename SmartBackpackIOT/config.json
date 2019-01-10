@@ -1,5 +1,16 @@
 {
     "device":{
+        "services":{
+            "sensor":{
+                "version":"0.0.0.1"
+            },
+            "bluetooth":{
+                "version":"0.0.0.2"
+            },
+            "monitoring":{
+                "version":"0.0.0.1"
+            }
+        },
         "sensors":{
             "particle": "/dev/ttyAMA0",
             "temp_hum": 7,

@@ -160,13 +160,6 @@ def initTesting():
 
 
 def main():
-    print("""
-                    =============
-                    SMARTBACKPACK
-                    version:0.0.1
-                    =============
-    """)
-
     global testing_button_triggered
     global countdown_to_record_data
     countdown_to_update = countdown_to_record_data

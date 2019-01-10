@@ -23,6 +23,7 @@ def init():
     global redis_cursor
     global debug
     global clear_holding_zone_after_sync
+    global killer
 
     #load config files
     try:
@@ -40,16 +41,19 @@ def init():
     BT_server_settings = config['settings']['BT_Server_Settings'] 
     clear_holding_zone_after_sync = BT_server_settings['clear_holding_zone_after_sync']
 
-# Main loop
-def main():
-
+    
     killer = GracefulKiller()
 
     # wait until Bluetooth init is done
-    time.sleep(10)
+    time.sleep(5)
 
     # Make device visible
     os.system("sudo hciconfig hci0 piscan")
+
+# Main loop
+def main():
+
+    print("Startup complete waiting for connection")
 
     # Create a new server socket using RFCOMM protocol
     server_sock = BluetoothSocket(RFCOMM)
@@ -70,10 +74,6 @@ def main():
                        service_classes=[uuid, SERIAL_PORT_CLASS],
                        profiles=[SERIAL_PORT_PROFILE])
 
-    operations = ["ping", "example"]
-
-    print("Startup complete waiting for connection")
-
     client_sock = None        
     client_sock, client_info = server_sock.accept()
 
@@ -87,18 +87,21 @@ def main():
             break
 
         try:
-            
+
             print("Accepted connection from ", client_info)
 
             data = client_sock.recv(1024)
             data = data.decode("utf-8").replace("\r\n","")
+
             if len(data) == 0:
                 break
 
-            print("Received [%s]" % data)
+            print("Received: %s" % data)
 
-            received = decodeBTObject(data)
-            if debug:
+            received = BtCommandObject() 
+            received.convertToCommandObject(data)
+
+            if debug and received is not None:
                 print("===============")
                 print(received.function_code)
                 print(received.data)
@@ -109,71 +112,65 @@ def main():
             result = {}
 
             # Handle the request
-            if data == "getop":
-                result['msg'] = "op:%s" % ",".join(operations)
-            elif data == "ping":
-                result['msg'] = "Pong"
-            elif data == "get_sensor_status":
-                result = get_service_status('sensor')
-            elif data == "get_bt_status":
-                result = get_service_status('bt')
-            elif data == "get_sensor_data":
-                result = get_sensor_data()
-            elif data == "sync_holding_zone":
-                result = sync_holding_zone()
-            elif data == "cmd_reboot_now":
-                cmd_reboot_now(client_sock)
-            elif data == "cmd_reboot_sensor_server":
-                cmd_reboot_sensor_server(client_sock)
-            elif data == "cmd_reboot_bt_server":
-                cmd_reboot_bt_server(client_sock)
-            elif data == "cmd_disconnect":
+            if received.function_code == "00000":
                 if client_sock is not None:
                     client_sock.close()
-            elif data == "cmd_toggle_debug":
-                result = cmd_toggle_debug()
-            elif "sh_" in data :
-                sh_execute_command(client_sock,data)
+            elif received.function_code == "30000":
+                result = toBTObject("00000",get_sensor_data(),"EOT")
             else:
-                result['msg'] = "Not supported"
+                result = toBTObject("00000","Command Not Supported","EOT")
+            
+            # if data == "getop":
+            #     result['msg'] = "op:%s" % ",".join(operations)
+            # elif data == "ping":
+            #     result['msg'] = "Pong"
+            # elif data == "get_sensor_status":
+            #     result = get_service_status('sensor')
+            # elif data == "get_bt_status":
+            #     result = get_service_status('bt')
+            # elif data == "get_sensor_data":
+            #     result = get_sensor_data()
+            # elif data == "sync_holding_zone":
+            #     result = sync_holding_zone()
+            # elif data == "cmd_reboot_now":
+            #     cmd_reboot_now(client_sock)
+            # elif data == "cmd_reboot_sensor_server":
+            #     cmd_reboot_sensor_server(client_sock)
+            # elif data == "cmd_reboot_bt_server":
+            #     cmd_reboot_bt_server(client_sock)
+            # elif data == "cmd_disconnect":
+            #     if client_sock is not None:
+            #         client_sock.close()
+            # elif data == "cmd_toggle_debug":
+            #     result = cmd_toggle_debug()
+            # elif "sh_" in data :
+            #     sh_execute_command(client_sock,data)
+            # else:
+            #     result['msg'] = "Not supported"
 
             if result is not {}:
                 response = json.dumps(result)
-                client_sock.send(response)
                 print("Sent back : %s" % response)
+                client_sock.send(response)
             
         except IOError: 
-            closing(client_sock,msg="IOError ")
+            closing(server_sock,client_sock,msg="IOError ")
             break
         except KeyboardInterrupt:
-            closing(client_sock,msg="Server going down")
+            closing(server_sock,client_sock,msg="Server going down")
             break
         except:
-            closing(client_sock,msg="Error in main loop")
+            closing(server_sock,client_sock,msg="Error in main loop")
             break
 
-def decodeBTObject(arr):
-    obj = json.loads(arr)
-    result = {}
-    result.function_code = obj[0]
-    result.data = obj[1]
-    result.end_code = obj[2]
-
-    if debug and obj[3] is not "":
-        result.debug = obj[3]
-    else:
-        result.debug = ""
-
-    return result
-
 def toBTObject(function_code,data,end_code,debug=""):
-    result = []
-    result[0] = function_code
-    result[1] = data
-    result[2] = end_code
+    result = {}
+    result["function_code"] = function_code
+    result["data"] = data
+    result["end_code"] = end_code
 
     if debug and debug is not "":
-        result[3] = debug
+        result["debug"] = debug
     
     return result
 
@@ -276,10 +273,9 @@ def sh_execute_command(client_sock,data):
     client_sock.send("\r\n" + status)
     print("Sent back : %s" % status)
 
-def closing(client_sock,msg="Closing",exception=""):
-    print(msg + ": " + str(exception))
-    if client_sock is not None:
-        client_sock.close()
+def closing(server_sock,client_sock,msg="Closing",exception=""):
+    client_sock.close()
+    server_sock.close()
 
     if debug:
         print("-"*60)
@@ -288,4 +284,5 @@ def closing(client_sock,msg="Closing",exception=""):
 
 if __name__ == '__main__':
     init()
-    main()
+    while True:
+        main()
