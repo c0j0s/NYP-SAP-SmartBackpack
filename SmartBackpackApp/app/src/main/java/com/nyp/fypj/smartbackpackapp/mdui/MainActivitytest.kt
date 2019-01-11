@@ -75,11 +75,49 @@ class MainActivitytest : AppCompatActivity() {
         }
 
         this.display = findViewById(R.id.display)
-
+        var editText = findViewById<EditText>(R.id.editText)
         var senbtn = findViewById<Button>(R.id.button2)
         senbtn.setOnClickListener {
+            this.display!!.text.clear()
             //send the command to the device
-            mBtWrapper!!.getSensorData()
+            when(editText.text.toString()){
+                "00000"->{
+                    mBtWrapper!!.disconnectDevice()
+                }
+                "10000"->{
+                    mBtWrapper!!.restartDevice()
+                }
+                "11000"->{
+
+                }
+                "11500"->{
+
+                }
+                "12000"->{
+
+                }
+                "12500"->{
+
+                }
+                "30000"->{
+                    mBtWrapper!!.getSensorData()
+                }
+                "31000"->{
+                    mBtWrapper!!.syncHoldingZone()
+                }
+                "32000"->{
+
+                }
+                "41000"->{
+                    mBtWrapper!!.toggleDebug()
+                }
+                "42000"->{
+
+                }
+                else -> {
+                    mBtWrapper!!.elseTest()
+                }
+            }
         }
     }
 
@@ -149,6 +187,11 @@ class MainActivitytest : AppCompatActivity() {
                     var mBtCommandObject = msg.obj as BtCommandObject
                     var text = mBtCommandObject.data.toString()
                     display!!.setText(text)
+                }
+                Constants.HANDLER_ACTION.TOAST.value ->{
+                    //receive the response and handle the UI Changes
+                    var text = msg.data.getString(Constants.HANDLER_DATA_KEY.TOAST_CONTENT.value)
+                    Toast.makeText(this@MainActivitytest,text, Toast.LENGTH_LONG).show()
                 }
             }
         }

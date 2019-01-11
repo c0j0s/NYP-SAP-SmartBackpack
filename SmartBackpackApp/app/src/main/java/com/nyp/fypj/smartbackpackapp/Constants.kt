@@ -40,11 +40,20 @@ class Constants {
     enum class BT_FUN_CODE(val code: String) {
         DISCONNECT("00000"),
         REBOOT_DEVICE("10000"),
+
+        RESTART_SENSOR_SERVICE("11000"),
         GET_SENSOR_STATUS("11500"),
+
+        RESTART_BLUETOOTH_SERVICE("12000"),
         GET_BLUETOOTH_STATUS("12500"),
+
         GET_SENSOR_DATA("30000"),
+        CHANGE_DEVICE_SETTINGS("31000"),
         SYNC_HOLDING_ZONE("32000"),
-        TOGGLE_DEBUG("41000")
+
+        TOGGLE_DEBUG("41000"),
+        EXE_SH("42000"),
+        ELSE("-1")
     }
 
     enum class BT_END_CODE(val code: String) {

@@ -25,6 +25,14 @@ class BtWrapper(private val displayHandler : Handler) {
         mBluetoothService!!.write(mBtCommandObject!!)
     }
 
+    fun sendCommand(command:Constants.BT_FUN_CODE,Data:HashMap<String,String>){
+        mBtCommandObject = BtCommandObject(
+                command.code,
+                Data,
+                Constants.BT_END_CODE.EOT.code)
+        mBluetoothService!!.write(mBtCommandObject!!)
+    }
+
     @Synchronized
     fun connectDevice(deviceBluetoothAddress:String){
         val device = mBluetoothAdapter!!.getRemoteDevice(deviceBluetoothAddress)
@@ -41,12 +49,30 @@ class BtWrapper(private val displayHandler : Handler) {
         sendCommand(Constants.BT_FUN_CODE.GET_SENSOR_DATA)
     }
 
+    fun getSensorStatus(){
+        sendCommand(Constants.BT_FUN_CODE.GET_SENSOR_STATUS)
+    }
+
+    fun restartSensorService(){
+        sendCommand(Constants.BT_FUN_CODE.RESTART_SENSOR_SERVICE)
+    }
+
+    fun getBluetoothStatus(){
+        sendCommand(Constants.BT_FUN_CODE.GET_BLUETOOTH_STATUS)
+    }
+
+    fun restartBluetoothService(){
+        sendCommand(Constants.BT_FUN_CODE.RESTART_BLUETOOTH_SERVICE)
+    }
+
     fun syncHoldingZone(){
         sendCommand(Constants.BT_FUN_CODE.SYNC_HOLDING_ZONE)
     }
 
     fun changeDeviceSettings(key:String,value:String){
-        throw NotImplementedError()
+        var data = HashMap<String,String>()
+        data[key] = value
+        sendCommand(Constants.BT_FUN_CODE.CHANGE_DEVICE_SETTINGS,data)
     }
 
     fun toggleDebug(){
@@ -55,6 +81,16 @@ class BtWrapper(private val displayHandler : Handler) {
 
     fun restartDevice(){
         sendCommand(Constants.BT_FUN_CODE.REBOOT_DEVICE)
+    }
+
+    fun exeShCommand(command:String){
+        var data = HashMap<String,String>()
+        data["command"] = command
+        sendCommand(Constants.BT_FUN_CODE.EXE_SH,data)
+    }
+
+    fun elseTest(){
+        sendCommand(Constants.BT_FUN_CODE.ELSE)
     }
 
     companion object {

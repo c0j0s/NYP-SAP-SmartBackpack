@@ -66,11 +66,12 @@ class BluetoothService(private val displayHandler: Handler) {
         mConnectedThread?.start()
 
         // Send the name of the connected device back to the UI Activity
-        val msg = displayHandler.obtainMessage(Constants.HANDLER_STATE_CHANGE)
-        val bundle = Bundle()
-        bundle.putString(Constants.DEVICE_NAME, device.name)
-        msg.data = bundle
-        displayHandler.sendMessage(msg)
+//        val msg = displayHandler.obtainMessage(Constants.HANDLER_STATE_CHANGE)
+//        val bundle = Bundle()
+//        bundle.putString(Constants.DEVICE_NAME, device.name)
+//        msg.data = bundle
+//        displayHandler.sendMessage(msg)
+        sendToastMessage(Constants.HANDLER_DATA_KEY.TOAST_CONTENT.value, "Connected to " + device.name)
     }
 
     /**
