@@ -58,7 +58,6 @@ def init():
         sensor_path = config['device']['sensors']
         actuator_path = config['device']['actuators']
         redis_path = config['env']['redis']
-        hana_path = config['env']['HANA']
         debug = config['settings']['debug']
         sensor_server_settings = config['settings']['Sensor_Server_Settings']
 
@@ -67,6 +66,9 @@ def init():
         pm_sensor = HPMA115S0(pm_sensor_port,debug=debug)
         pm_sensor.init()
         pm_sensor.startParticleMeasurement()
+        
+        #start taking the readings
+        pm_sensor.readParticleMeasurement()
 
         temp_hum = int(sensor_path['temp_hum'])
 
@@ -105,7 +107,7 @@ def init():
         if debug:
             display.setDisplayText("[Debug mode]\nWait for network")
             #wait for network to connect
-            time.sleep(5)
+            time.sleep(3)
             #print ip on boot
             try:
                 ip = (([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) + ["no IP found"])[0]
@@ -116,9 +118,8 @@ def init():
             time.sleep(5)
             display.setDisplayText_noRefresh("[Debug mode]\nPress the btn >")
 
-        #debug log
-        if debug:
-            print("DEVICE INITIALISATION")
+            #debug log
+            print("\n[SENSOR] INIT: DEVICE INITIALISATION")
             print("\tpm_sensor: " + pm_sensor_port)
             print("\ttemp_hum: " + str(temp_hum))
             print("\tled_green: " + str(led_green_port))
@@ -126,7 +127,7 @@ def init():
             print("\tled_red: " + str(led_red_port))
             print("\tbuzzer: " + str(buzzer_port))
 
-            print("ENVIRONMENT INITIALISATION")
+            print("\n[SENSOR] INIT: ENVIRONMENT INITIALISATION")
             print("\tredis connection: {}".format(host))
 
     except Exception as ex:
@@ -140,8 +141,10 @@ def init():
 
 def initTesting():
     global testing_button_triggered
+    global button
+
     if testing_button_triggered is 0:
-        print("Start Testing Routine")
+        print("[SENSOR] initTesting: Start Testing Routine")
         display.setDisplayText("Start Testing \nRoutine")
 
         buzzer.buzzForSeconds(1)
@@ -155,18 +158,20 @@ def initTesting():
 
         display.setDisplayText("End")
         testing_button_triggered = 1
-        print("End Testing Routine")
+        button = None
+        print("[SENSOR] initTesting: End Testing Routine")
         time.sleep(2)
 
 
 def main():
     global testing_button_triggered
     global countdown_to_record_data
+    global button
     countdown_to_update = countdown_to_record_data
     displayAlternate = 1
 
     if debug:
-        print("count to write " + str(countdown_to_record_data))
+        print("[SENSOR] main: count to write " + str(countdown_to_record_data))
 
     #load temp hum data
     with open(temp_hum_data_file) as csvfile:
@@ -189,19 +194,20 @@ def main():
             
             try:
                 #listen for testing mode
-                if debug:
+                if debug and button is not None:
                     if grovepi.digitalRead(button) is 1:
                         initTesting()
                 else:
                     testing_button_triggered = 1
                 #if not in testing mode
-                if testing_button_triggered is not 0:
+                if testing_button_triggered is not 0 and button is None:
 
                     pm2_5 = 0
                     pm10 = 0
                     temp = 0
                     hum = 0
-                    desc = "ok"
+                    desc = "ok" 
+                    alert_triggered = False
 
                     #particle sensor
                     if (pm_sensor.readParticleMeasurement()):
@@ -241,15 +247,8 @@ def main():
                     redis_cursor.set('pm2_5',pm2_5)
                     redis_cursor.set('pm10',pm10)
 
-                    #handles holding zone
-                    if countdown_to_update is 0:
-                        countdown_to_update = countdown_to_record_data
-                        output_data_to_hoding_file(hum,temp,pm2_5,pm10)
-                    else:
-                        countdown_to_update = countdown_to_update - 1
-
                     #handel display output
-                    if pm2_5 is 0 or pm10 is 0:
+                    if pm2_5 is 0 and pm10 is 0:
                         displayAlternate = 0
 
                     if displayAlternate is 1:
@@ -263,10 +262,21 @@ def main():
                     if light_level is 2:
                         led_controller.litSingleLED('red')
                         buzzer.buzzForSeconds(1)
+                        alert_triggered = True
                     elif light_level is 1:
                         led_controller.litSingleLED('blue')
                     elif light_level is 0:
                         led_controller.litSingleLED('green')
+
+                    
+                    #handles holding zone
+                    if countdown_to_update is 0:
+                        countdown_to_update = countdown_to_record_data
+
+                        if pm2_5 is not 0 and pm10 is not 0:
+                            output_data_to_hoding_file(hum,temp,pm2_5,pm10,desc,alert_triggered)
+                    else:
+                        countdown_to_update = countdown_to_update - 1
 
             except KeyboardInterrupt:
                 #clean up devices
@@ -294,26 +304,38 @@ def main():
             END
             =================================================================================================================
             """
-
+ 
     except KeyboardInterrupt:
             #clean up devices
             closing()
             print ("Keyboard interrupted")
             exit(0)
         
-def output_data_to_hoding_file(hum,temp,pm2_5,pm10):
+def output_data_to_hoding_file(hum,temp,pm2_5,pm10,predict_comfort,alert_triggered):
     current = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
 
+    jsonObj = {
+            'RECOREDED_ON':current,
+            'HUMIDITY':hum,
+            'TEMPERATURE':temp,
+            'PM2_5':pm2_5,
+            'PM10':pm10,
+            'PREDICTED_COMFORT_LEVEL':predict_comfort,
+            'ALERT_TRIGGERED':alert_triggered,
+        }
+    if debug:
+        print("[HOLDING_ZONE] Writing: "+ str(jsonObj))
+        
     with open("holding_zone","a") as f:
-        line = "INSERT INTO TEST (humidity,tempreture,pm2_5,pm10,timestamp) VALUES ('{}','{}','{}','{}','{}');\r\n".format(hum,temp,pm2_5,pm10,current)
-        f.write(line)
+        json.dump(jsonObj, f)
+        f.write("\r\n")
         f.close()
 
 def closing():
     display.setDisplayOff()
     time.sleep(1)
     led_controller.offAllLED()
-    time.sleep(1)
+    time.sleep(1) 
     buzzer.off()
 
 if __name__ == '__main__':
