@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.sap.cloud.mobile.foundation.common.EncryptionState;
 import com.sap.cloud.mobile.foundation.common.EncryptionUtil;
@@ -32,12 +33,16 @@ public class UnlockActivity extends Activity {
         ClientPolicyManager clientPolicyManager = ((SAPWizardApplication)getApplication()).getClientPolicyManager();
         SecureStoreManager secureStoreManager = ((SAPWizardApplication)getApplication()).getSecureStoreManager();
         PasscodePolicy passcodePolicy = clientPolicyManager.getClientPolicy(false).getPasscodePolicy();
-        if (passcodePolicy.allowsFingerprint() && secureStoreManager
-                .getApplicationStoreState() == EncryptionState.PASSCODE_BIOMETRIC) {
-            unlockWithFingerprint();
-        } else {
-            unlockWithPasscode();
-        }
+
+        //TODO fingerprint function disabled due to some unknown issue preventing access to switch to passcode method
+//        if (passcodePolicy.allowsFingerprint() && secureStoreManager
+//                .getApplicationStoreState() == EncryptionState.PASSCODE_BIOMETRIC) {
+//            unlockWithFingerprint();
+//        } else {
+//            unlockWithPasscode();
+//        }
+
+        unlockWithPasscode();
     }
 
     private void unlockWithPasscode() {
@@ -69,14 +74,19 @@ public class UnlockActivity extends Activity {
 		SecureStoreManager secureStoreManager = ((SAPWizardApplication)getApplication()).getSecureStoreManager();
         if (!secureStoreManager.isApplicationStoreOpen()) {
 			Intent intent = new Intent(this, FingerprintActivity.class);
+
+			//TODO fallback button action result in cancel status code instead of triggering passcode activity, issue with SAP API?
 			FingerprintSettings fingerprintSettings = new FingerprintSettings();
 			fingerprintSettings.setFallbackButtonTitle("Use passcode");
 			fingerprintSettings.setFallbackButtonEnabled(true);
 			fingerprintSettings.saveToIntent(intent);
+
+
 			FingerprintErrorSettings fingerprintErrorSettings = new FingerprintErrorSettings();
 			fingerprintErrorSettings.setFingerprintErrorResetEnabled(true);
 			fingerprintErrorSettings.setFingerprintErrorResetButtonTitle("Use passcode");
 			fingerprintErrorSettings.saveToIntent(intent);
+            Log.e("UnlockActivity", "Starting finger print activity");
 			this.startActivityForResult(intent, FINGERPRINT_UNLOCK);
 		}
     }
@@ -84,6 +94,7 @@ public class UnlockActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.e("UnlockActivity"," request code: " + requestCode + " result code: " + resultCode);
         if (resultCode == Activity.RESULT_CANCELED) {
 			setResult(RESULT_CANCELED);
             finish();
