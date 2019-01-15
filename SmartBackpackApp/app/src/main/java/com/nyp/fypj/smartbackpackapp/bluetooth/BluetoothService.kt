@@ -71,7 +71,12 @@ class BluetoothService(private val displayHandler: Handler) {
 //        bundle.putString(Constants.DEVICE_NAME, device.name)
 //        msg.data = bundle
 //        displayHandler.sendMessage(msg)
-        sendToastMessage(Constants.HANDLER_DATA_KEY.TOAST_CONTENT.value, "Connected to " + device.name)
+//        sendToastMessage(Constants.HANDLER_DATA_KEY.TOAST_CONTENT.value, "Connected to " + device.name)
+        val msg = displayHandler.obtainMessage(Constants.HANDLER_ACTION.CONNECTED.value)
+        val bundle = Bundle()
+        bundle.putString(Constants.HANDLER_DATA_KEY.DEVICE_NAME.value, device.name)
+        msg.data = bundle
+        displayHandler.sendMessage(msg)
     }
 
     /**
@@ -280,7 +285,7 @@ class BluetoothService(private val displayHandler: Handler) {
                     Log.e(TAG,jsonResponse)
                     var mBtCommandObject = gson.fromJson(jsonResponse, BtCommandObject::class.java);
                     // Send the obtained bytes to the UI Activity
-                    val msg = displayHandler.obtainMessage(Constants.HANDLER_ACTION.DISPLAY_SENSOR_DATA.value)
+                    val msg = displayHandler.obtainMessage(Constants.HANDLER_ACTION.RECEIVE_RESPONSE.value)
                     msg.obj = mBtCommandObject
                     displayHandler.sendMessage(msg)
                 } catch (e: IOException) {

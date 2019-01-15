@@ -17,7 +17,7 @@ public class IotdeviceinfoUiConnector extends EntityValueUiConnector {
      "DEVICE_SN"
       };
      // TODO: Change masterPropertyName value to display the desired property in Item list screen
-     private final String masterPropertyName = "MANUFACTURED_ON";
+     private final String masterPropertyName = "LAST_ONLINE";
      // ordered, key fields are first
      private final String[] propertyNames = {
          "DEVICE_SN",
@@ -39,7 +39,8 @@ public class IotdeviceinfoUiConnector extends EntityValueUiConnector {
          "MINUTES_TO_RECORD_DATA",
          "LAST_ONLINE",
          "CONFIG_UPDATED_ON",
-         "ACTIVATED_ON"
+         "ACTIVATED_ON",
+         "DEVICE_ADDRESS"
         };
 
     private Map<String, String> propertyValues = new HashMap<>();
@@ -74,7 +75,7 @@ public class IotdeviceinfoUiConnector extends EntityValueUiConnector {
      */
     @Override
     public Map<String, String> getPropertiesWithValues() {
-            Map<String, String> propertyValues = new HashMap<>();
+        Map<String, String> propertyValues = new HashMap<>();
         propertyValues.put("CONFIG_ENABLE_LED", iotdeviceinfoType.getConfigEnableLed());
         propertyValues.put("SYSTEM_PLATFORM", iotdeviceinfoType.getSystemPlatform());
         propertyValues.put("ACTUATOR_DISPLAY", iotdeviceinfoType.getActuatorDisplay());
@@ -95,6 +96,7 @@ public class IotdeviceinfoUiConnector extends EntityValueUiConnector {
         propertyValues.put("DEVICE_SN", iotdeviceinfoType.getDeviceSn());
         propertyValues.put("ACTIVATED_ON", String.valueOf(iotdeviceinfoType.getActivatedOn()));
         propertyValues.put("SENSOR_AIR_QUALITY", iotdeviceinfoType.getSensorAirQuality());
+        propertyValues.put("DEVICE_ADDRESS", iotdeviceinfoType.getDeviceAddress());
       return propertyValues;
     }
 

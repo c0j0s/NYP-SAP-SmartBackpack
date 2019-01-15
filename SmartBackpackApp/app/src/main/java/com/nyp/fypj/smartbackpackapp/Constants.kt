@@ -11,6 +11,8 @@ class Constants {
         //Key names
         val DEVICE_NAME = "bluetooth_device_name"
         val TOAST = "toast_content"
+        val TAB_TO_OPEN = "tab_to_open"
+        val USER_DEVICES = "user_devices"
 
     }
 
@@ -21,6 +23,7 @@ class Constants {
         //iot status action
         CONNECTED(20),
         DISCONNECTED(21),
+        CONNECT_ERROR(22),
 
         //app action status
         COMMAND_SEND(30),
@@ -60,5 +63,11 @@ class Constants {
         EOT("EOT"),
         MSE("MSE"),
         ERR("ERR")
+    }
+
+    enum class TAB_PAGE() {
+        HOME,
+        MY_DEVICE,
+        MY_PROFILE
     }
 }

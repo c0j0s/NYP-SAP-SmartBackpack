@@ -5,6 +5,10 @@ import android.os.Handler
 import android.util.Log
 import com.nyp.sit.fypj.smartbackpackapp.Constants
 import com.nyp.sit.fypj.smartbackpackapp.bluetooth.BluetoothService
+import android.bluetooth.BluetoothDevice
+import android.content.IntentFilter
+
+
 
 class BtWrapper(private val displayHandler : Handler) {
 
@@ -35,6 +39,7 @@ class BtWrapper(private val displayHandler : Handler) {
 
     @Synchronized
     fun connectDevice(deviceBluetoothAddress:String){
+        Log.i(TAG,deviceBluetoothAddress)
         val device = mBluetoothAdapter!!.getRemoteDevice(deviceBluetoothAddress)
         mBluetoothService!!.connect(device)
     }

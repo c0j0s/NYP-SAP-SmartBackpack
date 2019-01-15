@@ -134,13 +134,6 @@ The first array item is reserved for function identifier code
 | 41000 | toggle server debug mode                    | TOOGLE_DEBUG|
 | 42000 | execute custom shell commands               ||
 
-#### Android App Function Codes:  
-| Function Code | Description                         | 
-|:--------------|:------------------------------------| 
-| 00000 | command executed successfully               |
-| 10000 | command executed with error occurred, retry |
-| 20000 | fatal error                                 |
-
 __Data__  
 The Second array item is reserved for data body  
 ```JSON

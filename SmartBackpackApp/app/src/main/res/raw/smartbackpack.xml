@@ -119,6 +119,7 @@
                 <Property Name="LAST_ONLINE" Type="Edm.DateTime"/>
                 <Property Name="CONFIG_UPDATED_ON" Type="Edm.DateTime"/>
                 <Property Name="ACTIVATED_ON" Type="Edm.DateTime"/>
+                <Property Name="DEVICE_ADDRESS" Type="Edm.String" MaxLength="50"/>
             </EntityType>
             <EntityContainer Name="sbp" m:IsDefaultEntityContainer="true">
                 <EntitySet Name="user" EntityType="sbp.userType"/>
