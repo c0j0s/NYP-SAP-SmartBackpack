@@ -182,12 +182,12 @@ class MainActivitytest : AppCompatActivity() {
                 /**
                  * Active
                  */
-                Constants.HANDLER_ACTION.DISPLAY_SENSOR_DATA.value ->{
-                    //receive the response and handle the UI Changes
-                    var mBtCommandObject = msg.obj as BtCommandObject
-                    var text = mBtCommandObject.data.toString()
-                    display!!.setText(text)
-                }
+//                Constants.HANDLER_ACTION.DISPLAY_SENSOR_DATA.value ->{
+//                    //receive the response and handle the UI Changes
+//                    var mBtCommandObject = msg.obj as BtCommandObject
+//                    var text = mBtCommandObject.data.toString()
+//                    display!!.setText(text)
+//                }
                 Constants.HANDLER_ACTION.TOAST.value ->{
                     //receive the response and handle the UI Changes
                     var text = msg.data.getString(Constants.HANDLER_DATA_KEY.TOAST_CONTENT.value)

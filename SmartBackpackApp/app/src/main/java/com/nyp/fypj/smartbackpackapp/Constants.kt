@@ -24,14 +24,12 @@ class Constants {
         CONNECTED(20),
         DISCONNECTED(21),
         CONNECT_ERROR(22),
+        CONNECT_LOST(23),
 
         //app action status
         COMMAND_SEND(30),
         RECEIVE_RESPONSE(31),
 
-        //iot response actions
-        DISPLAY_SENSOR_DATA(40),
-        HANDLE_HOLDING_ZONE_DATA(41),
     }
 
     enum class HANDLER_DATA_KEY(val value: String) {

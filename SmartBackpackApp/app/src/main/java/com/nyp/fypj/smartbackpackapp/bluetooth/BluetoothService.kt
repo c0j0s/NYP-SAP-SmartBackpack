@@ -148,8 +148,8 @@ class BluetoothService(private val displayHandler: Handler) {
      */
     private fun connectionFailed() {
         // Send a failure message back to the Activity
-        sendToastMessage(Constants.HANDLER_DATA_KEY.TOAST_CONTENT.value, "Unable to connect device")
-
+        val msg = displayHandler.obtainMessage(Constants.HANDLER_ACTION.CONNECT_ERROR.value)
+        displayHandler.sendMessage(msg)
         mState = STATE_NONE
         // Update UI title
 
@@ -161,8 +161,8 @@ class BluetoothService(private val displayHandler: Handler) {
      */
     private fun connectionLost() {
         // Send a failure message back to the Activity
-        sendToastMessage(Constants.HANDLER_DATA_KEY.TOAST_CONTENT.value, "Device connection was lost")
-
+        val msg = displayHandler.obtainMessage(Constants.HANDLER_ACTION.CONNECT_LOST.value)
+        displayHandler.sendMessage(msg)
         mState = STATE_NONE
 
     }

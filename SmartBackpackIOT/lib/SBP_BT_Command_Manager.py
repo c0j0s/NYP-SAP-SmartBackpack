@@ -30,9 +30,10 @@ class BtCommandObject:
 
 class SBP_BT_Command_Manager:
 
-    def __init__(self,client_sock,debug=False):
+    def __init__(self,client_sock,original_received,debug=False):
         self.client = client_sock
         self.debug = debug
+        self.command = original_received
 
     def get_service_status(self,servicename):
         if servicename is 'sensor':
@@ -45,7 +46,7 @@ class SBP_BT_Command_Manager:
         output = {
             'status': subprocess.getoutput(['sudo systemctl status ' + str(service)]).split("\n")[2]
         }
-        self.client.send(self.toBTObject("00000",output,"EOT"))
+        self.client.send(self.toBTObject(self.command.function_code,output,"EOT"))
 
     def get_sensor_data(self,redis_cursor):
         output = {
@@ -54,7 +55,7 @@ class SBP_BT_Command_Manager:
             'PM2_5': redis_cursor.get('pm2_5'),
             'PM10': redis_cursor.get('pm10')
         }
-        self.client.send(self.toBTObject("00000",output,"EOT"))
+        self.client.send(self.toBTObject(self.command.function_code,output,"EOT"))
 
     def restart_sensor_service(self):
         """
@@ -63,8 +64,8 @@ class SBP_BT_Command_Manager:
         output = {
             'message':'Restarting Sensor Service'
         }
-        self.client.send(self.toBTObject("00000",output,"MSE"))
-        print("Sent back : " + str(BtCommandObject("00000",output,"MSE").toJson()))
+        self.client.send(self.toBTObject(self.command.function_code,output,"MSE"))
+        print("Sent back : " + str(BtCommandObject(self.command.function_code,output,"MSE").toJson()))
 
         try:
             return_code = os.system("sudo systemctl restart SBP_Sensor_Server.service")
@@ -79,7 +80,7 @@ class SBP_BT_Command_Manager:
             output = {
                 'status': status
             }
-            self.client.send(self.toBTObject("00000",output,"EOT"))
+            self.client.send(self.toBTObject(self.command.function_code,output,"EOT"))
         except subprocess.CalledProcessError as err:
             print(err)
             pass
@@ -94,7 +95,7 @@ class SBP_BT_Command_Manager:
         output = {
             'message':'System rebooting now, reconnect after reboot'
         }
-        self.client.send(self.toBTObject("00000",output,"EOT"))
+        self.client.send(self.toBTObject(self.command.function_code,output,"EOT"))
         time.sleep(1)
         os.system("sudo reboot")
 
@@ -114,7 +115,7 @@ class SBP_BT_Command_Manager:
         output = {
             'message':'Debug mode for sensor server changed to: ' + str(config["settings"]["debug"])
         }
-        self.client.send(self.toBTObject("00000",output,"EOT"))
+        self.client.send(self.toBTObject(self.command.function_code,output,"EOT"))
 
     def sh_execute_command(self,command):
         pass
@@ -123,7 +124,7 @@ class SBP_BT_Command_Manager:
         output = {
             'message':message
         }
-        self.client.send(self.toBTObject("00000",output,"EOT"))
+        self.client.send(self.toBTObject(self.command.function_code,output,"EOT"))
 
     def toBTObject(self,function_code,data,end_code,debug=""):
         result = {}

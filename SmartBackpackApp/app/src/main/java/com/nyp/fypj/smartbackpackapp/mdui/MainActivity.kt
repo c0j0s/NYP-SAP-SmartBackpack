@@ -70,6 +70,8 @@ class MainActivity : AppCompatActivity() {
                 if(!homeDisabled!!) {
                     fm.beginTransaction().hide(active).show(homeFragment).commit()
                     active = homeFragment
+                }else{
+                    Toast.makeText(this,"No Backpack Connected, Please select a device from your backpack list",Toast.LENGTH_LONG).show()
                 }
                 return@OnNavigationItemSelectedListener true
             }
@@ -117,7 +119,11 @@ class MainActivity : AppCompatActivity() {
         okHttpClient = ClientProvider.get()
         settingsParameter = CpmsParameters.getSettingsParameters()
 
-        //get user profile
+        /*
+        The following retrieves user account details
+        look for user devices from database
+        try to connect to the first device in their list
+         */
         val roles = UserRoles(okHttpClient!!, settingsParameter!!)
         roles.load(object : UserRoles.CallbackListener {
             override fun onSuccess(o: UserInfo) {
@@ -181,8 +187,8 @@ class MainActivity : AppCompatActivity() {
         override fun handleMessage(msg: Message) {
             Log.d(MainActivitytest.TAG, msg.what.toString())
             when (msg.what) {
+                //handle when device connected
                 Constants.HANDLER_ACTION.CONNECTED.value->{
-                    //Device connected
 
                     //TODO move to after sensor data receviced handler, else empty homepage will be visiable before get sensor data command
                     fm.beginTransaction().hide(active).show(homeFragment).commit()
@@ -192,14 +198,66 @@ class MainActivity : AppCompatActivity() {
                     indeterminateBar!!.visibility = View.INVISIBLE
                     Log.i(TAG,"Backpack Connected")
 
-                    //TODO start get sensor command and display the output from device
+                    btWrapper!!.getSensorData()
                 }
                 //TODO handle when device disconnected
+                Constants.HANDLER_ACTION.DISCONNECTED.value->{
 
+                    Log.i(TAG,"Backpack disconnected")
+
+                }
+                //TODO handle when device connection lost
+                Constants.HANDLER_ACTION.CONNECT_LOST.value->{
+
+                    Log.i(TAG,"Backpack connection lost")
+
+                }
                 //TODO handle when device connection error
+                Constants.HANDLER_ACTION.CONNECT_ERROR.value->{
 
+                    Log.i(TAG,"Backpack connection error")
+
+                }
                 //TODO sensor data retrieved from device
+                Constants.HANDLER_ACTION.RECEIVE_RESPONSE.value->{
+                    /*
+                    BtCommandObject -> function_code
+                                       data
+                                       end_code
 
+                    refer to documentation
+                     */
+
+                    Log.i(TAG,"Backpack data received")
+
+                    var mBtCommandObject = msg.obj as BtCommandObject
+                    when(mBtCommandObject.function_code){
+                        Constants.BT_FUN_CODE.GET_SENSOR_DATA.code->{
+
+                            Toast.makeText(this@MainActivity,mBtCommandObject.data.toString(),Toast.LENGTH_LONG).show()
+
+                        }
+                        Constants.BT_FUN_CODE.SYNC_HOLDING_ZONE.code->{
+
+
+
+                        }
+                        Constants.BT_FUN_CODE.TOGGLE_DEBUG.code->{
+
+
+
+                        }
+                        else -> {
+                            //received code not supported
+                            Log.i(TAG,"received code not supported")
+                        }
+                        //TODO handle other function code responses
+                    }
+                }
+                else -> {
+                    //state not supported
+                    Log.i(TAG,"state not supported")
+                }
             }
         }
     }
