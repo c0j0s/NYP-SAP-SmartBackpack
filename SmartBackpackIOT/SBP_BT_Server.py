@@ -113,7 +113,7 @@ def main():
             result = {}
 
             # Handle the request
-            command = SBP_BT_Command_Manager(client_sock)
+            command = SBP_BT_Command_Manager(client_sock,received)
 
             if received.function_code == "00000":
                 closing(server_sock,client_sock)

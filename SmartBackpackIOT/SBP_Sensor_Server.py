@@ -258,25 +258,26 @@ def main():
                         displayAlternate = 1
                         display.setDisplayText("T: %.02f'C \nH: %.02f%% %s"%(temp, hum, desc))
 
-                    light_level = getLeveByHum(hum)
-                    if light_level is 2:
-                        led_controller.litSingleLED('red')
-                        buzzer.buzzForSeconds(1)
-                        alert_triggered = True
-                    elif light_level is 1:
-                        led_controller.litSingleLED('blue')
-                    elif light_level is 0:
-                        led_controller.litSingleLED('green')
+                    #prevent zero values triggering false alarm during initialisation
+                    if pm2_5 is not 0 and pm10 is not 0 and temp is not 0 and hum is not 0:
+                        #handles led light
+                        light_level = getLeveByHum(hum)
+                        if light_level is 2:
+                            led_controller.litSingleLED('red')
+                            buzzer.buzzForSeconds(1)
+                            alert_triggered = True
+                        elif light_level is 1:
+                            led_controller.litSingleLED('blue')
+                        elif light_level is 0:
+                            led_controller.litSingleLED('green')
 
-                    
-                    #handles holding zone
-                    if countdown_to_update is 0:
-                        countdown_to_update = countdown_to_record_data
+                        #handles holding zone
+                        if countdown_to_update is 0:
+                            countdown_to_update = countdown_to_record_data
 
-                        if pm2_5 is not 0 and pm10 is not 0:
                             output_data_to_hoding_file(hum,temp,pm2_5,pm10,desc,alert_triggered)
-                    else:
-                        countdown_to_update = countdown_to_update - 1
+                        else:
+                            countdown_to_update = countdown_to_update - 1
 
             except KeyboardInterrupt:
                 #clean up devices
@@ -328,7 +329,7 @@ def output_data_to_hoding_file(hum,temp,pm2_5,pm10,predict_comfort,alert_trigger
         
     with open("holding_zone","a") as f:
         json.dump(jsonObj, f)
-        f.write("\r\n")
+        f.write("\n")
         f.close()
 
 def closing():
