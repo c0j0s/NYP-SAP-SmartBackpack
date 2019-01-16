@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.provider.Settings
-import android.provider.SyncStateContract
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -18,16 +17,17 @@ import com.nyp.fypj.smartbackpackapp.app.ConfigurationData
 import com.nyp.fypj.smartbackpackapp.app.SAPWizardApplication
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtCommandObject
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtWrapper
-import kotlinx.android.synthetic.main.activity_main.*
+import com.nyp.fypj.smartbackpackapp.logon.AuthenticationInterceptor
+import com.nyp.fypj.smartbackpackapp.logon.BasicAuthPersistentCredentialStore
+import com.nyp.fypj.smartbackpackapp.logon.SecureStoreManager
 import com.nyp.fypj.smartbackpackapp.mdui.fragments.HomeFragment
 import com.nyp.fypj.smartbackpackapp.mdui.fragments.MyDevicesFragment
 import com.nyp.fypj.smartbackpackapp.mdui.fragments.MyProfileFragment
 import com.nyp.fypj.smartbackpackapp.service.SAPServiceManager
 import com.nyp.sit.fypj.smartbackpackapp.Constants
 import com.sap.cloud.android.odata.sbp.IotdeviceinfoType
-import com.sap.cloud.android.odata.sbp.UserDevicesType
+import com.sap.cloud.android.odata.sbp.UserinfosType
 import com.sap.cloud.mobile.fiori.indicator.FioriProgressBar
-import com.sap.cloud.mobile.foundation.authentication.BasicAuthDialogAuthenticator
 import com.sap.cloud.mobile.foundation.common.ClientProvider
 import com.sap.cloud.mobile.foundation.common.CpmsParameters
 import com.sap.cloud.mobile.foundation.common.SettingsParameters
@@ -37,24 +37,37 @@ import com.sap.cloud.mobile.foundation.networking.WebkitCookieJar
 import com.sap.cloud.mobile.foundation.user.UserInfo
 import com.sap.cloud.mobile.foundation.user.UserRoles
 import com.sap.cloud.mobile.odata.DataQuery
-import com.sap.cloud.mobile.odata.core.Action1
 import com.sap.cloud.mobile.odata.http.HttpException
+import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.OkHttpClient
-
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import java.io.Serializable
 
 class MainActivity : AppCompatActivity() {
 
+    /*
+    SAP Services
+     */
     private val LOGGER = LoggerFactory.getLogger(MainActivity::class.java)
 
     private var sapServiceManager: SAPServiceManager? = null
     private var configurationData: ConfigurationData? = null
+    private var secureStoreManager: SecureStoreManager? = null
+
+
+    /*
+    Utilities
+     */
     private var okHttpClient: OkHttpClient? = null
     private var settingsParameter: SettingsParameters? = null
     private var btWrapper:BtWrapper? = null
 
+    private var userProfile: UserinfosType? = null
+    private var userDevices: List<IotdeviceinfoType>? = null
+
+
+    /*
+    UI Components
+     */
     private val homeFragment: Fragment = HomeFragment()
     private val myDevicesFragment: Fragment = MyDevicesFragment()
     private val myProfileFragment: Fragment = MyProfileFragment()
@@ -62,7 +75,8 @@ class MainActivity : AppCompatActivity() {
     private var active = homeFragment
     private var homeDisabled: Boolean? = false
 
-    private var indeterminateBar:FioriProgressBar? = null
+    private var loadingBar:FioriProgressBar? = null
+
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -99,11 +113,15 @@ class MainActivity : AppCompatActivity() {
         fm.beginTransaction().add(R.id.main_container,homeFragment, "1").hide(homeFragment).commit()
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        indeterminateBar = findViewById(R.id.indeterminateBar);
+        loadingBar = findViewById(R.id.indeterminateBar);
 
         btWrapper = BtWrapper(mHandler)
         sapServiceManager = (application as SAPWizardApplication).sapServiceManager
         configurationData = (application as SAPWizardApplication).configurationData
+        secureStoreManager = (application as SAPWizardApplication).secureStoreManager
+
+        var mBasicAuthPersistentCredentialStore = BasicAuthPersistentCredentialStore(secureStoreManager)
+        var credential = mBasicAuthPersistentCredentialStore.getCredential(configurationData!!.serviceUrl,"SAP HANA Cloud Platform")
 
         val settingsParameters = SettingsParameters(configurationData!!.serviceUrl, this.packageName, Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID), "0.0.0.1")
         CpmsParameters.init(settingsParameters)
@@ -112,7 +130,7 @@ class MainActivity : AppCompatActivity() {
                 .addInterceptor(appHeadersInterceptor)
                 .addInterceptor(CsrfTokenInterceptor(
                         CpmsParameters.getSettingsParameters().backendUrl))
-                .authenticator(BasicAuthDialogAuthenticator())
+                .addInterceptor(AuthenticationInterceptor(credential!![0], credential!![1]))
                 .cookieJar(WebkitCookieJar())
                 .build())
 
@@ -127,21 +145,41 @@ class MainActivity : AppCompatActivity() {
         val roles = UserRoles(okHttpClient!!, settingsParameter!!)
         roles.load(object : UserRoles.CallbackListener {
             override fun onSuccess(o: UserInfo) {
-                Log.e("User Name", o.userName)
-                Log.e("User Id", o.id)
 
                 //open database session
                 sapServiceManager!!.openODataStore {
-                    val query = DataQuery()
+
+                    /*
+                    Retrieve user profile from database
+                     */
+                    val userProfileQuery = DataQuery()
+                            .filter(UserinfosType.userId.equal(o.id))
+
+                    sapServiceManager!!.getsbp().getUserinfosAsync(userProfileQuery,
+                            {userInfos:List<UserinfosType>->
+                                Log.e(TAG, "user " + userInfos.size.toString())
+                                if(userInfos.size == 1){
+                                    userProfile = userInfos[0]
+                                }
+                            },
+                            {re:RuntimeException->
+                                Log.d(TAG, "An error occurred during async query:  "  + re.message);
+                                fm.beginTransaction().hide(active).show(myDevicesFragment).commit()
+                                active = myDevicesFragment
+                            })
+
+                    /*
+                    Retrieve user devices from database
+                     */
+                    val userDeviceQuery = DataQuery()
                             .filter(IotdeviceinfoType.userId.equal(o.id))
                             .orderBy(IotdeviceinfoType.lastOnline)
 
-                    //get user devices
-                    sapServiceManager!!.getsbp().getIotdeviceinfoAsync(query,
+                    sapServiceManager!!.getsbp().getIotdeviceinfoAsync(userDeviceQuery,
                     {deviceList:List<IotdeviceinfoType>->
                         Log.e(TAG, deviceList.size.toString())
                         if(deviceList.size > 0){
-                            //indeterminateBar!!.isIndeterminate = false
+                            userDevices = deviceList
 
                             //connect to user first device
                             Log.e("Device Address", deviceList[0].deviceAddress)
@@ -149,7 +187,7 @@ class MainActivity : AppCompatActivity() {
                         }else{
                             fm.beginTransaction().hide(active).show(myDevicesFragment).commit()
                             active = myDevicesFragment
-                            indeterminateBar!!.visibility = View.INVISIBLE
+                            loadingBar!!.visibility = View.INVISIBLE
                             homeDisabled = true
                         }
                     },
@@ -171,6 +209,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+
     }
 
     override fun onBackPressed() {
@@ -195,7 +234,7 @@ class MainActivity : AppCompatActivity() {
                     active = homeFragment
 
                     Toast.makeText(this@MainActivity,"Backpack Connected",Toast.LENGTH_SHORT).show()
-                    indeterminateBar!!.visibility = View.INVISIBLE
+                    loadingBar!!.visibility = View.INVISIBLE
                     Log.i(TAG,"Backpack Connected")
 
                     btWrapper!!.getSensorData()

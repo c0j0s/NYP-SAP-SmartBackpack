@@ -1,24 +1,18 @@
 package com.nyp.fypj.smartbackpackapp.logon;
 
-import android.support.v4.app.Fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
-import ch.qos.logback.classic.Level;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import com.sap.cloud.mobile.foundation.logging.Logging;
-import ch.qos.logback.classic.Level;
-
-import ch.qos.logback.classic.Level;
-import java.io.IOException;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
-
+import com.nyp.fypj.smartbackpackapp.R;
+import com.nyp.fypj.smartbackpackapp.app.ConfigurationData;
+import com.nyp.fypj.smartbackpackapp.app.ErrorHandler;
+import com.nyp.fypj.smartbackpackapp.app.ErrorMessage;
+import com.nyp.fypj.smartbackpackapp.app.SAPWizardApplication;
+import com.nyp.fypj.smartbackpackapp.service.SAPServiceManager;
 import com.sap.cloud.mobile.foundation.common.ClientProvider;
 import com.sap.cloud.mobile.foundation.configurationprovider.ConfigurationLoader;
 import com.sap.cloud.mobile.foundation.configurationprovider.ConfigurationLoaderCallback;
@@ -27,22 +21,27 @@ import com.sap.cloud.mobile.foundation.configurationprovider.DiscoveryServiceCon
 import com.sap.cloud.mobile.foundation.configurationprovider.ProviderIdentifier;
 import com.sap.cloud.mobile.foundation.configurationprovider.ProviderInputs;
 import com.sap.cloud.mobile.foundation.configurationprovider.UserInputs;
+import com.sap.cloud.mobile.foundation.logging.Logging;
 import com.sap.cloud.mobile.onboarding.activation.ActivationActivity;
 import com.sap.cloud.mobile.onboarding.activation.ActivationSettings;
 import com.sap.cloud.mobile.onboarding.launchscreen.WelcomeScreenActionHandlerImpl;
 import com.sap.cloud.mobile.onboarding.utility.ActivityResultActionHandler;
 import com.sap.cloud.mobile.onboarding.utility.OnboardingType;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
+
+import ch.qos.logback.classic.Level;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
-import com.nyp.fypj.smartbackpackapp.app.ErrorMessage;
-import com.nyp.fypj.smartbackpackapp.app.SAPWizardApplication;
 import static com.nyp.fypj.smartbackpackapp.logon.ActivationActionHandlerImpl.DISCOVERY_SVC_EMAIL;
-import com.nyp.fypj.smartbackpackapp.R;
-import com.nyp.fypj.smartbackpackapp.app.ConfigurationData;
-import com.nyp.fypj.smartbackpackapp.app.ErrorHandler;
-import com.nyp.fypj.smartbackpackapp.service.SAPServiceManager;
 
 public class LaunchScreenActionHandlerImpl extends WelcomeScreenActionHandlerImpl implements ActivityResultActionHandler {
 
@@ -120,8 +119,6 @@ public class LaunchScreenActionHandlerImpl extends WelcomeScreenActionHandlerImp
         Activity activity = fragment.getActivity();
 
         String serviceUrl = configurationData.getServiceUrl();
-
- 
 
 		OkHttpClient okHttpClient = ClientProvider.get();
 

@@ -1,7 +1,6 @@
 package com.nyp.fypj.smartbackpackapp.logon;
 
 import com.sap.cloud.mobile.foundation.authentication.BasicAuthCredentialStore;
-import com.sap.cloud.mobile.foundation.securestore.SecureKeyValueStore;
 
 import java.util.HashMap;
 import java.util.Map;
