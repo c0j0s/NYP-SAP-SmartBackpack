@@ -83,24 +83,8 @@ Others:
 ```
 
 ## Bluetooth Commands
-
-### Previous version of bluetooth communication command syntax
-| BT Commands              | Functionality                               | Sample Output  |
-| -------------------------|----------------------------------------     | --------------------|
-| get_sensor_status        | get the status of sensor server             | Active/dead |
-| get_bt_status            | get the status of bluetooth server          | Active/dead |
-| get_sensor_data          | get real time sensor reading                | JSON:  {humidity:0,temperature:0}|
-| set_user_config_(JSON)   | set user perferences [NOT IMPLEMENTED]      |Success/fail|
-| sync_holding_zone        | get holding_zone SQL data                   | INSERT INTO...|
-| cmd_reboot_now           | restart device                              | - |
-| cmd_reboot_sensor_server | restart sensor server                       | Active/dead |
-| cmd_reboot_bt_server     | restart bluetooth server [NOT IMPLEMENTED]  | - |
-| cmd_disconnect           | disconnect bluetooth connections            | Disconnected |
-| cmd_toggle_debug         | toggle server debug mode                    | Debug:True/False |
-| sh_(Bash commands)       | execute custom shell commands               | [Command output] |
-
-### New version of bluetooth communication command syntax
-The entire transmission string in __JSON__ array format consist of 3 parts:  
+### Bluetooth communication command syntax
+The entire transmission string in __JSON__ array format consist of 3 main parts:  
 ```JSON
 {
     "function_code":"",
@@ -114,9 +98,6 @@ The first array item is reserved for function identifier code
 ```JSON
 {
     "function_code":"00001",
-    .
-    .
-    .
 }
 ```
 #### IOT Device Function Codes:  
@@ -139,26 +120,18 @@ __Data__
 The Second array item is reserved for data body  
 ```JSON
 {
-    .
     "data":{
 
     },
-    .
-    .
 }
 ```
 
 Holding zone synchronisation syntax:  
 ```JSON
 {
-    .
     "data":{
         "RECORDED_ON":"HUMIDITY;TEMPERATURE;PM2_5;PM10;PREDICTED_COMFORT_LEVEL;ALERT_TRIGGERED",
-        .
-        .
     },
-    .
-    .
 }
 ```
 
@@ -166,10 +139,7 @@ __End Status Code__
 The Third array item is reserved for transmission ending status  
 ```JSON
 {
-    .
-    .
     "end_code":"EOT"
-    .
 }
 ```
 
@@ -179,6 +149,22 @@ The Third array item is reserved for transmission ending status
 | EOT | end of transmission |
 | MSE | maintain session, more data transmitting |
 | ERR | error occured, transmission terminated and services schedule for reboot |
+
+#### Previous version of bluetooth communication command syntax
+| BT Commands              | Functionality                               | Sample Output  |
+| -------------------------|----------------------------------------     | --------------------|
+| get_sensor_status        | get the status of sensor server             | Active/dead |
+| get_bt_status            | get the status of bluetooth server          | Active/dead |
+| get_sensor_data          | get real time sensor reading                | JSON:  {humidity:0,temperature:0}|
+| set_user_config_(JSON)   | set user perferences [NOT IMPLEMENTED]      |Success/fail|
+| sync_holding_zone        | get holding_zone SQL data                   | INSERT INTO...|
+| cmd_reboot_now           | restart device                              | - |
+| cmd_reboot_sensor_server | restart sensor server                       | Active/dead |
+| cmd_reboot_bt_server     | restart bluetooth server [NOT IMPLEMENTED]  | - |
+| cmd_disconnect           | disconnect bluetooth connections            | Disconnected |
+| cmd_toggle_debug         | toggle server debug mode                    | Debug:True/False |
+| sh_(Bash commands)       | execute custom shell commands               | [Command output] |
+
 
 # SmartBackpackIOT Project Structures
 ### Main Server Scripts:  
