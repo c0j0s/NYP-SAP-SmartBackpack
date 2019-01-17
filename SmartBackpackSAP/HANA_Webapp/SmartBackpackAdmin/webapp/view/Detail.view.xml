@@ -38,7 +38,7 @@
 							</Toolbar>
 						</headerToolbar>
 						<content>
-							<sap.ui.layout:Grid xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:sap.m.semantic="sap.m.semantic" xmlns:sap.ui.layout="sap.ui.layout" id="grid0" defaultSpan="XL6 L6 M6 S12" position="Center">
+							<sap.ui.layout:Grid xmlns:html="http://www.w3.org/1999/xhtml" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:sap.m.semantic="sap.m.semantic" xmlns:sap.ui.layout="sap.ui.layout" id="grid0" defaultSpan="XL6 L6 M6 S12" position="Center" cd:w5g.dt.context="/userinfos">
 								<sap.ui.layout:content>
 									<sap.ui.layout:VerticalLayout width="100%" id="layout0">
 										<sap.ui.layout:content>
@@ -79,7 +79,7 @@
 									<sap.ui.layout:VerticalLayout xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc" xmlns:semantic="sap.f.semantic" xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:csdata="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:sap.m.semantic="sap.m.semantic" xmlns:sap.ui.layout="sap.ui.layout" width="100%" id="layout2_copy">
 									    <sap.ui.layout:content>
 									        <Label xmlns="sap.m" text="Asthmatic Level:" width="100%" id="label3_copy"/>
-									        <Text xmlns="sap.m" text="Level {ASTHMATIC_LEVEL}" id="text20_copy" tooltip="level 0 - Nil&#10;level 1 - Intermittent Asthma&#10;level 2 - Mild Persistent Asthma&#10;level 3 - Moderate Persistent Asthma&#10;level 4 - Severe Persistent Asthma"/>
+									        <Text xmlns="sap.m" text="{ASTHMATIC_DESC}" id="text20_copy" tooltip="level 0 - Nil&#10;level 1 - Intermittent Asthma&#10;level 2 - Mild Persistent Asthma&#10;level 3 - Moderate Persistent Asthma&#10;level 4 - Severe Persistent Asthma"/>
 									        </sap.ui.layout:content>
 									    
 									</sap.ui.layout:VerticalLayout>

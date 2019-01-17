@@ -100,27 +100,41 @@
 				},
 				"async": true
 			},
-			"routes": [{
-				"pattern": "",
-				"name": "master",
-				"target": "master"
-			}, {
-				"pattern": "user/{objectId}",
-				"name": "object",
-				"target": ["master", "object"]
-			}, {
-				"name": "userDeviceOvp",
-				"pattern": "user/{userid}/device/{devicesn}",
-				"titleTarget": "",
-				"greedy": false,
-				"target": ["master", "userDeviceOvp"]
-			}, {
-				"name": "DataDashboard",
-				"pattern": "dataovp/",
-				"titleTarget": "",
-				"greedy": false,
-				"target": ["master", "DataDashboard"]
-			}],
+			"routes": [
+				{
+					"pattern": "",
+					"name": "master",
+					"target": "master"
+				},
+				{
+					"pattern": "user/{objectId}",
+					"name": "object",
+					"target": [
+						"master",
+						"object"
+					]
+				},
+				{
+					"name": "userDeviceOvp",
+					"pattern": "user/{userid}/device/{devicesn}",
+					"titleTarget": "",
+					"greedy": false,
+					"target": [
+						"master",
+						"userDeviceOvp"
+					]
+				},
+				{
+					"name": "DataDashboard",
+					"pattern": "dataovp/",
+					"titleTarget": "",
+					"greedy": false,
+					"target": [
+						"master",
+						"DataDashboard"
+					]
+				}
+			],
 			"targets": {
 				"master": {
 					"viewName": "Master",

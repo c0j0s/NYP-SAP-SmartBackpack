@@ -301,6 +301,7 @@ sap.ui.define([
 						var race = sap.ui.getCore().byId("input-race").getValue();
 						var gender = sap.ui.getCore().byId("input-gender").getSelectedIndex();
 						var dob = new Date(sap.ui.getCore().byId("input-dob").getValue()).getTime();
+						dob = (dob/1) + 86400000;
 						var oEntry = {
 							ASTHMATIC_LEVEL: asthlevel,
 							CONTACT_NO: contactnum.toString(),
@@ -310,10 +311,13 @@ sap.ui.define([
 							GENDER: (gender === 0) ? "M" : "F",
 							DOB: "/Date(" + dob + ")/"
 						};
-						console.log(oEntry);
-
+						// console.log(oObject.DOB)
+						// console.log(sap.ui.getCore().byId("input-dob").getValue())
+						// console.log(oEntry);
+						var that = this;
 						oModel.update("/user('" + oObject.USER_ID + "')", oEntry, {
 							success: function () {
+								that.getView().getElementBinding().refresh(true);
 								MessageToast.show("Profile Updated");
 							},
 							error: function () {

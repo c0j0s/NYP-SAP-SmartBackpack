@@ -5,46 +5,104 @@
 				<content>
 					<IconTabBar selectedKey="__filter0" id="bar0_1545278439131" expandable="false">
 						<items>
-							<IconTabFilter text="Incident Panel" count="{INCIDENT_COUNT}" icon="sap-icon://status-inactive" id="filter0" design="Horizontal"/>
-							<IconTabFilter xmlns="sap.m" text="Users" count="100{USER_COUNT}" showAll="true" id="filter18" design="Horizontal">
+							<IconTabFilter text="Incident Panel" count="{INCIDENT_COUNT}" icon="sap-icon://status-inactive" id="filter0" design="Horizontal">
+								<content>
+									<sap.ui.layout:ResponsiveSplitter xmlns:sap.ui.layout="sap.ui.layout" id="splitter0">
+										<sap.ui.layout:rootPaneContainer>
+											<sap.ui.layout:PaneContainer id="container2">
+												<sap.ui.layout:panes>
+													<sap.ui.layout:SplitPane requiredParentWidth="200" id="pane3">
+														<sap.ui.layout:content>
+															<Panel height="100%" backgroundDesign="Transparent" id="panel3" content="{path:'/incident',filters:[{path:'READ',operator:'EQ',value1:'N'},{path:'ALERT_TRIGGERED',operator:'EQ',value1:'Y'}],sorter:[{path:'RECORDED_ON',descending:true}]}">
+																<layoutData>
+																	<sap.ui.layout:SplitterLayoutData id="data34"/>
+																</layoutData>
+																<content>
+																	<ObjectListItem type="Active" title="{NAME}" number="{CITY},{COUNTRY}" numberUnit="{GEO_LAT}, {GEO_LNG}" intro="Alert Triggered For" id="incident_item" highlight="{COMFORT_LEVEL_INDICATOR}" press="onIncidentItemClick">
+																		<attributes>
+																			<ObjectAttribute text="{TEMPERATURE}" id="attribute515" title="Temperature"/>
+																			<ObjectAttribute text="{HUMIDITY}" id="attribute0" title="Humidity"/>
+																			<ObjectAttribute text="{ASTHMATIC_DESC}" id="attribute2" title="Asthmatic level"/>
+																		</attributes>
+																		<firstStatus>
+																			<ObjectStatus id="status774" title="PM 2.5" text="{PM2_5}"/>
+																		</firstStatus>
+																		<secondStatus>
+																			<ObjectStatus text="{PM10}" id="status775" title="PM 10"/>
+																		</secondStatus>
+																	</ObjectListItem>
+																</content>
+																<headerToolbar>
+																	<Toolbar width="100%" id="toolbar1_1545894843433">
+																		<content>
+																			<Label text="Latest Incident" width="100%" id="label1_1545894851708"/>
+																		</content>
+																	</Toolbar>
+																</headerToolbar>
+															</Panel>
+														</sap.ui.layout:content>
+													</sap.ui.layout:SplitPane>
+													<sap.ui.layout:SplitPane id="pane4" requiredParentWidth="500">
+														<sap.ui.layout:content>
+															<Panel height="100%" backgroundDesign="Transparent" id="panel4">
+																<layoutData>
+																	<sap.ui.layout:SplitterLayoutData id="data37"/>
+																</layoutData>
+																<content><vbm:AnalyticMap xmlns:l="sap.ui.layout" width="100%" scaleVisible="false" id="incident_map" regions="{/Regions}" cd:w5g.dt.context="/incidentmap">
+																		<vbm:regions>
+																			<vbm:Region code="{COUNTRY_CODE}" color="{COLOR}" tooltip="{COUNTRY}"/>
+																		</vbm:regions>
+																		<vbm:legend>
+																			<vbm:Legend id="legend" caption="Number of Incidents" items="{/Legend}">
+																				<vbm:LegendItem text="{text}" color="{color}"/>
+																			</vbm:Legend>
+																		</vbm:legend>
+																	</vbm:AnalyticMap>
+																</content>
+															</Panel>
+														</sap.ui.layout:content>
+													</sap.ui.layout:SplitPane>
+												</sap.ui.layout:panes>
+											</sap.ui.layout:PaneContainer>
+										</sap.ui.layout:rootPaneContainer>
+									</sap.ui.layout:ResponsiveSplitter>
+								</content>
+							</IconTabFilter>
+							<IconTabFilter xmlns="sap.m" text="Users" count="{USER_COUNT}" id="filter18" design="Horizontal" icon="sap-icon://account" iconColor="Neutral">
 								<content>
 									<vbm:AnalyticMap scaleVisible="false" id="analyticalmap" enableAnimation="true" width="auto" height="400px" regions="{/Regions}" regionClick="onRegionClick">
-												<vbm:regions>
-													<vbm:Region code="{code}" color="{color}" tooltip="{country}"/>
-												</vbm:regions>
-											</vbm:AnalyticMap>
-									<SegmentedButton xmlns="sap.m" selectedKey="one" id="button4">
-												<items><SegmentedButtonItem text="Button One" key="one" id="item2"/>
-													<SegmentedButtonItem text="Button Two" key="two" id="item3"/>
-													<SegmentedButtonItem text="Button Three" key="three" id="item4"/>
-												</items>
-											</SegmentedButton>
+										<vbm:regions>
+											<vbm:Region code="{code}" color="{color}" tooltip="{country}"/>
+										</vbm:regions>
+									</vbm:AnalyticMap>
 									<Button xmlns="sap.m" text="Clear" id="button2" press="onRegionDeselect"/>
 									<Table noDataText="No Data" id="allUserTables" items="{path:'/user',sorter:[{path:'REGISTERED_ON',descending:false}]}">
-									    <items>
-									        <ColumnListItem type="Active" id="item0">
-									            <cells>
-									                <Text text="{USER_ID}" id="text6"/>
-									                <Text text="{NAME}" id="text7"/>
-									                <Text text="{CITY}, {COUNTRY_CODE}" id="text8"/></cells>
-									        </ColumnListItem>
-									    </items>
-									    <columns>
-									        <Column id="column1_1545896754631">
-									            <header>
-									                <Label text="Header 1" id="label1_1545896754631"/>
-									            </header>
-									        </Column>
-									        <Column id="column2_1545896754631">
-									            <header>
-									                <Label text="Header 2" id="label2_1545896754631"/>
-									            </header>
-									        </Column>
-									        <Column id="column3_1545896754632">
-									            <header>
-									                <Label text="Header 3" id="label3"/>
-									            </header>
-									        </Column></columns></Table>
+										<items>
+											<ColumnListItem type="Active" id="item0">
+												<cells>
+													<Text text="{USER_ID}" id="text6"/>
+													<Text text="{NAME}" id="text7"/>
+													<Text text="{CITY}, {COUNTRY_CODE}" id="text8"/></cells>
+											</ColumnListItem>
+										</items>
+										<columns>
+											<Column id="column1_1545896754631">
+												<header>
+													<Label text="Header 1" id="label1_1545896754631"/>
+												</header>
+											</Column>
+											<Column id="column2_1545896754631">
+												<header>
+													<Label text="Header 2" id="label2_1545896754631"/>
+												</header>
+											</Column>
+											<Column id="column3_1545896754632">
+												<header>
+													<Label text="Header 3" id="label3"/>
+												</header>
+											</Column>
+										</columns>
+									</Table>
 								</content>
 							</IconTabFilter>
 							<IconTabFilter xmlns="sap.m" text="Backpacks" count="{DEVICE_COUNT}" icon="sap-icon://machine" iconColor="Neutral" id="filter19" design="Horizontal">
@@ -171,68 +229,7 @@
 								</content>
 							</IconTabFilter>
 						</items>
-						<content>
-							<sap.ui.layout:ResponsiveSplitter xmlns:sap.ui.layout="sap.ui.layout" id="splitter0">
-								<sap.ui.layout:rootPaneContainer>
-									<sap.ui.layout:PaneContainer id="container2">
-										<sap.ui.layout:panes>
-											<sap.ui.layout:SplitPane requiredParentWidth="200" id="pane3">
-												<sap.ui.layout:content>
-													<Panel height="100%" backgroundDesign="Transparent" id="panel3">
-														<layoutData>
-															<sap.ui.layout:SplitterLayoutData id="data34"/>
-														</layoutData>
-														<content>
-															<ObjectListItem type="Active" title="username" number="city,country" numberUnit="lat, lng" intro="Alert Triggered For" id="item14" highlight="Error">
-																<attributes>
-																	<ObjectAttribute text="0" id="attribute515" title="Temperature"/>
-																	<ObjectAttribute text="0" id="attribute0" title="Humidity"/>
-																	<ObjectAttribute text="2 - ..." id="attribute2" title="Asthmatic level"/>
-																</attributes>
-																<firstStatus>
-																	<ObjectStatus text="100" id="status774" title="PM 2.5"/>
-																</firstStatus>
-																<secondStatus>
-																	<ObjectStatus text="100" id="status775" title="PM 10"/>
-																</secondStatus>
-															</ObjectListItem>
-															<List noDataText="Drop list items here" id="list1" growingThreshold="10" showUnread="true">
-																<items>
-																	<StandardListItem type="Navigation" title="username" description="temp:100 hum:100 pm2.5:100 pm10:100" icon="sap-icon://picture" id="item11" highlight="Warning"/>
-																	<StandardListItem xmlns:core="sap.ui.core" xmlns:vbm="sap.ui.vbm" xmlns:mvc="sap.ui.core.mvc" xmlns:viz="sap.viz.ui5.controls" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds" xmlns:viz.data="sap.viz.ui5.data" xmlns:sap.ui.layout="sap.ui.layout" xmlns="sap.m" type="Navigation" title="username" description="temp:100 hum:100 pm2.5:100 pm10:100" icon="sap-icon://picture" id="item11_copy" highlight="Warning"/>
-																	<StandardListItem xmlns:core="sap.ui.core" xmlns:vbm="sap.ui.vbm" xmlns:mvc="sap.ui.core.mvc" xmlns:viz="sap.viz.ui5.controls" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds" xmlns:viz.data="sap.viz.ui5.data" xmlns:sap.ui.layout="sap.ui.layout" xmlns="sap.m" type="Navigation" title="username" description="temp:100 hum:100 pm2.5:100 pm10:100" icon="sap-icon://picture" id="item11_copy2" highlight="Error"/>
-																	<StandardListItem xmlns:core="sap.ui.core" xmlns:vbm="sap.ui.vbm" xmlns:mvc="sap.ui.core.mvc" xmlns:viz="sap.viz.ui5.controls" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds" xmlns:viz.data="sap.viz.ui5.data" xmlns:sap.ui.layout="sap.ui.layout" xmlns="sap.m" type="Navigation" title="username" description="temp:100 hum:100 pm2.5:100 pm10:100" icon="sap-icon://picture" id="item11_copy3" highlight="Warning"/>
-																	<StandardListItem xmlns:core="sap.ui.core" xmlns:vbm="sap.ui.vbm" xmlns:mvc="sap.ui.core.mvc" xmlns:viz="sap.viz.ui5.controls" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cd="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1" xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds" xmlns:viz.data="sap.viz.ui5.data" xmlns:sap.ui.layout="sap.ui.layout" xmlns="sap.m" type="Navigation" title="username" description="temp:100 hum:100 pm2.5:100 pm10:100" icon="sap-icon://picture" id="item11_copy4" highlight="Warning"/>
-																</items>
-															</List>
-														</content>
-														<headerToolbar>
-															<Toolbar width="100%" id="toolbar1_1545894843433">
-																<content>
-																	<Label text="Latest Incident" width="100%" id="label1_1545894851708"/>
-																</content>
-															</Toolbar>
-														</headerToolbar>
-													</Panel>
-												</sap.ui.layout:content>
-											</sap.ui.layout:SplitPane>
-											<sap.ui.layout:SplitPane id="pane4" requiredParentWidth="500">
-												<sap.ui.layout:content>
-													<Panel height="100%" backgroundDesign="Transparent" id="panel4">
-														<layoutData>
-															<sap.ui.layout:SplitterLayoutData id="data37"/>
-														</layoutData>
-													<content>
-													    <vbm:AnalyticMap scaleVisible="false" id="map1" width="100%"/>
-													</content>
-													</Panel>
-												</sap.ui.layout:content>
-											</sap.ui.layout:SplitPane>
-										</sap.ui.layout:panes>
-									</sap.ui.layout:PaneContainer>
-								</sap.ui.layout:rootPaneContainer>
-							</sap.ui.layout:ResponsiveSplitter>
-						</content>
+						<content/>
 					</IconTabBar>
 				</content>
 				<headerContent>
