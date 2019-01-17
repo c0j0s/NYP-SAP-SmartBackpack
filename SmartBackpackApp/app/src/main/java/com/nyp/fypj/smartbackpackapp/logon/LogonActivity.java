@@ -4,65 +4,37 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
-import com.nyp.fypj.smartbackpackapp.mdui.MainActivity;
-import com.nyp.fypj.smartbackpackapp.mdui.MainActivitytest;
-import com.nyp.fypj.smartbackpackapp.service.SAPServiceManager;
 import com.nyp.fypj.smartbackpackapp.R;
 import com.nyp.fypj.smartbackpackapp.app.ConfigurationData;
 import com.nyp.fypj.smartbackpackapp.app.ErrorHandler;
 import com.nyp.fypj.smartbackpackapp.app.ErrorMessage;
 import com.nyp.fypj.smartbackpackapp.app.SAPWizardApplication;
-
-import com.nyp.fypj.smartbackpackapp.mdui.EntitySetListActivity;
-
-
-import com.nyp.sit.fypj.smartbackpackapp.Constants;
-import com.sap.cloud.android.odata.sbp.UserDevicesType;
+import com.nyp.fypj.smartbackpackapp.mdui.MainActivity;
+import com.nyp.fypj.smartbackpackapp.service.SAPServiceManager;
 import com.sap.cloud.mobile.foundation.authentication.AppLifecycleCallbackHandler;
-import com.sap.cloud.mobile.foundation.authentication.BasicAuthDialogAuthenticator;
-import com.sap.cloud.mobile.foundation.common.ClientProvider;
-import com.sap.cloud.mobile.foundation.common.CpmsParameters;
 import com.sap.cloud.mobile.foundation.common.EncryptionError;
-import com.sap.cloud.mobile.foundation.common.SettingsParameters;
-import com.sap.cloud.mobile.foundation.networking.AppHeadersInterceptor;
-import com.sap.cloud.mobile.foundation.networking.CsrfTokenInterceptor;
-import com.sap.cloud.mobile.foundation.networking.WebkitCookieJar;
-import com.sap.cloud.mobile.foundation.securestore.OpenFailureException;
-
-import android.util.Log;
-import android.widget.Toast;
 import com.sap.cloud.mobile.foundation.logging.Logging;
-import ch.qos.logback.classic.Level;
-import okhttp3.OkHttpClient;
-
-import com.sap.cloud.mobile.foundation.user.UserInfo;
-import com.sap.cloud.mobile.foundation.user.UserRoles;
-import com.sap.cloud.mobile.odata.DataQuery;
-import com.sap.cloud.mobile.odata.SortOrder;
-import com.sap.cloud.mobile.odata.http.HttpException;
+import com.sap.cloud.mobile.foundation.securestore.OpenFailureException;
+import com.sap.cloud.mobile.onboarding.launchscreen.LaunchScreenSettings;
 import com.sap.cloud.mobile.onboarding.passcode.EnterPasscodeActivity;
 import com.sap.cloud.mobile.onboarding.passcode.EnterPasscodeSettings;
 import com.sap.cloud.mobile.onboarding.passcode.PasscodePolicy;
-import com.sap.cloud.mobile.onboarding.launchscreen.LaunchScreenSettings;
+import com.sap.cloud.mobile.onboarding.passcode.SetPasscodeActivity;
 import com.sap.cloud.mobile.onboarding.passcode.SetPasscodeSettings;
 import com.sap.cloud.mobile.onboarding.utility.OnboardingType;
-import com.sap.cloud.mobile.onboarding.passcode.SetPasscodeActivity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.Serializable;
-import java.net.MalformedURLException;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static android.provider.UserDictionary.Words.APP_ID;
-import static com.nyp.fypj.smartbackpackapp.mdui.EntitySetListActivity.EntitySetName.UserDevices;
+import ch.qos.logback.classic.Level;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.

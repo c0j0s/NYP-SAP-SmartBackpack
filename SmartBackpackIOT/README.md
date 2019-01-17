@@ -130,7 +130,8 @@ The first array item is reserved for function identifier code
 | 12500 | get the status of bluetooth server          |GET_BLUETOOTH_STATUS|
 | 30000 | get real time sensor reading                | GET_SENSOR_DATA|
 | 31000 | set user perferences [NOT IMPLEMENTED]      ||
-| 32000 | get holding_zone SQL data                   | SYNC_HOLDING_ZONE|
+| 32000 | get holding_zone data                       | SYNC_HOLDING_ZONE |
+| 32000 | flush holding_zone                          | FLUSH_HOLDING_ZONE |
 | 41000 | toggle server debug mode                    | TOOGLE_DEBUG|
 | 42000 | execute custom shell commands               ||
 
@@ -141,6 +142,20 @@ The Second array item is reserved for data body
     .
     "data":{
 
+    },
+    .
+    .
+}
+```
+
+Holding zone synchronisation syntax:  
+```JSON
+{
+    .
+    "data":{
+        "RECORDED_ON":"HUMIDITY;TEMPERATURE;PM2_5;PM10;PREDICTED_COMFORT_LEVEL;ALERT_TRIGGERED",
+        .
+        .
     },
     .
     .

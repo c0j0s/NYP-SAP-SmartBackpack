@@ -5,9 +5,6 @@ import android.os.Handler
 import android.util.Log
 import com.nyp.sit.fypj.smartbackpackapp.Constants
 import com.nyp.sit.fypj.smartbackpackapp.bluetooth.BluetoothService
-import android.bluetooth.BluetoothDevice
-import android.content.IntentFilter
-
 
 
 class BtWrapper(private val displayHandler : Handler) {
@@ -72,6 +69,10 @@ class BtWrapper(private val displayHandler : Handler) {
 
     fun syncHoldingZone(){
         sendCommand(Constants.BT_FUN_CODE.SYNC_HOLDING_ZONE)
+    }
+
+    fun flushHoldingZone(){
+        sendCommand(Constants.BT_FUN_CODE.FLUSH_HOLDING_ZONE)
     }
 
     fun changeDeviceSettings(key:String,value:String){

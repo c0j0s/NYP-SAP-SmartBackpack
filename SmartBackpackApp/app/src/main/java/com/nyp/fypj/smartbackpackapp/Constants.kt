@@ -1,20 +1,6 @@
 package com.nyp.sit.fypj.smartbackpackapp
 
 class Constants {
-    companion object {
-        //Standard types for handler
-        val HANDLER_TOAST = 1
-        val HANDLER_STATE_CHANGE = 2
-        val HANDLER_MESSAGE_SEND = 3
-        val HANDLER_MESSAGE_RECEIVED = 4
-
-        //Key names
-        val DEVICE_NAME = "bluetooth_device_name"
-        val TOAST = "toast_content"
-        val TAB_TO_OPEN = "tab_to_open"
-        val USER_DEVICES = "user_devices"
-
-    }
 
     enum class HANDLER_ACTION(val value: Int) {
         //system action
@@ -29,6 +15,7 @@ class Constants {
         //app action status
         COMMAND_SEND(30),
         RECEIVE_RESPONSE(31),
+        RECEIVE_ERROR(32),
 
     }
 
@@ -51,10 +38,12 @@ class Constants {
         GET_SENSOR_DATA("30000"),
         CHANGE_DEVICE_SETTINGS("31000"),
         SYNC_HOLDING_ZONE("32000"),
+        FLUSH_HOLDING_ZONE("32500"),
 
         TOGGLE_DEBUG("41000"),
         EXE_SH("42000"),
-        ELSE("-1")
+        ELSE("-1"),
+
     }
 
     enum class BT_END_CODE(val code: String) {

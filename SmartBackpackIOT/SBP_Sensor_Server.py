@@ -313,24 +313,39 @@ def main():
             exit(0)
         
 def output_data_to_hoding_file(hum,temp,pm2_5,pm10,predict_comfort,alert_triggered):
-    current = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+    try:
+        today = datetime.datetime.now().strftime("%Y-%m-%d")
+        filepath = "holding_zone/holding_zone_" + today
+        filemode = "a"
 
-    jsonObj = {
-            'RECOREDED_ON':current,
-            'HUMIDITY':hum,
-            'TEMPERATURE':temp,
-            'PM2_5':pm2_5,
-            'PM10':pm10,
-            'PREDICTED_COMFORT_LEVEL':predict_comfort,
-            'ALERT_TRIGGERED':alert_triggered,
-        }
-    if debug:
-        print("[HOLDING_ZONE] Writing: "+ str(jsonObj))
-        
-    with open("holding_zone","a") as f:
-        json.dump(jsonObj, f)
-        f.write("\n")
-        f.close()
+        if not os.path.isfile(filepath):
+            print("[HOLDING_ZONE] Creating File in " + filepath)
+            filemode = "w"
+
+        current = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+
+        jsonObj = {
+                'RECOREDED_ON':current,
+                'HUMIDITY':hum,
+                'TEMPERATURE':temp,
+                'PM2_5':pm2_5,
+                'PM10':pm10,
+                'PREDICTED_COMFORT_LEVEL':predict_comfort,
+                'ALERT_TRIGGERED':alert_triggered,
+            }
+        if debug:
+            print("[HOLDING_ZONE] Writing: "+ str(jsonObj))
+            
+        with open(filepath,filemode) as f:
+            json.dump(jsonObj, f)
+            f.write("\n")
+            f.close()
+    except:
+        print("[HOLDING_ZONE] Exception occurred")
+        print("-"*60)
+        traceback.print_exc(file=sys.stdout)
+        print("-"*60)
+        pass
 
 def closing():
     display.setDisplayOff()

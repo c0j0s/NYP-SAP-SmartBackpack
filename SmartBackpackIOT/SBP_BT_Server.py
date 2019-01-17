@@ -17,6 +17,7 @@ import datetime
 
 debug=False
 config_file = "config.json"
+holding_zone_file = "holding_zone"
 
 def init():
     print("Initialising BT Server")
@@ -104,13 +105,8 @@ def main():
 
             if debug and received is not None:
                 print("===============")
-                print(received.function_code)
-                print(received.data)
-                print(received.end_code)
-                if received.debug is not "":
-                    print(received.debug)
-
-            result = {}
+                print(str(received))
+                print("===============")
 
             # Handle the request
             command = SBP_BT_Command_Manager(client_sock,received)
@@ -130,48 +126,17 @@ def main():
             elif received.function_code == "30000":
                 command.get_sensor_data(redis_cursor)
             elif received.function_code == "31000":
-                pass
+                command.message("Function Not Implemented")
             elif received.function_code == "32000":
                 command.sync_holding_zone()
+            elif received.function_code == "32500":
+                command.flush_holding_zone_temp(clear_holding_zone_after_sync)
             elif received.function_code == "41000":
                 command.toggle_debug(config_file)
             elif received.function_code == "42000":
                 command.sh_execute_command(command)
             else:
                 command.message("Function Not Supported")
-            
-            # if data == "getop":
-            #     result['msg'] = "op:%s" % ",".join(operations)
-            # elif data == "ping":
-            #     result['msg'] = "Pong"
-            # elif data == "get_sensor_status":
-            #     result = get_service_status('sensor')
-            # elif data == "get_bt_status":
-            #     result = get_service_status('bt')
-            # elif data == "get_sensor_data":
-            #     result = get_sensor_data()
-            # elif data == "sync_holding_zone":
-            #     result = sync_holding_zone()
-            # elif data == "cmd_reboot_now":
-            #     cmd_reboot_now(client_sock)
-            # elif data == "cmd_reboot_sensor_server":
-            #     cmd_reboot_sensor_server(client_sock)
-            # elif data == "cmd_reboot_bt_server":
-            #     cmd_reboot_bt_server(client_sock)
-            # elif data == "cmd_disconnect":
-            #     if client_sock is not None:
-            #         client_sock.close()
-            # elif data == "cmd_toggle_debug":
-            #     result = cmd_toggle_debug()
-            # elif "sh_" in data :
-            #     sh_execute_command(client_sock,data)
-            # else:
-            #     result['msg'] = "Not supported"
-
-            # if result is not {}:
-            #     response = json.dumps(result)
-            #     print("Sent back : %s" % response)
-            #     client_sock.send(response)
             
         except IOError: 
             closing(server_sock,client_sock,msg="IOError ")
@@ -183,16 +148,16 @@ def main():
             closing(server_sock,client_sock,msg="Error in main loop")
             break
 
-def toBTObject(function_code,data,end_code,debug=""):
-    result = {}
-    result["function_code"] = function_code
-    result["data"] = data
-    result["end_code"] = end_code
+# def toBTObject(function_code,data,end_code,debug=""):
+#     result = {}
+#     result["function_code"] = function_code
+#     result["data"] = data
+#     result["end_code"] = end_code
 
-    if debug and debug is not "":
-        result["debug"] = debug
+#     if debug and debug is not "":
+#         result["debug"] = debug
     
-    return result
+#     return result
 
 # def handleBtCommand(function_code,data,end_code,debug=""):
 #     switcher={

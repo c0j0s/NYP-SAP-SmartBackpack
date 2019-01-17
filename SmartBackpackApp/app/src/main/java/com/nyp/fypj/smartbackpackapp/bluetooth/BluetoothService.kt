@@ -8,17 +8,17 @@ import android.bluetooth.BluetoothSocket
 import android.media.session.PlaybackState.STATE_NONE
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
+import com.google.gson.JsonSyntaxException
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtCommandObject
 import com.nyp.sit.fypj.smartbackpackapp.Constants
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import java.util.*
+import kotlin.collections.HashMap
 
 class BluetoothService(private val displayHandler: Handler) {
 
@@ -272,26 +272,47 @@ class BluetoothService(private val displayHandler: Handler) {
             val buffer = ByteArray(1024)
             var bytes: Int
 
+            var hashMap = HashMap<String,String>()
+            var session_function_code = ""
+
             // Keep listening to the InputStream while connected
             while (mState == STATE_CONNECTED) {
                 try {
                     // Read from the InputStream
                     bytes = mmInStream!!.read(buffer)
-                    val readBuf = buffer as ByteArray
-                    // construct a string from the valid bytes in the buffer
-                    val jsonResponse = String(readBuf, 0, bytes)
 
-                    var gson = Gson()
+                    // construct a string from the valid bytes in the buffer
+                    val jsonResponse = String(buffer, 0, bytes)
                     Log.e(TAG,jsonResponse)
-                    var mBtCommandObject = gson.fromJson(jsonResponse, BtCommandObject::class.java);
+                    var gson = Gson()
+                    var mBtCommandObject = gson.fromJson(jsonResponse, BtCommandObject::class.java)
+
                     // Send the obtained bytes to the UI Activity
-                    val msg = displayHandler.obtainMessage(Constants.HANDLER_ACTION.RECEIVE_RESPONSE.value)
-                    msg.obj = mBtCommandObject
-                    displayHandler.sendMessage(msg)
+                    if (mBtCommandObject.end_code == Constants.BT_END_CODE.MSE.code){
+                        //For Session Command
+                        session_function_code = mBtCommandObject.function_code
+                        hashMap.putAll(mBtCommandObject.data)
+                    }else{
+                        //For Session Ending Command
+                        if(session_function_code.equals(mBtCommandObject.function_code)) {
+                            mBtCommandObject.data = hashMap
+                        }
+
+                        Log.e(TAG,mBtCommandObject.data.size.toString())
+
+                        //For Normal Command
+                        val msg = displayHandler.obtainMessage(Constants.HANDLER_ACTION.RECEIVE_RESPONSE.value)
+                        msg.obj = mBtCommandObject
+                        displayHandler.sendMessage(msg)
+                    }
                 } catch (e: IOException) {
                     Log.e(TAG, "disconnected", e)
                     connectionLost()
                     break
+                } catch (e: JsonSyntaxException){
+                    Log.e(TAG, "json syntax error, iot side might transmit data with a wrong format", e)
+                    val msg = displayHandler.obtainMessage(Constants.HANDLER_ACTION.RECEIVE_ERROR.value)
+                    displayHandler.sendMessage(msg)
                 }
 
             }
@@ -307,7 +328,7 @@ class BluetoothService(private val displayHandler: Handler) {
                 mmOutStream!!.write(buffer)
 
                 // Share the sent message back to the UI Activity
-                displayHandler.obtainMessage(Constants.HANDLER_MESSAGE_SEND, -1, -1, buffer)
+                displayHandler.obtainMessage(Constants.HANDLER_ACTION.COMMAND_SEND.value, -1, -1, buffer)
                     .sendToTarget()
             } catch (e: IOException) {
                 Log.e(TAG, "Exception during write", e)

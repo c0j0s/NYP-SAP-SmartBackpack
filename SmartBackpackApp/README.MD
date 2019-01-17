@@ -18,7 +18,8 @@ An Android companion app that is responsible for user interactions with SmartBac
 | 12500 | get the status of bluetooth server          | Toast |
 | 30000 | get real time sensor reading                | Display in home page |
 | 31000 | set user perferences [NOT IMPLEMENTED]      ||
-| 32000 | get holding_zone SQL data                   | Upload to Hana DB |
+| 32000 | get holding_zone data                       | Upload to Hana DB |
+| 32000 | flush holding_zone                          | Toast |
 | 41000 | toggle server debug mode                    | Toast |
 | 42000 | execute custom shell commands               ||
 | 99999 | Error Occurred in IOT Device               | Toast |

@@ -17,6 +17,7 @@ import com.nyp.fypj.smartbackpackapp.app.ConfigurationData
 import com.nyp.fypj.smartbackpackapp.app.SAPWizardApplication
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtCommandObject
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtWrapper
+import com.nyp.fypj.smartbackpackapp.bluetooth.HoldingZoneData
 import com.nyp.fypj.smartbackpackapp.logon.AuthenticationInterceptor
 import com.nyp.fypj.smartbackpackapp.logon.BasicAuthPersistentCredentialStore
 import com.nyp.fypj.smartbackpackapp.logon.SecureStoreManager
@@ -237,7 +238,11 @@ class MainActivity : AppCompatActivity() {
                     loadingBar!!.visibility = View.INVISIBLE
                     Log.i(TAG,"Backpack Connected")
 
+                    //test get sensor data
                     btWrapper!!.getSensorData()
+
+                    //test syncholdingzone
+                    btWrapper!!.syncHoldingZone()
                 }
                 //TODO handle when device disconnected
                 Constants.HANDLER_ACTION.DISCONNECTED.value->{
@@ -255,6 +260,11 @@ class MainActivity : AppCompatActivity() {
                 Constants.HANDLER_ACTION.CONNECT_ERROR.value->{
 
                     Log.i(TAG,"Backpack connection error")
+
+                }
+                Constants.HANDLER_ACTION.COMMAND_SEND.value->{
+
+                    Log.i(TAG,"Command send")
 
                 }
                 //TODO sensor data retrieved from device
@@ -278,24 +288,46 @@ class MainActivity : AppCompatActivity() {
                         }
                         Constants.BT_FUN_CODE.SYNC_HOLDING_ZONE.code->{
 
+                            //all received data is in hashmap form
+                            Toast.makeText(this@MainActivity,mBtCommandObject.data.size.toString(),Toast.LENGTH_LONG).show()
 
+                            //convert to list of holdingZoneData object
+                            var HoldingZoneDataList: MutableList<HoldingZoneData> = mutableListOf()
+                            for (keyValuePair in mBtCommandObject.data){
+                                HoldingZoneDataList.add(HoldingZoneData(keyValuePair.key,keyValuePair.value))
+                            }
+
+                            //test
+                            Log.e(TAG,"holdingZoneData object test: " + HoldingZoneDataList[0].humidity)
+
+                            //send command to flush holding zone after transmission complete
+                            btWrapper!!.flushHoldingZone()
+                        }
+                        Constants.BT_FUN_CODE.FLUSH_HOLDING_ZONE.code->{
+
+                            Log.i(TAG,"Holding zone flushing complete")
 
                         }
                         Constants.BT_FUN_CODE.TOGGLE_DEBUG.code->{
 
 
-
                         }
                         else -> {
                             //received code not supported
-                            Log.i(TAG,"received code not supported")
+                            Log.i(TAG,"received code not supported: " + mBtCommandObject.function_code)
                         }
                         //TODO handle other function code responses
                     }
                 }
+                //TODO handle exceptions occurred at receiving end
+                Constants.HANDLER_ACTION.RECEIVE_ERROR.value->{
+
+                    Toast.makeText(this@MainActivity,"Error occurred",Toast.LENGTH_SHORT).show()
+
+                }
                 else -> {
                     //state not supported
-                    Log.i(TAG,"state not supported")
+                    Log.i(TAG,"state not supported: " + msg.what)
                 }
             }
         }
