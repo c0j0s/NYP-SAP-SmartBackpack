@@ -170,12 +170,48 @@ class SBP_BT_Command_Manager:
         time.sleep(1)
         os.system("sudo reboot")
 
-    def toggle_debug(self,config_file):
+    def changeDeviceConfigs(self,config_file):
 
         with open(config_file) as f:
             config = json.load(f)
-            localdebug = config['settings']['debug']
-            if localdebug:
+            sensor_config_path = config['settings']['Sensor_Server_Settings']
+            
+            for key, val in self.command.data.items():
+                changeVal = 0
+                if val == "true":
+                    changeVal = 1
+                elif val == "false":
+                    changeVal = 0
+                else:
+                    changeVal = int(val)
+
+                sensor_config_path[key] = changeVal
+                print("[changeDeviceConfigs] Config change for: " + key + " to: " + str(changeVal))
+
+            f.close()
+
+        with open(config_file,'w',encoding='utf-8') as outfile:
+            json.dump(config, outfile, ensure_ascii=False,indent = 4)
+            print("[changeDeviceConfigs] Config saved")
+
+        output = {
+            "message":"Config Changed"
+        }
+        self.client.send(self.toBTObject(self.command.function_code,output,"EOT"))
+
+        try:
+            #restart the sensor service in order to load the new configurations
+            print("[changeDeviceConfigs] Restarting sensor service")
+            os.system("sudo systemctl restart SBP_Sensor_Server.service")
+        except:
+            print("[changeDeviceConfigs] Error occurred while restarting sensor service")
+            pass
+
+    def toggle_debug(self,config_file):
+        with open(config_file) as f:
+            config = json.load(f)
+            config = config['settings']['debug']
+            if self.debug:
                 config["settings"]["debug"] = False
             else:
                 config["settings"]["debug"] = True

@@ -7,7 +7,7 @@ An Android companion app that is responsible for user interactions with SmartBac
 ### IOT Communication layer
 ![IOT Communication layer](https://github.com/c0j0s/SmartBackpack/blob/master/Documentations/4_android_bt_flow.jpeg)
 
-### Android App Handler Action For IOT Data Function Codes Received:  
+### Android App Handler Action For IOT Data Function Codes Received  
 | Function Code  | Description                        | Action      | 
 |:-------------- |:-----------------------------------|:--------- |
 | 00000 | terminate bluetooth connections             | Toast |
@@ -23,3 +23,75 @@ An Android companion app that is responsible for user interactions with SmartBac
 | 41000 | toggle server debug mode                    | Toast |
 | 42000 | execute custom shell commands               ||
 | 99999 | Error Occurred in IOT Device               | Toast |
+
+## Wrapper Class Implementation Guide
+### BtWrapper
+A wrapper class that encapsulates bluetooth command syntax into simple functions for front-end implementation.  
+
+#### Sample usage
+```kotlin
+    var btWrapper = BtWrapper(<UiHandler>)
+    btWrapper.getSensorData()
+```
+
+#### Functions
+```kotlin
+    fun connectDevice(deviceBluetoothAddress:String)
+
+    fun disconnectDevice()
+
+    fun getSensorData()
+
+    fun getSensorStatus()
+
+    fun restartSensorService()
+
+    fun getBluetoothStatus()
+
+    fun restartBluetoothService()
+
+    fun syncHoldingZone()
+
+    fun flushHoldingZone()
+
+    fun changeDeviceSettings(key:String,value:String)
+
+    fun changeDeviceMultipleSettings(list:HashMap<String,String>)
+
+    fun toggleDebug()
+
+    fun restartDevice()
+
+    fun exeShCommand(command:String)
+
+    fun elseTest()
+```
+
+### IotDeviceConfigManager
+A wrapper class that handles functions to change IOT device configs.json and functions to sync the data to cloud database.  
+
+#### Sample usage
+```kotlin
+    var iotDeviceConfigManager = IotDeviceConfigManager(<BtWrapper>,<SapServiceManager>,<userId>,<deviceSn>)
+
+    //adds the configs to change list
+    iotDeviceConfigManager!!.toggleBuzzer(true);
+    .
+    .
+
+    //execute the final changes
+    iotDeviceConfigManager!!.commitChanges()
+```
+
+#### Functions
+```kotlin
+    fun syncConfigToHana(success: () -> Unit,error: (e:RuntimeException) -> Unit)
+
+    fun toggleBuzzer(enable:Boolean)
+
+    fun toggleLed(enable:Boolean)
+
+    fun changeHoldingZoneRecordInterval(minutes:Int)
+
+    fun commitChanges()
+```

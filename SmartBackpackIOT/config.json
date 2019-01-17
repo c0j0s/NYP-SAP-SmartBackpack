@@ -2,10 +2,10 @@
     "device":{
         "services":{
             "sensor":{
-                "version":"0.0.0.1"
+                "version":"0.0.0.2"
             },
             "bluetooth":{
-                "version":"0.0.0.2"
+                "version":"0.0.0.3"
             },
             "monitoring":{
                 "version":"0.0.0.1"
@@ -40,10 +40,10 @@
             "clear_holding_zone_after_sync":1
         },
         "Sensor_Server_Settings":{
-            "enable_buzzer":0,
-            "enable_led":0,
-            "minute_to_record_data":0.1,
-            "seconds_to_update_data":5,
+            "CONFIG_ENABLE_BUZZER":0,
+            "CONFIG_ENABLE_LED":1,
+            "MINUTES_TO_RECORD_DATA":1,
+            "SECONDS_TO_UPDATE_DATA":5,
             "humidity_range":{
                 "red":{
                     "min":30,

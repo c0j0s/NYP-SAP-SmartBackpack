@@ -81,6 +81,10 @@ class BtWrapper(private val displayHandler : Handler) {
         sendCommand(Constants.BT_FUN_CODE.CHANGE_DEVICE_SETTINGS,data)
     }
 
+    fun changeDeviceMultipleSettings(list: HashMap<String,String>){
+        sendCommand(Constants.BT_FUN_CODE.CHANGE_DEVICE_SETTINGS,list)
+    }
+
     fun toggleDebug(){
         sendCommand(Constants.BT_FUN_CODE.TOGGLE_DEBUG)
     }

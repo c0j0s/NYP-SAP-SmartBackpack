@@ -81,16 +81,16 @@ def init():
         led_red_port = int(actuator_path['led_red'])
         buzzer_port = int(actuator_path['buzzer'])
 
-        led_controller = SBP_LED_Controller(debug=debug)
+        led_controller = SBP_LED_Controller(sensor_server_settings['CONFIG_ENABLE_LED'],debug=debug)
         led_controller.addLED('green',led_green_port)
         led_controller.addLED('blue',led_blue_port)
         led_controller.addLED('red',led_red_port)
 
         #load custom settings
-        buzzer = SBP_Buzzer(buzzer_port,sensor_server_settings['enable_buzzer'],debug=debug)
+        buzzer = SBP_Buzzer(buzzer_port,sensor_server_settings['CONFIG_ENABLE_BUZZER'],debug=debug)
 
-        minute_to_record_data = sensor_server_settings['minute_to_record_data']
-        seconds_to_update_data = sensor_server_settings['seconds_to_update_data']
+        minute_to_record_data = sensor_server_settings['MINUTES_TO_RECORD_DATA']
+        seconds_to_update_data = sensor_server_settings['SECONDS_TO_UPDATE_DATA']
         countdown_to_record_data = calIntervalNeeded(minute_to_record_data,seconds_to_update_data)
 
         #init redis
@@ -102,6 +102,7 @@ def init():
 
         #start display
         display = SBP_Display()
+        display.checkIfDisplayAvailable()
         display.setDisplayOn()
 
         if debug:

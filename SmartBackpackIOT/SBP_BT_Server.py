@@ -126,7 +126,7 @@ def main():
             elif received.function_code == "30000":
                 command.get_sensor_data(redis_cursor)
             elif received.function_code == "31000":
-                command.message("Function Not Implemented")
+                command.changeDeviceConfigs(config_file)
             elif received.function_code == "32000":
                 command.sync_holding_zone()
             elif received.function_code == "32500":
@@ -287,4 +287,7 @@ def closing(server_sock,client_sock,msg="Closing",exception=""):
 if __name__ == '__main__':
     init()
     while True:
+        if killer.kill_now:
+            break
+
         main()

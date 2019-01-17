@@ -167,14 +167,14 @@ The Third array item is reserved for transmission ending status
 
 
 # SmartBackpackIOT Project Structures
-### Main Server Scripts:  
+### Main Service Scripts:  
 - SBP_BT_Server.py  
 - SBP_Sensor_Server.py  
 - SBP_Service_Monitor.py  
 
 ### Data and configuration storage:  
 - config.json  
-- holding_zone
+- holding_zone/
 
 ### Project Structures
 /lib  
@@ -191,3 +191,6 @@ contains scripts to setup the runtime environment.
 
 /unitTesting  
 for testing purposes.
+
+/holding_zone  
+for holding zone files

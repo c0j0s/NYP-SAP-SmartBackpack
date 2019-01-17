@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import com.nyp.fypj.smartbackpackapp.R
 import com.nyp.fypj.smartbackpackapp.app.ConfigurationData
@@ -24,6 +25,7 @@ import com.nyp.fypj.smartbackpackapp.logon.SecureStoreManager
 import com.nyp.fypj.smartbackpackapp.mdui.fragments.HomeFragment
 import com.nyp.fypj.smartbackpackapp.mdui.fragments.MyDevicesFragment
 import com.nyp.fypj.smartbackpackapp.mdui.fragments.MyProfileFragment
+import com.nyp.fypj.smartbackpackapp.service.IotDeviceConfigManager
 import com.nyp.fypj.smartbackpackapp.service.SAPServiceManager
 import com.nyp.sit.fypj.smartbackpackapp.Constants
 import com.sap.cloud.android.odata.sbp.IotdeviceinfoType
@@ -61,6 +63,7 @@ class MainActivity : AppCompatActivity() {
     private var okHttpClient: OkHttpClient? = null
     private var settingsParameter: SettingsParameters? = null
     private var btWrapper:BtWrapper? = null
+    private var iotDeviceConfigManager: IotDeviceConfigManager? = null
 
     private var userProfile: UserinfosType? = null
     private var userDevices: List<IotdeviceinfoType>? = null
@@ -191,6 +194,20 @@ class MainActivity : AppCompatActivity() {
                             loadingBar!!.visibility = View.INVISIBLE
                             homeDisabled = true
                         }
+
+                        /*
+                        IOT device change config testing
+
+                         */
+//                        var test_btn = findViewById<Button>(R.id.test_btn)
+//
+//                        iotDeviceConfigManager = IotDeviceConfigManager(btWrapper!!,sapServiceManager!!,userProfile!!.userId,userDevices!![0].deviceSn)
+//                        test_btn.setOnClickListener {
+//                            iotDeviceConfigManager!!.toggleBuzzer(false)
+//                            iotDeviceConfigManager!!.toggleLed(true)
+//                            iotDeviceConfigManager!!.changeHoldingZoneRecordInterval(5)
+//                            iotDeviceConfigManager!!.commitChanges()
+//                        }
                     },
                     {re:RuntimeException->
                         Log.d(TAG, "An error occurred during async query:  "  + re.message);
@@ -210,7 +227,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
-
     }
 
     override fun onBackPressed() {
@@ -242,7 +258,7 @@ class MainActivity : AppCompatActivity() {
                     btWrapper!!.getSensorData()
 
                     //test syncholdingzone
-                    btWrapper!!.syncHoldingZone()
+                    //btWrapper!!.syncHoldingZone()
                 }
                 //TODO handle when device disconnected
                 Constants.HANDLER_ACTION.DISCONNECTED.value->{
@@ -294,7 +310,7 @@ class MainActivity : AppCompatActivity() {
                             //convert to list of holdingZoneData object
                             var HoldingZoneDataList: MutableList<HoldingZoneData> = mutableListOf()
                             for (keyValuePair in mBtCommandObject.data){
-                                HoldingZoneDataList.add(HoldingZoneData(keyValuePair.key,keyValuePair.value))
+                                HoldingZoneDataList.add(HoldingZoneData(keyValuePair.key,keyValuePair.value.toString()))
                             }
 
                             //test
@@ -306,6 +322,22 @@ class MainActivity : AppCompatActivity() {
                         Constants.BT_FUN_CODE.FLUSH_HOLDING_ZONE.code->{
 
                             Log.i(TAG,"Holding zone flushing complete")
+
+                        }
+                        Constants.BT_FUN_CODE.CHANGE_DEVICE_SETTINGS.code ->{
+
+                            Log.i(TAG,"Device config changed, start hana sync")
+
+                            iotDeviceConfigManager!!.syncConfigToHana({
+
+                                Log.i(TAG,"Hana Config Updated")
+
+                            }, {e:RuntimeException ->
+
+                                Log.e(TAG,"Error when synchronising config to database " + e.message)
+
+                            })
+
 
                         }
                         Constants.BT_FUN_CODE.TOGGLE_DEBUG.code->{
