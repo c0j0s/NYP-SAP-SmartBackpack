@@ -95,3 +95,19 @@ A wrapper class that handles functions to change IOT device configs.json and fun
 
     fun commitChanges()
 ```
+
+### IotDataFeedbackManager
+A wrapper class that update user feedback of specific iot data to database.
+#### Sample usage
+```kotlin
+    var iotDataFeedbackManager = IotDataFeedbackManager(<SapServiceManager>,<userId>,<dataId>)
+
+    iotDataFeedbackManager!!.setDataFeedback(1)
+```
+
+#### Functions
+```kotlin
+    fun setDataFeedback(level:Int,success:() -> Unit,error:(e:RuntimeException) -> Unit)
+
+    fun getFeedbackLabel(level:Int):String
+```
