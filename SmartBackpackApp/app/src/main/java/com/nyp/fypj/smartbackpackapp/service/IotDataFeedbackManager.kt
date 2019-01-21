@@ -6,18 +6,18 @@ import java.security.InvalidParameterException
 
 class IotDataFeedbackManager(private val sapServiceManager: SAPServiceManager,USER_ID:String,DATA_ID:Long) {
 
-    private val data:IotDataType? = IotDataType()
+    private val data:IotDataType = IotDataType()
 
     private val feedbackDescription:HashMap<Int,String> = hashMapOf(
             Pair(0,"Very Good"),
             Pair(1,"Ok"),
             Pair(2,"Uncomfortable"),
             Pair(3,"Very Uncomfortable"),
-            Pair(4,"Danger")
+            Pair(4,"Hazardous")
     )
 
     init {
-        data!!.rememberOld()
+        data.rememberOld()
         data.userId = USER_ID
         data.dataId = DATA_ID
     }
