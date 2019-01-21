@@ -15,7 +15,7 @@ import android.widget.Toast
 import com.nyp.fypj.smartbackpackapp.R
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtWrapper
 import com.nyp.fypj.smartbackpackapp.bluetooth.DeviceListActivity
-import com.nyp.sit.fypj.smartbackpackapp.Constants
+import com.nyp.fypj.smartbackpackapp.Constants
 
 class MainActivitytest : AppCompatActivity() {
 

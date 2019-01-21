@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.Toast
 import com.nyp.fypj.smartbackpackapp.R
 import com.nyp.fypj.smartbackpackapp.app.ConfigurationData
@@ -27,7 +26,7 @@ import com.nyp.fypj.smartbackpackapp.mdui.fragments.MyDevicesFragment
 import com.nyp.fypj.smartbackpackapp.mdui.fragments.MyProfileFragment
 import com.nyp.fypj.smartbackpackapp.service.IotDeviceConfigManager
 import com.nyp.fypj.smartbackpackapp.service.SAPServiceManager
-import com.nyp.sit.fypj.smartbackpackapp.Constants
+import com.nyp.fypj.smartbackpackapp.Constants
 import com.sap.cloud.android.odata.sbp.IotdeviceinfoType
 import com.sap.cloud.android.odata.sbp.UserinfosType
 import com.sap.cloud.mobile.fiori.indicator.FioriProgressBar

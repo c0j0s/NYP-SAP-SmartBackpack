@@ -3,7 +3,7 @@ package com.nyp.fypj.smartbackpackapp.bluetooth
 import android.bluetooth.BluetoothAdapter
 import android.os.Handler
 import android.util.Log
-import com.nyp.sit.fypj.smartbackpackapp.Constants
+import com.nyp.fypj.smartbackpackapp.Constants
 
 
 class BtWrapper(private val displayHandler : Handler) {
@@ -16,7 +16,7 @@ class BtWrapper(private val displayHandler : Handler) {
         mBluetoothService = BluetoothService(this.displayHandler)
     }
 
-    fun sendCommand(command:Constants.BT_FUN_CODE){
+    fun sendCommand(command: Constants.BT_FUN_CODE){
         mBtCommandObject = BtCommandObject(
                 command.code,
                 HashMap<String,String>(),
@@ -24,7 +24,7 @@ class BtWrapper(private val displayHandler : Handler) {
         mBluetoothService!!.write(mBtCommandObject!!)
     }
 
-    fun sendCommand(command:Constants.BT_FUN_CODE,Data:HashMap<String,String>){
+    fun sendCommand(command: Constants.BT_FUN_CODE, Data:HashMap<String,String>){
         mBtCommandObject = BtCommandObject(
                 command.code,
                 Data,

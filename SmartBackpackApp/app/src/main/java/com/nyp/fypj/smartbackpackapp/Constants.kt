@@ -1,4 +1,4 @@
-package com.nyp.sit.fypj.smartbackpackapp
+package com.nyp.fypj.smartbackpackapp
 
 class Constants {
 

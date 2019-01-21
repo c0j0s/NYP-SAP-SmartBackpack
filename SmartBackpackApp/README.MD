@@ -79,8 +79,17 @@ A wrapper class that handles functions to change IOT device configs.json and fun
     .
     .
 
-    //execute the final changes
+    //execute the final changes and status feedback will be handled in handlers configured for BtWrapper
     iotDeviceConfigManager!!.commitChanges()
+
+    //sync to database
+    iotDeviceConfigManager!!.syncConfigToHana(
+        {
+            //success callback
+        },
+        { e:RuntimeException ->
+            //error callback
+        })
 ```
 
 #### Functions
