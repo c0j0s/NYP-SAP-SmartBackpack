@@ -1,0 +1,27 @@
+service namespace "sbp"{ 
+	"NYPFYPJ03"."USER_PROFILE" as "user";
+	"NYPFYPJ03"."USER_DEVICES" as "userDevices";
+	"NYPFYPJ03"."IOT_DEVICE" as "iotDevice";
+	"NYPFYPJ03"."IOT_DATA" as "iotData";
+	"NYPFYPJ03"."SUGGESTIONS" as "suggestions";
+	
+	"_SYS_BIC"."NYPFYPJ_SMARTBACKPACK/userinfos" 
+	as "userinfos"
+	key("USER_ID");
+	
+	"_SYS_BIC"."NYPFYPJ_SMARTBACKPACK/iotdeviceinfo"
+	as "iotdeviceinfo"
+	key("DEVICE_SN");
+	
+	"_SYS_BIC"."NYPFYPJ_SMARTBACKPACK/incident" 
+	as "incident"
+	key("DATA_ID");
+	
+	//"_SYS_BIC"."NYPFYPJ_SMARTBACKPACK/iotdataovp" 
+	//as "iotdataopv"
+	//key("DATA_ID");
+	
+	"_SYS_BIC"."NYPFYPJ_SMARTBACKPACK/incidentMap" 
+	as "incidentmap"
+	key("COUNTRY");
+}

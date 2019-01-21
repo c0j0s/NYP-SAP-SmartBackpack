@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dimension:dimension xmlns:Dimension="http://www.sap.com/ndb/BiModelDimension.ecore" schemaVersion="1.2" id="iotdeviceinfo" applyPrivilegeType="ANALYTIC_PRIVILEGE" checkAnalyticPrivileges="true" defaultClient="$$client$$" defaultLanguage="$$language$$" hierarchiesSQLEnabled="false" translationRelevant="true" visibility="internal" dimensionType="Standard">
+  <descriptions defaultDescription="iotdeviceinfo"/>
+  <informationModelLayout relativeWidthScenario="27"/>
+  <attributes>
+    <attribute id="DEVICE_SN" key="true" order="1" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="DEVICE_SN"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="DEVICE_SN"/>
+    </attribute>
+    <attribute id="MANUFACTURED_ON" order="2" semanticType="date" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="MANUFACTURED_ON"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="MANUFACTURED_ON"/>
+    </attribute>
+    <attribute id="SYSTEM_PLATFORM" order="3" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="SYSTEM_PLATFORM"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="SYSTEM_PLATFORM"/>
+    </attribute>
+    <attribute id="APPLICATION_VERSION" order="4" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="APPLICATION_VERSION"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="APPLICATION_VERSION"/>
+    </attribute>
+    <attribute id="SENSOR_HUMIDITY" order="5" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="Y/N"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="SENSOR_HUMIDITY"/>
+    </attribute>
+    <attribute id="SENSOR_TEMPERATURE" order="6" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="Y/N"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="SENSOR_TEMPERATURE"/>
+    </attribute>
+    <attribute id="SENSOR_BUTTON" order="7" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="Y/N"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="SENSOR_BUTTON"/>
+    </attribute>
+    <attribute id="SENSOR_AIR_QUALITY" order="8" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="Y/N"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="SENSOR_AIR_QUALITY"/>
+    </attribute>
+    <attribute id="ACTUATOR_BUZZER" order="9" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="Y/N"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="ACTUATOR_BUZZER"/>
+    </attribute>
+    <attribute id="ACTUATOR_DISPLAY" order="10" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="Y/N"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="ACTUATOR_DISPLAY"/>
+    </attribute>
+    <attribute id="ACTUATOR_LED" order="11" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="Y/N"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="ACTUATOR_LED"/>
+    </attribute>
+    <attribute id="USER_ID" order="12" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="USER_ID"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_DEVICES" columnName="USER_ID"/>
+    </attribute>
+    <attribute id="DEVICE_NAME" order="13" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="DEVICE_NAME"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_DEVICES" columnName="DEVICE_NAME"/>
+    </attribute>
+    <attribute id="REGISTERED_ON" order="14" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="REGISTERED_ON"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_DEVICES" columnName="REGISTERED_ON"/>
+    </attribute>
+    <attribute id="CONFIG_ENABLE_BUZZER" order="15" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="Y/N"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_DEVICES" columnName="CONFIG_ENABLE_BUZZER"/>
+    </attribute>
+    <attribute id="CONFIG_ENABLE_LED" order="16" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="Y/N"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_DEVICES" columnName="CONFIG_ENABLE_LED"/>
+    </attribute>
+    <attribute id="MINUTES_TO_RECORD_DATA" order="17" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="MINUTES_TO_RECORD_DATA"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_DEVICES" columnName="MINUTES_TO_RECORD_DATA"/>
+    </attribute>
+    <attribute id="LAST_ONLINE" order="18" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="LAST_ONLINE"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_DEVICES" columnName="LAST_ONLINE"/>
+    </attribute>
+    <attribute id="CONFIG_UPDATED_ON" order="19" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="CONFIG_UPDATED_ON"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_DEVICES" columnName="CONFIG_UPDATED_ON"/>
+    </attribute>
+    <attribute id="ACTIVATED_ON" order="20" semanticType="date" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="ACTIVATED_ON"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="ACTIVATED_ON"/>
+    </attribute>
+    <attribute id="DEVICE_ADDRESS" order="21" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="DEVICE_ADDRESS"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="DEVICE_ADDRESS"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <privateDataFoundation>
+    <tableProxies>
+      <tableProxy>
+        <table schemaName="NYPFYPJ03" columnObjectName="USER_DEVICES"/>
+      </tableProxy>
+      <tableProxy>
+        <table schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE"/>
+      </tableProxy>
+    </tableProxies>
+    <joins>
+      <join>
+        <leftTable schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE"/>
+        <rightTable schemaName="NYPFYPJ03" columnObjectName="USER_DEVICES"/>
+        <leftColumns>
+          <columnName>DEVICE_SN</columnName>
+        </leftColumns>
+        <rightColumns>
+          <columnName>DEVICE_SN</columnName>
+        </rightColumns>
+        <properties cardinality="C1_N" joinOperator="Equal" joinType="referential"/>
+      </join>
+    </joins>
+    <layout>
+      <shapes>
+        <shape modelObjectName="USER_DEVICES" modelObjectNameSpace="NYPFYPJ03" modelObjectType="catalog">
+          <upperLeftCorner x="346" y="69"/>
+        </shape>
+        <shape modelObjectName="IOT_DEVICE" modelObjectNameSpace="NYPFYPJ03" modelObjectType="catalog">
+          <upperLeftCorner x="50" y="44"/>
+        </shape>
+        <shape modelObjectName="DataFoundation" modelObjectNameSpace="DataFoundation" modelObjectType="repository">
+          <upperLeftCorner x="40" y="85"/>
+          <rectangleSize height="0" width="0"/>
+        </shape>
+      </shapes>
+    </layout>
+  </privateDataFoundation>
+  <hierarchies/>
+</Dimension:dimension>

@@ -146,7 +146,7 @@
 			<OrdPos>4</OrdPos>
 			<IdxInGrp>0</IdxInGrp>
 			<Collat></Collat>
-			<FieldId>206</FieldId> 
+			<FieldId>221</FieldId> 
 			<AttrType>AttributeType[DOUBLE]</AttrType> 
 			<Group></Group>
 			<IntDigs>0</IntDigs>
@@ -172,7 +172,7 @@
 			<OrdPos>5</OrdPos>
 			<IdxInGrp>0</IdxInGrp>
 			<Collat></Collat>
-			<FieldId>207</FieldId> 
+			<FieldId>222</FieldId> 
 			<AttrType>AttributeType[DOUBLE]</AttrType> 
 			<Group></Group>
 			<IntDigs>0</IntDigs>
@@ -198,7 +198,7 @@
 			<OrdPos>6</OrdPos>
 			<IdxInGrp>0</IdxInGrp>
 			<Collat></Collat>
-			<FieldId>208</FieldId> 
+			<FieldId>223</FieldId> 
 			<AttrType>AttributeType[DOUBLE]</AttrType> 
 			<Group></Group>
 			<IntDigs>0</IntDigs>
@@ -224,7 +224,7 @@
 			<OrdPos>7</OrdPos>
 			<IdxInGrp>0</IdxInGrp>
 			<Collat></Collat>
-			<FieldId>209</FieldId> 
+			<FieldId>224</FieldId> 
 			<AttrType>AttributeType[DOUBLE]</AttrType> 
 			<Group></Group>
 			<IntDigs>0</IntDigs>
@@ -302,8 +302,7 @@
 			<OrdPos>10</OrdPos>
 			<IdxInGrp>2</IdxInGrp>
 			<Collat></Collat>
-			<Descr>Y/N</Descr>
-			<FieldId>212</FieldId> 
+			<FieldId>225</FieldId> 
 			<AttrType>AttributeType[STRING]</AttrType> 
 			<Group></Group>
 			<IntDigs>0</IntDigs>
@@ -459,7 +458,33 @@
 			<OrdPos>16</OrdPos>
 			<IdxInGrp>6</IdxInGrp>
 			<Collat></Collat>
-			<FieldId>220</FieldId> 
+			<FieldId>226</FieldId> 
+			<AttrType>AttributeType[STRING]</AttrType> 
+			<Group></Group>
+			<IntDigs>0</IntDigs>
+			<FractDigs>0 </FractDigs>
+			<IFlags>1</IFlags>
+			<IParams></IParams>
+			<FuzzyMode>0</FuzzyMode>
+			<MinVal></MinVal>
+			<MaxVal></MaxVal> 
+			<UTFlags>1</UTFlags>
+			<UType>1</UType>
+		</Field>
+		<Field>
+			<Name>READ</Name>
+			<SQLType>36</SQLType>
+			<ABAPType>32</ABAPType>
+			<TrexType>83</TrexType>
+			<MdrsType>0</MdrsType>
+			<Constr>0</Constr>
+			<Offset>88</Offset>
+			<Length>1</Length>
+			<Scale>0</Scale>
+			<OrdPos>17</OrdPos>
+			<IdxInGrp>7</IdxInGrp>
+			<Collat></Collat>
+			<FieldId>229</FieldId> 
 			<AttrType>AttributeType[STRING]</AttrType> 
 			<Group></Group>
 			<IntDigs>0</IntDigs>

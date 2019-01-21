@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dimension:dimension xmlns:Dimension="http://www.sap.com/ndb/BiModelDimension.ecore" schemaVersion="1.2" id="userinfos" applyPrivilegeType="ANALYTIC_PRIVILEGE" checkAnalyticPrivileges="true" defaultClient="$$client$$" defaultLanguage="$$language$$" hierarchiesSQLEnabled="false" historyEnabled="false" translationRelevant="true" visibility="internal" dimensionType="Standard">
+  <descriptions defaultDescription="userinfos"/>
+  <metadata changedAt="2019-01-14 15:03:25.217"/>
+  <informationModelLayout relativeWidthScenario="27"/>
+  <attributes>
+    <attribute id="USER_ID" key="true" order="1" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="SAP account Id"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" alias="USER_PROFILE" columnName="USER_ID"/>
+    </attribute>
+    <attribute id="ROLE" order="2" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="user/admin"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" alias="USER_PROFILE" columnName="ROLE"/>
+    </attribute>
+    <attribute id="NAME" order="3" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="NAME"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" alias="USER_PROFILE" columnName="NAME"/>
+    </attribute>
+    <attribute id="GENDER" order="4" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="GENDER"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" alias="USER_PROFILE" columnName="GENDER"/>
+    </attribute>
+    <attribute id="DOB" order="5" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="DOB"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" alias="USER_PROFILE" columnName="DOB"/>
+    </attribute>
+    <attribute id="RACE" order="6" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="RACE"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" alias="USER_PROFILE" columnName="RACE"/>
+    </attribute>
+    <attribute id="ASTHMATIC_LEVEL" order="7" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="level 0 - Nil;&#xD;&#xA;level 1 - Intermittent Asthma;&#xD;&#xA;level 2 - Mild Persistent Asthma;&#xD;&#xA;level 3 - Moderate Persistent Asthma;&#xD;&#xA;level 4 - Severe Persistent Asthma;"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" alias="USER_PROFILE" columnName="ASTHMATIC_LEVEL"/>
+    </attribute>
+    <attribute id="CONTACT_NO" order="8" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="CONTACT_NO"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" alias="USER_PROFILE" columnName="CONTACT_NO"/>
+    </attribute>
+    <attribute id="EMAIL" order="9" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="EMAIL"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" alias="USER_PROFILE" columnName="EMAIL"/>
+    </attribute>
+    <attribute id="REGISTERED_ON" order="10" semanticType="date" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="REGISTERED_ON"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" alias="USER_PROFILE" columnName="REGISTERED_ON"/>
+    </attribute>
+    <attribute id="USER_CITY" order="12" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="USER_CITY"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" alias="USER_PROFILE" columnName="CITY"/>
+    </attribute>
+    <attribute id="USER_STATE" order="13" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="USER_STATE"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" alias="USER_PROFILE" columnName="STATE"/>
+    </attribute>
+    <attribute id="USER_COUNTRY" order="14" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="USER_COUNTRY"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" alias="USER_PROFILE" columnName="COUNTRY"/>
+    </attribute>
+    <attribute id="USER_COUNTRY_CODE" order="15" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="USER_COUNTRY_CODE"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" alias="USER_PROFILE" columnName="COUNTRY_CODE"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes>
+    <calculatedAttribute id="AGE" hidden="false" order="11" semanticType="empty" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="AGE"/>
+      <keyCalculation datatype="INTEGER" expressionLanguage="COLUMN_ENGINE">
+        <formula>rounddown(daysbetween(&quot;DOB&quot;,now())/365,0)</formula>
+      </keyCalculation>
+    </calculatedAttribute>
+    <calculatedAttribute id="ASTHMATIC_DESC" hidden="false" order="16" semanticType="empty" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="ASTHMATIC_DESC"/>
+      <keyCalculation datatype="VARCHAR" expressionLanguage="COLUMN_ENGINE" length="100">
+        <formula>if( &quot;ASTHMATIC_LEVEL&quot; = 0,'level 0 - Nil',&#xD;
+if(&quot;ASTHMATIC_LEVEL&quot; = 1,'level 1 - Intermittent Asthma',&#xD;
+if(&quot;ASTHMATIC_LEVEL&quot; = 2,'level 2 - Mild Persistent Asthma',&#xD;
+if(&quot;ASTHMATIC_LEVEL&quot; = 3,'level 3 - Moderate Persistent Asthma',&#xD;
+'level 4 - Severe Persistent Asthma'))))</formula>
+      </keyCalculation>
+    </calculatedAttribute>
+  </calculatedAttributes>
+  <privateDataFoundation>
+    <tableProxies>
+      <tableProxy>
+        <table schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" alias="USER_PROFILE"/>
+      </tableProxy>
+    </tableProxies>
+    <joins/>
+    <layout>
+      <shapes>
+        <shape modelObjectName="USER_PROFILE" modelObjectNameSpace="NYPFYPJ03" modelObjectType="catalog">
+          <upperLeftCorner x="64" y="71"/>
+        </shape>
+        <shape modelObjectName="DataFoundation" modelObjectNameSpace="DataFoundation" modelObjectType="repository">
+          <upperLeftCorner x="40" y="85"/>
+          <rectangleSize height="0" width="0"/>
+        </shape>
+      </shapes>
+    </layout>
+  </privateDataFoundation>
+  <hierarchies/>
+</Dimension:dimension>

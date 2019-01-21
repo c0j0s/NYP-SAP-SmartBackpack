@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Cube:cube xmlns:Cube="http://www.sap.com/ndb/BiModelCube.ecore" schemaVersion="1.5" id="iotdataovp" applyPrivilegeType="ANALYTIC_PRIVILEGE" checkAnalyticPrivileges="true" defaultClient="crossClient" defaultLanguage="$$language$$" hierarchiesSQLEnabled="false" translationRelevant="true" visibility="reportingEnabled">
+  <descriptions defaultDescription="iotdataovp"/>
+  <defaultSchema schemaName="NYPFYPJ03"/>
+  <localVariables/>
+  <informationModelLayout relativeWidthScenario="27"/>
+  <privateMeasureGroup id="MeasureGroup">
+    <attributes>
+      <attribute id="DATA_ID" order="1" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="DATA_ID"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="DATA_ID"/>
+      </attribute>
+      <attribute id="HUMIDITY" order="2" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="HUMIDITY"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="HUMIDITY"/>
+      </attribute>
+      <attribute id="TEMPERATURE" order="3" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="TEMPERATURE"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="TEMPERATURE"/>
+      </attribute>
+      <attribute id="PM2_5" order="4" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="PM2_5"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="PM2_5"/>
+      </attribute>
+      <attribute id="PM10" order="5" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="PM10"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="PM10"/>
+      </attribute>
+      <attribute id="PREDICTED_COMFORT_LEVEL" order="6" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="PREDICTED_COMFORT_LEVEL"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="PREDICTED_COMFORT_LEVEL"/>
+      </attribute>
+      <attribute id="USER_FEEDBACK_COMFORT_LEVEL" order="7" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="USER_FEEDBACK_COMFORT_LEVEL"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="USER_FEEDBACK_COMFORT_LEVEL"/>
+      </attribute>
+      <attribute id="ALERT_TRIGGERED" order="8" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Y/N"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="ALERT_TRIGGERED"/>
+      </attribute>
+      <attribute id="COUNTRY" order="9" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="COUNTRY"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="COUNTRY"/>
+      </attribute>
+      <attribute id="STATE" order="10" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="STATE"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="STATE"/>
+      </attribute>
+      <attribute id="CITY" order="11" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="CITY"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="CITY"/>
+      </attribute>
+      <attribute id="GEO_LAT" order="12" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="GEO_LAT"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="GEO_LAT"/>
+      </attribute>
+      <attribute id="GEO_LNG" order="13" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="GEO_LNG"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="GEO_LNG"/>
+      </attribute>
+      <attribute id="USER_ID_1" order="16" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="SAP account Id"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" columnName="USER_ID"/>
+      </attribute>
+      <attribute id="DOB" order="17" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="DOB"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" columnName="DOB"/>
+      </attribute>
+      <attribute id="RACE" order="18" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="RACE"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" columnName="RACE"/>
+      </attribute>
+      <attribute id="ASTHMATIC_LEVEL" order="19" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="level 0 - Nil;&#xD;&#xA;level 1 - Intermittent Asthma;&#xD;&#xA;level 2 - Mild Persistent Asthma;&#xD;&#xA;level 3 - Moderate Persistent Asthma;&#xD;&#xA;level 4 - Severe Persistent Asthma;"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" columnName="ASTHMATIC_LEVEL"/>
+      </attribute>
+      <attribute id="CONTACT_NO" order="20" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="CONTACT_NO"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" columnName="CONTACT_NO"/>
+      </attribute>
+      <attribute id="EMAIL" order="21" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="EMAIL"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" columnName="EMAIL"/>
+      </attribute>
+      <attribute id="REGISTERED_ON" order="22" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="REGISTERED_ON"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" columnName="REGISTERED_ON"/>
+      </attribute>
+      <attribute id="NAME" order="23" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="NAME"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" columnName="NAME"/>
+      </attribute>
+      <attribute id="GENDER" order="24" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="GENDER"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" columnName="GENDER"/>
+      </attribute>
+      <attribute id="CITY_1" order="25" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="CITY_1"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" columnName="CITY"/>
+      </attribute>
+      <attribute id="STATE_1" order="26" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="STATE_1"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" columnName="STATE"/>
+      </attribute>
+      <attribute id="COUNTRY_1" order="27" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="COUNTRY_1"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" columnName="COUNTRY"/>
+      </attribute>
+      <attribute id="COUNTRY_CODE" order="28" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="COUNTRY_CODE"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" columnName="COUNTRY_CODE"/>
+      </attribute>
+      <attribute id="DEVICE_SN_1" order="29" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="DEVICE_SN_1"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="DEVICE_SN"/>
+      </attribute>
+      <attribute id="MANUFACTURED_ON" order="30" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="MANUFACTURED_ON"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="MANUFACTURED_ON"/>
+      </attribute>
+      <attribute id="SYSTEM_PLATFORM" order="31" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="SYSTEM_PLATFORM"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="SYSTEM_PLATFORM"/>
+      </attribute>
+      <attribute id="APPLICATION_VERSION" order="32" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="APPLICATION_VERSION"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="APPLICATION_VERSION"/>
+      </attribute>
+      <attribute id="SENSOR_HUMIDITY" order="33" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Y/N"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="SENSOR_HUMIDITY"/>
+      </attribute>
+      <attribute id="SENSOR_TEMPERATURE" order="34" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Y/N"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="SENSOR_TEMPERATURE"/>
+      </attribute>
+      <attribute id="SENSOR_BUTTON" order="35" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Y/N"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="SENSOR_BUTTON"/>
+      </attribute>
+      <attribute id="SENSOR_AIR_QUALITY" order="36" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Y/N"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="SENSOR_AIR_QUALITY"/>
+      </attribute>
+      <attribute id="ACTUATOR_BUZZER" order="37" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Y/N"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="ACTUATOR_BUZZER"/>
+      </attribute>
+      <attribute id="ACTUATOR_LED" order="38" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Y/N"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="ACTUATOR_LED"/>
+      </attribute>
+      <attribute id="ACTUATOR_DISPLAY" order="39" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="Y/N"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="ACTUATOR_DISPLAY"/>
+      </attribute>
+      <attribute id="ACTIVATED_ON" order="40" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="ACTIVATED_ON"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE" columnName="ACTIVATED_ON"/>
+      </attribute>
+      <attribute id="RECORDED_ON" order="41" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="RECORDED_ON"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="RECORDED_ON"/>
+      </attribute>
+    </attributes>
+    <calculatedAttributes/>
+    <privateDataFoundation>
+      <tableProxies>
+        <tableProxy centralTable="true">
+          <table schemaName="NYPFYPJ03" columnObjectName="IOT_DATA"/>
+        </tableProxy>
+        <tableProxy>
+          <table schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE"/>
+        </tableProxy>
+        <tableProxy>
+          <table schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE"/>
+        </tableProxy>
+      </tableProxies>
+      <joins>
+        <join>
+          <leftTable schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE"/>
+          <rightTable schemaName="NYPFYPJ03" columnObjectName="IOT_DATA"/>
+          <leftColumns>
+            <columnName>USER_ID</columnName>
+          </leftColumns>
+          <rightColumns>
+            <columnName>USER_ID</columnName>
+          </rightColumns>
+          <properties cardinality="C1_N" joinOperator="Equal" joinType="rightOuter"/>
+        </join>
+        <join>
+          <leftTable schemaName="NYPFYPJ03" columnObjectName="IOT_DEVICE"/>
+          <rightTable schemaName="NYPFYPJ03" columnObjectName="IOT_DATA"/>
+          <leftColumns>
+            <columnName>DEVICE_SN</columnName>
+          </leftColumns>
+          <rightColumns>
+            <columnName>DEVICE_SN</columnName>
+          </rightColumns>
+          <properties cardinality="C1_N" joinOperator="Equal" joinType="rightOuter"/>
+        </join>
+      </joins>
+      <layout>
+        <shapes>
+          <shape modelObjectName="IOT_DATA" modelObjectNameSpace="NYPFYPJ03" modelObjectType="catalog">
+            <upperLeftCorner x="396" y="16"/>
+          </shape>
+          <shape modelObjectName="USER_PROFILE" modelObjectNameSpace="NYPFYPJ03" modelObjectType="catalog">
+            <upperLeftCorner x="16" y="32"/>
+          </shape>
+          <shape modelObjectName="IOT_DEVICE" modelObjectNameSpace="NYPFYPJ03" modelObjectType="catalog">
+            <upperLeftCorner x="753" y="235"/>
+          </shape>
+        </shapes>
+      </layout>
+    </privateDataFoundation>
+    <baseMeasures/>
+    <calculatedMeasures>
+      <measure id="USER_DEVICE_COUNT" hidden="false" order="14" aggregationType="sum" measureType="simple" calculatedMeasureType="counter" datatype="INTEGER" expressionLanguage="COLUMN_ENGINE">
+        <descriptions defaultDescription="USER_DEVICE_COUNT"/>
+        <exceptionAggregation exceptionAggregationType="countDistinct">
+          <attribute attributeName="USER_ID_1"/>
+          <attribute attributeName="DEVICE_SN_1"/>
+        </exceptionAggregation>
+        <formula>1</formula>
+      </measure>
+      <measure id="USER_DEVICE_DATA_COUNT" hidden="false" order="15" aggregationType="sum" measureType="simple" calculatedMeasureType="counter" datatype="INTEGER" expressionLanguage="COLUMN_ENGINE">
+        <descriptions defaultDescription="USER_DEVICE_DATA_COUNT"/>
+        <exceptionAggregation exceptionAggregationType="countDistinct">
+          <attribute attributeName="DATA_ID"/>
+          <attribute attributeName="DEVICE_SN_1"/>
+          <attribute attributeName="USER_ID_1"/>
+        </exceptionAggregation>
+        <formula>1</formula>
+      </measure>
+    </calculatedMeasures>
+    <restrictedMeasures/>
+    <sharedDimensions/>
+    <layout>
+      <shapes>
+        <shape modelObjectName="MEASURE_GROUP" modelObjectType="repository">
+          <upperLeftCorner x="367" y="144"/>
+        </shape>
+        <shape modelObjectName="LogicalView" modelObjectNameSpace="MeasureGroup" modelObjectType="repository">
+          <upperLeftCorner x="40" y="85"/>
+          <rectangleSize height="0" width="0"/>
+        </shape>
+      </shapes>
+    </layout>
+  </privateMeasureGroup>
+</Cube:cube>

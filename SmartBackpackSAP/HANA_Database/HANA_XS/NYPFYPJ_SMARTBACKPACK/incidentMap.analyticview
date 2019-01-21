@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Cube:cube xmlns:Cube="http://www.sap.com/ndb/BiModelCube.ecore" schemaVersion="1.5" id="incidentMap" applyPrivilegeType="ANALYTIC_PRIVILEGE" checkAnalyticPrivileges="true" defaultClient="$$client$$" defaultLanguage="$$language$$" hierarchiesSQLEnabled="false" translationRelevant="true" visibility="reportingEnabled">
+  <descriptions defaultDescription="incidentMap"/>
+  <localVariables/>
+  <informationModelLayout relativeWidthScenario="27"/>
+  <privateMeasureGroup id="MeasureGroup">
+    <attributes>
+      <attribute id="COUNTRY" order="1" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="COUNTRY"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="COUNTRY"/>
+      </attribute>
+      <attribute id="STATE" order="2" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="STATE"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="STATE"/>
+      </attribute>
+      <attribute id="CITY" order="3" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="CITY"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="CITY"/>
+      </attribute>
+      <attribute id="COUNTRY_CODE" order="4" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="COUNTRY_CODE"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="COUNTRY_CODE"/>
+      </attribute>
+      <attribute id="ALERT_TRIGGERED" order="5" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="ALERT_TRIGGERED"/>
+        <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="ALERT_TRIGGERED"/>
+      </attribute>
+    </attributes>
+    <calculatedAttributes>
+      <calculatedAttribute id="COLOR" hidden="false" order="7" semanticType="empty" attributeHierarchyActive="false" displayAttribute="false">
+        <descriptions defaultDescription="COLOR"/>
+        <keyCalculation datatype="VARCHAR" expressionLanguage="COLUMN_ENGINE" length="100">
+          <formula>if(&quot;COUNT&quot; &lt; 10 and &quot;COUNT&quot; > 0 ,'rgb(171,219,242)',&#xD;
+if(&quot;COUNT&quot; > 10 and &quot;COUNT&quot;&lt; 20,'rgb(132,202,236)',&#xD;
+if(&quot;COUNT&quot; > 20 and &quot;COUNT&quot;&lt; 30,'rgb(92,186,229)',&#xD;
+if(&quot;COUNT&quot; > 30 and &quot;COUNT&quot;&lt; 40,'rgb(39,163,221)',&#xD;
+'rgb(27,126,172)'&#xD;
+))))</formula>
+        </keyCalculation>
+      </calculatedAttribute>
+    </calculatedAttributes>
+    <privateDataFoundation>
+      <tableProxies>
+        <tableProxy centralTable="true">
+          <table schemaName="NYPFYPJ03" columnObjectName="IOT_DATA"/>
+        </tableProxy>
+        <tableProxy>
+          <table schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE"/>
+        </tableProxy>
+      </tableProxies>
+      <joins>
+        <join>
+          <leftTable schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE"/>
+          <rightTable schemaName="NYPFYPJ03" columnObjectName="IOT_DATA"/>
+          <leftColumns>
+            <columnName>USER_ID</columnName>
+          </leftColumns>
+          <rightColumns>
+            <columnName>USER_ID</columnName>
+          </rightColumns>
+          <properties cardinality="C1_N" joinOperator="Equal" joinType="leftOuter"/>
+        </join>
+      </joins>
+      <layout>
+        <shapes>
+          <shape modelObjectName="IOT_DATA" modelObjectNameSpace="NYPFYPJ03" modelObjectType="catalog">
+            <upperLeftCorner x="70" y="30"/>
+          </shape>
+          <shape modelObjectName="USER_PROFILE" modelObjectNameSpace="NYPFYPJ03" modelObjectType="catalog">
+            <upperLeftCorner x="454" y="32"/>
+          </shape>
+        </shapes>
+      </layout>
+    </privateDataFoundation>
+    <baseMeasures>
+      <measure id="COUNT" order="6" aggregationType="count" measureType="simple">
+        <descriptions defaultDescription="COUNT"/>
+        <measureMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="DATA_ID"/>
+      </measure>
+    </baseMeasures>
+    <calculatedMeasures/>
+    <restrictedMeasures/>
+    <sharedDimensions/>
+    <layout>
+      <shapes>
+        <shape modelObjectName="MEASURE_GROUP" modelObjectType="repository">
+          <upperLeftCorner x="55" y="64"/>
+        </shape>
+        <shape modelObjectName="LogicalView" modelObjectNameSpace="MeasureGroup" modelObjectType="repository">
+          <upperLeftCorner x="40" y="85"/>
+          <rectangleSize/>
+        </shape>
+      </shapes>
+    </layout>
+  </privateMeasureGroup>
+</Cube:cube>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Dimension:dimension xmlns:Dimension="http://www.sap.com/ndb/BiModelDimension.ecore" schemaVersion="1.2" id="incident" applyPrivilegeType="ANALYTIC_PRIVILEGE" checkAnalyticPrivileges="true" defaultClient="$$client$$" defaultLanguage="$$language$$" hierarchiesSQLEnabled="false" translationRelevant="true" visibility="internal" dimensionType="Standard">
+  <descriptions defaultDescription="incident"/>
+  <informationModelLayout relativeWidthScenario="27"/>
+  <attributes>
+    <attribute id="DATA_ID" key="true" order="1" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="DATA_ID"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="DATA_ID"/>
+    </attribute>
+    <attribute id="USER_ID" order="2" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="USER_ID"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="USER_ID"/>
+    </attribute>
+    <attribute id="RECORDED_ON" order="3" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="RECORDED_ON"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="RECORDED_ON"/>
+    </attribute>
+    <attribute id="HUMIDITY" order="4" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="HUMIDITY"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="HUMIDITY"/>
+    </attribute>
+    <attribute id="TEMPERATURE" order="5" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="TEMPERATURE"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="TEMPERATURE"/>
+    </attribute>
+    <attribute id="PM2_5" order="6" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="PM2_5"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="PM2_5"/>
+    </attribute>
+    <attribute id="PM10" order="7" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="PM10"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="PM10"/>
+    </attribute>
+    <attribute id="PREDICTED_COMFORT_LEVEL" order="8" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="PREDICTED_COMFORT_LEVEL"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="PREDICTED_COMFORT_LEVEL"/>
+    </attribute>
+    <attribute id="ALERT_TRIGGERED" order="9" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="ALERT_TRIGGERED"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="ALERT_TRIGGERED"/>
+    </attribute>
+    <attribute id="COUNTRY" order="10" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="COUNTRY"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="COUNTRY"/>
+    </attribute>
+    <attribute id="STATE" order="11" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="STATE"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="STATE"/>
+    </attribute>
+    <attribute id="CITY" order="12" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="CITY"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="CITY"/>
+    </attribute>
+    <attribute id="GEO_LAT" order="13" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="GEO_LAT"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="GEO_LAT"/>
+    </attribute>
+    <attribute id="GEO_LNG" order="14" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="GEO_LNG"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="GEO_LNG"/>
+    </attribute>
+    <attribute id="COUNTRY_CODE" order="15" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="COUNTRY_CODE"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="COUNTRY_CODE"/>
+    </attribute>
+    <attribute id="USER_ID_1" order="16" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="SAP account Id"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" columnName="USER_ID"/>
+    </attribute>
+    <attribute id="ASTHMATIC_LEVEL" order="17" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="level 0 - Nil;&#xD;&#xA;level 1 - Intermittent Asthma;&#xD;&#xA;level 2 - Mild Persistent Asthma;&#xD;&#xA;level 3 - Moderate Persistent Asthma;&#xD;&#xA;level 4 - Severe Persistent Asthma;"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" columnName="ASTHMATIC_LEVEL"/>
+    </attribute>
+    <attribute id="NAME" order="18" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="NAME"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" columnName="NAME"/>
+    </attribute>
+    <attribute id="GENDER" order="19" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="GENDER"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE" columnName="GENDER"/>
+    </attribute>
+    <attribute id="READ" order="23" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="READ"/>
+      <keyMapping schemaName="NYPFYPJ03" columnObjectName="IOT_DATA" columnName="READ"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes>
+    <calculatedAttribute id="ASTHMATIC_DESC" hidden="false" order="20" semanticType="empty" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="ASTHMATIC_DESC"/>
+      <keyCalculation datatype="VARCHAR" expressionLanguage="COLUMN_ENGINE" length="100">
+        <formula>if( &quot;ASTHMATIC_LEVEL&quot; = 0,'level 0 - Nil',&#xD;
+if(&quot;ASTHMATIC_LEVEL&quot; = 1,'level 1 - Intermittent Asthma',&#xD;
+if(&quot;ASTHMATIC_LEVEL&quot; = 2,'level 2 - Mild Persistent Asthma',&#xD;
+if(&quot;ASTHMATIC_LEVEL&quot; = 3,'level 3 - Moderate Persistent Asthma',&#xD;
+'level 4 - Severe Persistent Asthma'))))</formula>
+      </keyCalculation>
+    </calculatedAttribute>
+    <calculatedAttribute id="COMFORT_LEVEL_INDICATOR" hidden="false" order="21" semanticType="empty" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="COMFORT_LEVEL_INDICATOR"/>
+      <keyCalculation datatype="VARCHAR" expressionLanguage="COLUMN_ENGINE" length="10">
+        <formula>if(&quot;PREDICTED_COMFORT_LEVEL&quot; = 5 ,'Error',&#xD;
+if(&quot;PREDICTED_COMFORT_LEVEL&quot; = 4 or  &quot;PREDICTED_COMFORT_LEVEL&quot; = 3,'Warning', 'None'))</formula>
+      </keyCalculation>
+    </calculatedAttribute>
+    <calculatedAttribute id="UNREAD" hidden="false" order="22" semanticType="empty" attributeHierarchyActive="false" displayAttribute="false">
+      <descriptions defaultDescription="UNREAD"/>
+      <keyCalculation datatype="VARCHAR" expressionLanguage="COLUMN_ENGINE" length="5">
+        <formula>if(&quot;READ&quot;='Y','false','true')</formula>
+      </keyCalculation>
+    </calculatedAttribute>
+  </calculatedAttributes>
+  <privateDataFoundation>
+    <tableProxies>
+      <tableProxy>
+        <table schemaName="NYPFYPJ03" columnObjectName="IOT_DATA"/>
+      </tableProxy>
+      <tableProxy>
+        <table schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE"/>
+      </tableProxy>
+    </tableProxies>
+    <joins>
+      <join>
+        <leftTable schemaName="NYPFYPJ03" columnObjectName="IOT_DATA"/>
+        <rightTable schemaName="NYPFYPJ03" columnObjectName="USER_PROFILE"/>
+        <leftColumns>
+          <columnName>USER_ID</columnName>
+        </leftColumns>
+        <rightColumns>
+          <columnName>USER_ID</columnName>
+        </rightColumns>
+        <properties joinOperator="Equal" joinType="referential"/>
+      </join>
+    </joins>
+    <layout>
+      <shapes>
+        <shape modelObjectName="IOT_DATA" modelObjectNameSpace="NYPFYPJ03" modelObjectType="catalog">
+          <upperLeftCorner x="70" y="30"/>
+        </shape>
+        <shape modelObjectName="USER_PROFILE" modelObjectNameSpace="NYPFYPJ03" modelObjectType="catalog">
+          <upperLeftCorner x="378" y="37"/>
+        </shape>
+        <shape modelObjectName="DataFoundation" modelObjectNameSpace="DataFoundation" modelObjectType="repository">
+          <upperLeftCorner x="40" y="85"/>
+          <rectangleSize/>
+        </shape>
+      </shapes>
+    </layout>
+  </privateDataFoundation>
+  <hierarchies/>
+</Dimension:dimension>

@@ -345,6 +345,32 @@
 			<UType>1</UType>
 		</Field>
 		<Field>
+			<Name>DEVICE_ADDRESS</Name>
+			<SQLType>36</SQLType>
+			<ABAPType>32</ABAPType>
+			<TrexType>83</TrexType>
+			<MdrsType>0</MdrsType>
+			<Constr>0</Constr>
+			<Offset>24</Offset>
+			<Length>50</Length>
+			<Scale>0</Scale>
+			<OrdPos>12</OrdPos>
+			<IdxInGrp>10</IdxInGrp>
+			<Collat></Collat>
+			<FieldId>213</FieldId> 
+			<AttrType>AttributeType[STRING]</AttrType> 
+			<Group></Group>
+			<IntDigs>0</IntDigs>
+			<FractDigs>0 </FractDigs>
+			<IFlags>1</IFlags>
+			<IParams></IParams>
+			<FuzzyMode>0</FuzzyMode>
+			<MinVal></MinVal>
+			<MaxVal></MaxVal> 
+			<UTFlags>1</UTFlags>
+			<UType>1</UType>
+		</Field>
+		<Field>
 			<Name>$trex_udiv$</Name>
 			<TrexType>73</TrexType>
 			<FieldId>5</FieldId> 
