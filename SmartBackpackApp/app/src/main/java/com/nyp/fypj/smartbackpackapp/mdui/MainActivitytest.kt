@@ -13,11 +13,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.nyp.fypj.smartbackpackapp.R
-import com.nyp.fypj.smartbackpackapp.bluetooth.BtCommandObject
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtWrapper
 import com.nyp.fypj.smartbackpackapp.bluetooth.DeviceListActivity
 import com.nyp.sit.fypj.smartbackpackapp.Constants
-import com.nyp.sit.fypj.smartbackpackapp.bluetooth.BluetoothService
 
 class MainActivitytest : AppCompatActivity() {
 

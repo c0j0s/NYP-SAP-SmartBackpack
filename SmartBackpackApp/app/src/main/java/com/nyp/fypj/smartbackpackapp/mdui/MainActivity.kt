@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity() {
         fm.beginTransaction().add(R.id.main_container,homeFragment, "1").hide(homeFragment).commit()
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        loadingBar = findViewById(R.id.indeterminateBar);
+        loadingBar = findViewById(R.id.indeterminateBar)
 
         btWrapper = BtWrapper(mHandler)
         sapServiceManager = (application as SAPWizardApplication).sapServiceManager
@@ -366,6 +366,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        var TAG = "main"
+        const val TAG = "main"
     }
 }

@@ -4,17 +4,15 @@ import android.bluetooth.BluetoothAdapter
 import android.os.Handler
 import android.util.Log
 import com.nyp.sit.fypj.smartbackpackapp.Constants
-import com.nyp.sit.fypj.smartbackpackapp.bluetooth.BluetoothService
 
 
 class BtWrapper(private val displayHandler : Handler) {
 
-    private var mBluetoothAdapter: BluetoothAdapter? = null
+    private val mBluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
     private var mBluetoothService: BluetoothService? = null
     private var mBtCommandObject: BtCommandObject? = null
 
     init {
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         mBluetoothService = BluetoothService(this.displayHandler)
     }
 
@@ -104,6 +102,6 @@ class BtWrapper(private val displayHandler : Handler) {
     }
 
     companion object {
-        var TAG = "BTWrapper"
+        const val TAG = "BTWrapper"
     }
 }

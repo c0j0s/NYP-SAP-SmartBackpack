@@ -1,6 +1,6 @@
 package com.nyp.fypj.smartbackpackapp.bluetooth
 
-class HoldingZoneData (private var recorededOn:String, private var raw: String) {
+class HoldingZoneData (private var recorededOn:String, raw: String) {
 
     var humidity:String = ""
     var temperature:String = ""
@@ -10,7 +10,7 @@ class HoldingZoneData (private var recorededOn:String, private var raw: String) 
     var alertTriggered:String = ""
 
     init {
-        var arr = raw.split(";")
+        val arr = raw.split(";")
         humidity = arr[0]
         temperature = arr[1]
         pm2_5 = arr[2]

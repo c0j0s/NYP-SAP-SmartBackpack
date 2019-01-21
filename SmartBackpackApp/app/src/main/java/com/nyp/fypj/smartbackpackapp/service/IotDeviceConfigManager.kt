@@ -4,13 +4,13 @@ import com.nyp.fypj.smartbackpackapp.bluetooth.BtWrapper
 import com.sap.cloud.android.odata.sbp.UserDevicesType
 
 class IotDeviceConfigManager(
-        private var btWrapper: BtWrapper,
-        private var sapServiceManager:SAPServiceManager,
+        private val btWrapper: BtWrapper,
+        private val sapServiceManager:SAPServiceManager,
         USER_ID:String,
         DEVICE_SN:String) {
 
-    private var updateDevice = UserDevicesType()
-    private var listOfConfigToChange = HashMap<String,String>()
+    private val updateDevice = UserDevicesType()
+    private val listOfConfigToChange = HashMap<String,String>()
 
     init {
         updateDevice.userId = USER_ID
@@ -56,7 +56,7 @@ class IotDeviceConfigManager(
     }
 
     companion object {
-        var TAG = "IotDeviceConfigManager"
+        const val TAG = "IotDeviceConfigManager"
     }
 
 }

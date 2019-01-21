@@ -1,4 +1,4 @@
-package com.nyp.sit.fypj.smartbackpackapp.bluetooth
+package com.nyp.fypj.smartbackpackapp.bluetooth
 
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothAdapter.STATE_CONNECTED
@@ -12,7 +12,6 @@ import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonSyntaxException
-import com.nyp.fypj.smartbackpackapp.bluetooth.BtCommandObject
 import com.nyp.sit.fypj.smartbackpackapp.Constants
 import java.io.IOException
 import java.io.InputStream
@@ -26,7 +25,7 @@ class BluetoothService(private val displayHandler: Handler) {
     private var mConnectedThread: ConnectedThread? = null
 
     private var mState = STATE_NONE
-    private var mAdapter = BluetoothAdapter.getDefaultAdapter()
+    private val mAdapter = BluetoothAdapter.getDefaultAdapter()
 
     fun sendToastMessage(toastType:String, toastContent:String){
         val msg = displayHandler.obtainMessage(Constants.HANDLER_ACTION.TOAST.value)
@@ -272,7 +271,7 @@ class BluetoothService(private val displayHandler: Handler) {
             val buffer = ByteArray(1024)
             var bytes: Int
 
-            var hashMap = HashMap<String,String>()
+            val hashMap = HashMap<String,String>()
             var session_function_code = ""
 
             // Keep listening to the InputStream while connected
@@ -284,8 +283,8 @@ class BluetoothService(private val displayHandler: Handler) {
                     // construct a string from the valid bytes in the buffer
                     val jsonResponse = String(buffer, 0, bytes)
                     Log.e(TAG,jsonResponse)
-                    var gson = Gson()
-                    var mBtCommandObject = gson.fromJson(jsonResponse, BtCommandObject::class.java)
+                    val gson = Gson()
+                    val mBtCommandObject = gson.fromJson(jsonResponse, BtCommandObject::class.java)
 
                     // Send the obtained bytes to the UI Activity
                     if (mBtCommandObject.end_code == Constants.BT_END_CODE.MSE.code){
@@ -347,6 +346,6 @@ class BluetoothService(private val displayHandler: Handler) {
     }
 
     companion object {
-        private val TAG = "BluetoothService"
+        const val TAG = "BluetoothService"
     }
 }
