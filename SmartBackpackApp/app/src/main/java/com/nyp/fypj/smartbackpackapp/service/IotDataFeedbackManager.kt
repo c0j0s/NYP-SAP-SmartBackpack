@@ -1,6 +1,8 @@
 package com.nyp.fypj.smartbackpackapp.service
 
 import com.sap.cloud.android.odata.sbp.IotDataType
+import com.sap.cloud.android.odata.sbp.SuggestionsType
+import com.sap.cloud.mobile.odata.DataQuery
 import java.lang.RuntimeException
 import java.security.InvalidParameterException
 
@@ -37,11 +39,29 @@ class IotDataFeedbackManager(private val sapServiceManager: SAPServiceManager,US
         }
     }
 
+    //NOT TESTED
     fun getFeedbackLabel(level:Int):String{
         if (level in 0..4) {
             return feedbackDescription[level]!!
         } else {
             throw InvalidParameterException()
+        }
+    }
+
+    //NOT TESTED
+    fun getSuggestions(suggestionQuery: DataQuery,success:(suggestion:SuggestionsType) -> Unit,error:(e:RuntimeException) -> Unit){
+        sapServiceManager.openODataStore {
+            sapServiceManager.getsbp().getSuggestionsAsync(suggestionQuery, {
+                suggestionList:List<SuggestionsType> ->
+                if (suggestionList.isNotEmpty()){
+                    success(suggestionList[0])
+                }else{
+                    error("No suggestions found")
+                }
+
+            }, { e: RuntimeException ->
+                error(e)
+            })
         }
     }
 }

@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
+<edmx:Edmx xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" Version="1.0">
     <edmx:DataServices xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" m:DataServiceVersion="2.0">
-        <Schema Namespace="sbp" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <Schema xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="sbp">
             <EntityType Name="userType">
                 <Key>
                     <PropertyRef Name="USER_ID"/>
@@ -52,6 +51,7 @@
                 <Property Name="ACTUATOR_LED" Type="Edm.String" MaxLength="1"/>
                 <Property Name="ACTUATOR_DISPLAY" Type="Edm.String" MaxLength="1"/>
                 <Property Name="ACTIVATED_ON" Type="Edm.DateTime"/>
+                <Property Name="DEVICE_ADDRESS" Type="Edm.String" MaxLength="50"/>
             </EntityType>
             <EntityType Name="iotDataType">
                 <Key>
@@ -61,19 +61,30 @@
                 <Property Name="DEVICE_SN" Type="Edm.String" MaxLength="11"/>
                 <Property Name="USER_ID" Type="Edm.String" Nullable="false" MaxLength="11"/>
                 <Property Name="RECORDED_ON" Type="Edm.DateTime" Nullable="false"/>
-                <Property Name="HUMIDITY" Type="Edm.Double"/>
-                <Property Name="TEMPERATURE" Type="Edm.Double"/>
-                <Property Name="PM2_5" Type="Edm.Double"/>
-                <Property Name="PM10" Type="Edm.Double"/>
+                <Property Name="HUMIDITY" Type="Edm.Double" DefaultValue="0"/>
+                <Property Name="TEMPERATURE" Type="Edm.Double" DefaultValue="0"/>
+                <Property Name="PM2_5" Type="Edm.Double" DefaultValue="0"/>
+                <Property Name="PM10" Type="Edm.Double" DefaultValue="0"/>
                 <Property Name="PREDICTED_COMFORT_LEVEL" Type="Edm.Int32"/>
                 <Property Name="USER_FEEDBACK_COMFORT_LEVEL" Type="Edm.Int32"/>
-                <Property Name="ALERT_TRIGGERED" Type="Edm.String" MaxLength="1"/>
+                <Property Name="ALERT_TRIGGERED" Type="Edm.String" DefaultValue="N" MaxLength="1"/>
                 <Property Name="COUNTRY" Type="Edm.String" DefaultValue="SINGAPORE" MaxLength="100"/>
                 <Property Name="STATE" Type="Edm.String" DefaultValue="SINGAPORE" MaxLength="100"/>
                 <Property Name="CITY" Type="Edm.String" DefaultValue="SINGAPORE" MaxLength="100"/>
                 <Property Name="GEO_LAT" Type="Edm.Double"/>
                 <Property Name="GEO_LNG" Type="Edm.Double"/>
-                <Property Name="COUNTRY_CODE" Type="Edm.String" MaxLength="2"/>
+                <Property Name="COUNTRY_CODE" Type="Edm.String" DefaultValue="SG" MaxLength="2"/>
+                <Property Name="READ" Type="Edm.String" DefaultValue="Y" MaxLength="1"/>
+            </EntityType>
+            <EntityType Name="suggestionsType">
+                <Key>
+                    <PropertyRef Name="SUGGESTION_ID"/>
+                </Key>
+                <Property Name="SUGGESTION_ID" Type="Edm.Int64" Nullable="false"/>
+                <Property Name="COMFORT_LEVEL" Type="Edm.Int32" Nullable="false" DefaultValue="0"/>
+                <Property Name="ADVISE" Type="Edm.String" Nullable="false" MaxLength="3000"/>
+                <Property Name="CREATED_ON" Type="Edm.DateTime"/>
+                <Property Name="ASTHMATIC_LEVEL" Type="Edm.Int32" Nullable="false" DefaultValue="0"/>
             </EntityType>
             <EntityType Name="userinfosType">
                 <Key>
@@ -94,6 +105,7 @@
                 <Property Name="USER_COUNTRY" Type="Edm.String" MaxLength="100"/>
                 <Property Name="USER_COUNTRY_CODE" Type="Edm.String" MaxLength="2"/>
                 <Property Name="AGE" Type="Edm.Int32"/>
+                <Property Name="ASTHMATIC_DESC" Type="Edm.String" MaxLength="100"/>
             </EntityType>
             <EntityType Name="iotdeviceinfoType">
                 <Key>
@@ -121,13 +133,56 @@
                 <Property Name="ACTIVATED_ON" Type="Edm.DateTime"/>
                 <Property Name="DEVICE_ADDRESS" Type="Edm.String" MaxLength="50"/>
             </EntityType>
+            <EntityType Name="incidentType">
+                <Key>
+                    <PropertyRef Name="DATA_ID"/>
+                </Key>
+                <Property Name="DATA_ID" Type="Edm.Int64" Nullable="false"/>
+                <Property Name="USER_ID" Type="Edm.String" MaxLength="11"/>
+                <Property Name="RECORDED_ON" Type="Edm.DateTime"/>
+                <Property Name="HUMIDITY" Type="Edm.Double"/>
+                <Property Name="TEMPERATURE" Type="Edm.Double"/>
+                <Property Name="PM2_5" Type="Edm.Double"/>
+                <Property Name="PM10" Type="Edm.Double"/>
+                <Property Name="PREDICTED_COMFORT_LEVEL" Type="Edm.Int32"/>
+                <Property Name="ALERT_TRIGGERED" Type="Edm.String" MaxLength="1"/>
+                <Property Name="COUNTRY" Type="Edm.String" MaxLength="100"/>
+                <Property Name="STATE" Type="Edm.String" MaxLength="100"/>
+                <Property Name="CITY" Type="Edm.String" MaxLength="100"/>
+                <Property Name="GEO_LAT" Type="Edm.Double"/>
+                <Property Name="GEO_LNG" Type="Edm.Double"/>
+                <Property Name="COUNTRY_CODE" Type="Edm.String" MaxLength="2"/>
+                <Property Name="USER_ID_1" Type="Edm.String" MaxLength="11"/>
+                <Property Name="ASTHMATIC_LEVEL" Type="Edm.Int32"/>
+                <Property Name="NAME" Type="Edm.String" MaxLength="100"/>
+                <Property Name="GENDER" Type="Edm.String" MaxLength="1"/>
+                <Property Name="READ" Type="Edm.String" MaxLength="1"/>
+                <Property Name="ASTHMATIC_DESC" Type="Edm.String" MaxLength="100"/>
+                <Property Name="COMFORT_LEVEL_INDICATOR" Type="Edm.String" MaxLength="10"/>
+                <Property Name="UNREAD" Type="Edm.String" MaxLength="5"/>
+            </EntityType>
+            <EntityType Name="incidentmapType">
+                <Key>
+                    <PropertyRef Name="COUNTRY"/>
+                </Key>
+                <Property Name="COUNTRY" Type="Edm.String" Nullable="false" MaxLength="100"/>
+                <Property Name="STATE" Type="Edm.String" MaxLength="100"/>
+                <Property Name="CITY" Type="Edm.String" MaxLength="100"/>
+                <Property Name="COUNTRY_CODE" Type="Edm.String" MaxLength="2"/>
+                <Property Name="ALERT_TRIGGERED" Type="Edm.String" MaxLength="1"/>
+                <Property Name="COLOR" Type="Edm.String" MaxLength="100"/>
+                <Property Name="COUNT" Type="Edm.Decimal" Precision="18" Scale="0"/>
+            </EntityType>
             <EntityContainer Name="sbp" m:IsDefaultEntityContainer="true">
                 <EntitySet Name="user" EntityType="sbp.userType"/>
                 <EntitySet Name="userDevices" EntityType="sbp.userDevicesType"/>
                 <EntitySet Name="iotDevice" EntityType="sbp.iotDeviceType"/>
                 <EntitySet Name="iotData" EntityType="sbp.iotDataType"/>
+                <EntitySet Name="suggestions" EntityType="sbp.suggestionsType"/>
                 <EntitySet Name="userinfos" EntityType="sbp.userinfosType"/>
                 <EntitySet Name="iotdeviceinfo" EntityType="sbp.iotdeviceinfoType"/>
+                <EntitySet Name="incident" EntityType="sbp.incidentType"/>
+                <EntitySet Name="incidentmap" EntityType="sbp.incidentmapType"/>
             </EntityContainer>
         </Schema>
     </edmx:DataServices>

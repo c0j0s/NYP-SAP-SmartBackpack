@@ -119,4 +119,6 @@ A wrapper class that update user feedback of specific iot data to database.
     fun setDataFeedback(level:Int,success:() -> Unit,error:(e:RuntimeException) -> Unit)
 
     fun getFeedbackLabel(level:Int):String
+
+    fun getSuggestions(suggestionQuery: DataQuery,success:(suggestion:SuggestionsType) -> Unit,error:(e:RuntimeException) -> Unit)
 ```
