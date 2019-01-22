@@ -1,6 +1,6 @@
 <edmx:Edmx xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" Version="1.0">
     <edmx:DataServices xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" m:DataServiceVersion="2.0">
-        <Schema xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="sbp">
+        <Schema xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="sbp">
             <EntityType Name="userType">
                 <Key>
                     <PropertyRef Name="USER_ID"/>
@@ -85,6 +85,8 @@
                 <Property Name="ADVISE" Type="Edm.String" Nullable="false" MaxLength="3000"/>
                 <Property Name="CREATED_ON" Type="Edm.DateTime"/>
                 <Property Name="ASTHMATIC_LEVEL" Type="Edm.Int32" Nullable="false" DefaultValue="0"/>
+                <Property Name="GENDER" Type="Edm.String" MaxLength="1"/>
+                <Property Name="CONTEXT" Type="Edm.String" MaxLength="1"/>
             </EntityType>
             <EntityType Name="userinfosType">
                 <Key>
