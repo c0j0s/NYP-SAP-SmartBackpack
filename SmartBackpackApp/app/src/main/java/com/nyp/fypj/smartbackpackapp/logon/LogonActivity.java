@@ -14,6 +14,7 @@ import com.nyp.fypj.smartbackpackapp.app.ConfigurationData;
 import com.nyp.fypj.smartbackpackapp.app.ErrorHandler;
 import com.nyp.fypj.smartbackpackapp.app.ErrorMessage;
 import com.nyp.fypj.smartbackpackapp.app.SAPWizardApplication;
+import com.nyp.fypj.smartbackpackapp.mdui.IotBtTestingActivity;
 import com.nyp.fypj.smartbackpackapp.mdui.MainActivity;
 import com.nyp.fypj.smartbackpackapp.service.SAPServiceManager;
 import com.sap.cloud.mobile.foundation.authentication.AppLifecycleCallbackHandler;
@@ -284,9 +285,9 @@ public class LogonActivity extends AppCompatActivity {
 //			startActivityForResult(intent, ENTITYSET_LIST);
 //		});
 
-		//Old bluetooth testing activity
-//		Intent intent = new Intent(LogonActivity.this, MainActivitytest.class);
-//		startActivity(intent);
+        //bluetooth testing activity
+//        Intent intent = new Intent(LogonActivity.this, IotBtTestingActivity.class);
+//        startActivity(intent);
 
 		//Official Main activities
 		Intent intent = new Intent(LogonActivity.this, MainActivity.class);

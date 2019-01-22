@@ -1,6 +1,8 @@
 package com.nyp.fypj.smartbackpackapp.mdui
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.bluetooth.BluetoothAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -76,7 +78,7 @@ class MainActivity : AppCompatActivity() {
     private val myProfileFragment: Fragment = MyProfileFragment()
     private val fm = supportFragmentManager
     private var active = homeFragment
-    private var homeDisabled: Boolean? = false
+    private var homeDisabled:Boolean = false
 
     private var loadingBar:FioriProgressBar? = null
 
@@ -84,7 +86,7 @@ class MainActivity : AppCompatActivity() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                if(!homeDisabled!!) {
+                if(!homeDisabled) {
                     fm.beginTransaction().hide(active).show(homeFragment).commit()
                     active = homeFragment
                 }else{
@@ -118,13 +120,12 @@ class MainActivity : AppCompatActivity() {
 
         loadingBar = findViewById(R.id.indeterminateBar)
 
-        btWrapper = BtWrapper(mHandler)
         sapServiceManager = (application as SAPWizardApplication).sapServiceManager
         configurationData = (application as SAPWizardApplication).configurationData
         secureStoreManager = (application as SAPWizardApplication).secureStoreManager
 
-        var mBasicAuthPersistentCredentialStore = BasicAuthPersistentCredentialStore(secureStoreManager)
-        var credential = mBasicAuthPersistentCredentialStore.getCredential(configurationData!!.serviceUrl,"SAP HANA Cloud Platform")
+        val mBasicAuthPersistentCredentialStore = BasicAuthPersistentCredentialStore(secureStoreManager)
+        val credential = mBasicAuthPersistentCredentialStore.getCredential(configurationData!!.serviceUrl,"SAP HANA Cloud Platform")
 
         val settingsParameters = SettingsParameters(configurationData!!.serviceUrl, this.packageName, Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID), "0.0.0.1")
         CpmsParameters.init(settingsParameters)
@@ -133,17 +134,55 @@ class MainActivity : AppCompatActivity() {
                 .addInterceptor(appHeadersInterceptor)
                 .addInterceptor(CsrfTokenInterceptor(
                         CpmsParameters.getSettingsParameters().backendUrl))
-                .addInterceptor(AuthenticationInterceptor(credential!![0], credential!![1]))
+                .addInterceptor(AuthenticationInterceptor(credential!![0], credential[1]))
                 .cookieJar(WebkitCookieJar())
                 .build())
 
         okHttpClient = ClientProvider.get()
         settingsParameter = CpmsParameters.getSettingsParameters()
+    }
 
-        /*
-        The following retrieves user account details
-        look for user devices from database
-        try to connect to the first device in their list
+    public override fun onStart() {
+        /**
+         * Check for Bluetooth capabilities, if none, ask for access, else get user logon information
+         */
+        super.onStart()
+        if (!BluetoothAdapter.getDefaultAdapter().isEnabled) {
+            val enableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            startActivityForResult(enableIntent, Constants.ACTIVITY_RESULT_CODE.REQUEST_CONNECT_DEVICE.value)
+        }else{
+            btWrapper = BtWrapper(mHandler)
+            StartUserDeviceSession()
+        }
+    }
+
+    override fun onBackPressed() {
+        moveTaskToBack(true)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        LOGGER.debug("EntitySetListActivity::onActivityResult, request code: $requestCode result code: $resultCode")
+
+        when (requestCode) {
+            Constants.ACTIVITY_RESULT_CODE.REQUEST_CONNECT_DEVICE.value ->
+                // When DeviceListActivity returns with a device to connect
+                if (resultCode == Activity.RESULT_OK) {
+                    btWrapper = BtWrapper(mHandler)
+
+                    //start logon process after bluetooth access granted
+                    StartUserDeviceSession()
+                }
+        }
+    }
+
+    private fun StartUserDeviceSession(){
+        /**
+         * The following retrieves user account details
+         * look for user devices from database
+         * try to connect to the first device in their list
+         *
+         * ensure bluetooth access is granted
          */
         val roles = UserRoles(okHttpClient!!, settingsParameter!!)
         roles.load(object : UserRoles.CallbackListener {
@@ -182,31 +221,20 @@ class MainActivity : AppCompatActivity() {
                     {deviceList:List<IotdeviceinfoType>->
                         Log.e(TAG, deviceList.size.toString())
                         if(deviceList.size > 0){
-                            userDevices = deviceList
 
+                            userDevices = deviceList
                             //connect to user first device
-                            Log.e("Device Address", deviceList[0].deviceAddress)
                             btWrapper!!.connectDevice(deviceList[0].deviceAddress)
+
                         }else{
+
                             fm.beginTransaction().hide(active).show(myDevicesFragment).commit()
                             active = myDevicesFragment
                             loadingBar!!.visibility = View.INVISIBLE
                             homeDisabled = true
+
                         }
 
-                        /*
-                        IOT device change config testing
-
-                         */
-//                        var test_btn = findViewById<Button>(R.id.test_btn)
-//
-//                        iotDeviceConfigManager = IotDeviceConfigManager(btWrapper!!,sapServiceManager!!,userProfile!!.userId,userDevices!![0].deviceSn)
-//                        test_btn.setOnClickListener {
-//                            iotDeviceConfigManager!!.toggleBuzzer(false)
-//                            iotDeviceConfigManager!!.toggleLed(true)
-//                            iotDeviceConfigManager!!.changeHoldingZoneRecordInterval(5)
-//                            iotDeviceConfigManager!!.commitChanges()
-//                        }
                     },
                     {re:RuntimeException->
                         Log.d(TAG, "An error occurred during async query:  "  + re.message);
@@ -217,9 +245,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onError(result: Throwable) {
-                //Handle error here...
                 if (result is HttpException) {
-                    //HttpException type com.sap.cloud.mobile.foundation.networking.HttpException
                     Log.e("Http Exception: ", result.message)
                 } else {
                     Log.e("Exception occurred: ", result.message)
@@ -228,19 +254,10 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    override fun onBackPressed() {
-        moveTaskToBack(true)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        LOGGER.debug("EntitySetListActivity::onActivityResult, request code: $requestCode result code: $resultCode")
-    }
-
     private val mHandler = @SuppressLint("HandlerLeak")
     object : Handler() {
         override fun handleMessage(msg: Message) {
-            Log.d(MainActivitytest.TAG, msg.what.toString())
+            Log.d(TAG, msg.what.toString())
             when (msg.what) {
                 //handle when device connected
                 Constants.HANDLER_ACTION.CONNECTED.value->{
@@ -294,7 +311,7 @@ class MainActivity : AppCompatActivity() {
 
                     Log.i(TAG,"Backpack data received")
 
-                    var mBtCommandObject = msg.obj as BtCommandObject
+                    val mBtCommandObject = msg.obj as BtCommandObject
                     when(mBtCommandObject.function_code){
                         Constants.BT_FUN_CODE.GET_SENSOR_DATA.code->{
 
@@ -307,7 +324,7 @@ class MainActivity : AppCompatActivity() {
                             Toast.makeText(this@MainActivity,mBtCommandObject.data.size.toString(),Toast.LENGTH_LONG).show()
 
                             //convert to list of holdingZoneData object
-                            var HoldingZoneDataList: MutableList<HoldingZoneData> = mutableListOf()
+                            val HoldingZoneDataList: MutableList<HoldingZoneData> = mutableListOf()
                             for (keyValuePair in mBtCommandObject.data){
                                 HoldingZoneDataList.add(HoldingZoneData(keyValuePair.key,keyValuePair.value.toString()))
                             }
@@ -365,6 +382,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val TAG = "main"
+        private const val TAG = "main"
     }
 }

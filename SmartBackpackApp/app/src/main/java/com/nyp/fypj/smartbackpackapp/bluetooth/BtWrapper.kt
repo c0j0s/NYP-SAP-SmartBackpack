@@ -4,24 +4,27 @@ import android.bluetooth.BluetoothAdapter
 import android.os.Handler
 import android.util.Log
 import com.nyp.fypj.smartbackpackapp.Constants
+import java.lang.RuntimeException
 
 
 class BtWrapper(private val displayHandler : Handler) {
 
-    private val mBluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
-    private var mBluetoothService: BluetoothService? = null
+    private val mBluetoothAdapter: BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+    private val mBluetoothService: BluetoothService = BluetoothService(this.displayHandler)
     private var mBtCommandObject: BtCommandObject? = null
 
     init {
-        mBluetoothService = BluetoothService(this.displayHandler)
+        if (!mBluetoothAdapter.isEnabled) {
+            throw RuntimeException("Bluetooth Not Configured")
+        }
     }
 
     fun sendCommand(command: Constants.BT_FUN_CODE){
         mBtCommandObject = BtCommandObject(
                 command.code,
-                HashMap<String,String>(),
+                HashMap(),
                 Constants.BT_END_CODE.EOT.code)
-        mBluetoothService!!.write(mBtCommandObject!!)
+        mBluetoothService.write(mBtCommandObject!!)
     }
 
     fun sendCommand(command: Constants.BT_FUN_CODE, Data:HashMap<String,String>){
@@ -29,20 +32,20 @@ class BtWrapper(private val displayHandler : Handler) {
                 command.code,
                 Data,
                 Constants.BT_END_CODE.EOT.code)
-        mBluetoothService!!.write(mBtCommandObject!!)
+        mBluetoothService.write(mBtCommandObject!!)
     }
 
     @Synchronized
     fun connectDevice(deviceBluetoothAddress:String){
         Log.i(TAG,deviceBluetoothAddress)
-        val device = mBluetoothAdapter!!.getRemoteDevice(deviceBluetoothAddress)
-        mBluetoothService!!.connect(device)
+        val device = mBluetoothAdapter.getRemoteDevice(deviceBluetoothAddress)
+        mBluetoothService.connect(device)
     }
 
     @Synchronized
     fun disconnectDevice(){
         sendCommand(Constants.BT_FUN_CODE.DISCONNECT)
-        mBluetoothService!!.stop()
+        mBluetoothService.stop()
     }
 
     fun getSensorData(){
@@ -74,7 +77,7 @@ class BtWrapper(private val displayHandler : Handler) {
     }
 
     fun changeDeviceSettings(key:String,value:String){
-        var data = HashMap<String,String>()
+        val data = HashMap<String,String>()
         data[key] = value
         sendCommand(Constants.BT_FUN_CODE.CHANGE_DEVICE_SETTINGS,data)
     }
@@ -92,7 +95,7 @@ class BtWrapper(private val displayHandler : Handler) {
     }
 
     fun exeShCommand(command:String){
-        var data = HashMap<String,String>()
+        val data = HashMap<String,String>()
         data["command"] = command
         sendCommand(Constants.BT_FUN_CODE.EXE_SH,data)
     }
@@ -102,6 +105,6 @@ class BtWrapper(private val displayHandler : Handler) {
     }
 
     companion object {
-        const val TAG = "BTWrapper"
+        private const val TAG = "BTWrapper"
     }
 }

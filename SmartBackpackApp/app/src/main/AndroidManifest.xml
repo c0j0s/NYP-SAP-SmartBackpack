@@ -31,7 +31,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/application_name"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.sap.cloud.mobile.onboarding.launchscreen.LaunchScreenActivity"
             android:label="@string/application_name">
@@ -65,7 +65,7 @@
             android:label="@string/settings_activity_name"
             android:launchMode="singleTop"
             android:parentActivityName=".mdui.EntitySetListActivity"
-            android:screenOrientation="sensor"></activity>
+            android:screenOrientation="sensor" />
         <activity
             android:name="com.sap.cloud.mobile.onboarding.passcode.SetPasscodeActivity"
             android:label="@string/application_name"
@@ -113,7 +113,7 @@
                 android:name="action_handler"
                 android:value="com.nyp.fypj.smartbackpackapp.logon.FingerprintActionHandlerImpl" />
         </activity>
-        <activity android:name=".logon.UnlockActivity"></activity>
+        <activity android:name=".logon.UnlockActivity" />
         <activity
             android:name="com.sap.cloud.mobile.onboarding.passcode.ChangePasscodeActivity"
             android:label="@string/application_name">
@@ -125,17 +125,16 @@
                 android:value="com.nyp.fypj.smartbackpackapp.logon.PasscodeValidationActionHandlerImpl" />
         </activity>
         <activity
-            android:name=".app.ErrorNotificationDialog"
-            android:theme="@android:style/Theme.Holo.Light.Dialog.MinWidth"></activity>
-        <activity android:name=".mdui.MainActivitytest"></activity>
-        <activity
             android:name=".bluetooth.DeviceListActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="select_device"
             android:theme="@android:style/Theme.Material.Dialog" />
         <activity
             android:name=".mdui.MainActivity"
-            android:label="@string/title_activity_main"></activity>
+            android:label="@string/title_activity_main" />
+        <activity
+            android:name=".mdui.IotBtTestingActivity"
+            android:label="@string/title_activity_iot_bt_testing"></activity>
     </application>
 
 </manifest>
