@@ -42,10 +42,10 @@ class IotBtTestingActivity : Activity() {
     private val executor = Executors.newSingleThreadExecutor()
 
     private val INPUT_SIZE = 5
-    private val INPUT_NAME = "input:0"
-    private val OUTPUT_NAME = "output:0"
+    private val INPUT_NAME = "input_tensor"
+    private val OUTPUT_NAME = "output_pred"
 
-    private val MODEL_FILE = "file:///android_asset/sbp_model.pb"
+    private val MODEL_FILE = "file:///android_asset/sbp_model.tflite"
     private val LABEL_FILE = "file:///android_asset/sbp_labels.txt"
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -109,13 +109,14 @@ class IotBtTestingActivity : Activity() {
 
         btn_ml!!.setOnClickListener {
 
-            val input = FloatBuffer.allocate(INPUT_SIZE)
-            input.put(0.48.toFloat())
-            input.put(0.67.toFloat())
-            input.put(2.52.toFloat())
-            input.put(1.84.toFloat())
-            input.put(0.2.toFloat())
-            input.put(4.toFloat())
+            val input = floatArrayOf(
+                    0.48.toFloat(),
+                    0.67.toFloat(),
+                    2.52.toFloat(),
+                    1.84.toFloat(),
+                    0.2.toFloat()
+            )
+
 
             val results = classifier!!.classifyComfortLevel(input)
 

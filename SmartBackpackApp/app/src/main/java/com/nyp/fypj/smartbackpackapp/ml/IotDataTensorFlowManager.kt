@@ -35,13 +35,15 @@ class IotDataTensorFlowManager():Classifier {
 
     private var runStats = false
 
-    override fun classifyComfortLevel(input: FloatBuffer): List<Classifier.Recognition> {
+    override fun classifyComfortLevel(input: FloatArray): List<Classifier.Recognition> {
         // Log this method so that it can be analyzed with systrace.
         TraceCompat.beginSection("recognizeImage")
 
+
+
         // Copy the input data into TensorFlow.
         TraceCompat.beginSection("feed")
-        inferenceInterface!!.feed(inputName, input)
+        inferenceInterface!!.feed(inputName, input,5)
         TraceCompat.endSection()
 
         // Run the inference call.
@@ -114,8 +116,8 @@ class IotDataTensorFlowManager():Classifier {
             c.inferenceInterface = TensorFlowInferenceInterface(assetManager, modelFilename)
 
             // The shape of the output is [N, NUM_CLASSES], where N is the batch size.
-            val numClasses = c.inferenceInterface!!.graph().operation(outputName)!!.output<Int>(0).shape().size(1) as Int
-            Log.i(TAG, "Read " + c.labels.size + " labels, output layer size is " + numClasses)
+            //val numClasses = c.inferenceInterface!!.graph().operation(outputName)!!.output<Int>(0).shape().size(1) as Int
+            //Log.i(TAG, "Read " + c.labels.size + " labels, output layer size is " + numClasses)
 
             // Ideally, inputSize could have been retrieved from the shape of the input operation.  Alas,
             // the placeholder node for input in the graphdef typically used does not specify a shape, so it
@@ -124,7 +126,7 @@ class IotDataTensorFlowManager():Classifier {
 
             // Pre-allocate buffers.
             c.outputNames = arrayOf(outputName)
-            c.outputs = FloatArray(numClasses)
+            c.outputs = FloatArray(5)
 
             return c
         }

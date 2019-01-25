@@ -27,7 +27,7 @@ interface Classifier{
         }
     }
 
-    fun classifyComfortLevel(input:FloatBuffer): List<Recognition>
+    fun classifyComfortLevel(input:FloatArray): List<Recognition>
 
     fun close()
 }
