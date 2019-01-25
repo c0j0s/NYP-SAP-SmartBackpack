@@ -3,8 +3,8 @@ import tensorflow as tf
 from tensorflow import keras
 
 # Helper libraries
-import numpy as np
-import matplotlib.pyplot as plt
+# import numpy as np
+# import matplotlib.pyplot as plt
 
 from lib.MlHelper import *
 
@@ -39,8 +39,16 @@ def main():
         loss='sparse_categorical_crossentropy',
         metrics=['accuracy'])
 
+    # model.compile(optimizer='adam', 
+    #             loss=tf.keras.losses.sparse_categorical_crossentropy,
+    #             metrics=['accuracy'])
+
+    tbCallBack=keras.callbacks.TensorBoard(log_dir='./log', histogram_freq=0, write_graph=True)
+
+    print(train_features)
+
     #Train model 
-    model.fit(train_features, train_labels, epochs=201, steps_per_epoch=32)
+    model.fit(train_features, train_labels, epochs=201, steps_per_epoch=32, callbacks=[tbCallBack])
 
     #save the model
     tf.contrib.saved_model.save_keras_model(
@@ -49,7 +57,11 @@ def main():
         custom_objects=None,
         as_text=None
     )
-
+    
+    # model.save('./model/sbp_model.h5')
+    # converter = tf.contrib.lite.TFLiteConverter.from_keras_model_file('./model/sbp_model.h5')
+    # tflite_model = converter.convert()
+    # open('./model/sbp_model.tflite', "wb").write(tflite_model)
 
 if __name__ == "__main__":
     main()

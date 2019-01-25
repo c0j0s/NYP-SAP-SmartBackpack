@@ -18,7 +18,8 @@ def main():
     test_features,test_labels = load_dataset(test_dataset_fp)
 
     #load model
-    model = tf.contrib.saved_model.load_keras_model(saved_model_path)
+    #model = tf.contrib.saved_model.load_keras_model(saved_model_path)
+    model = keras.models.load_model('./model/sbp_model.h5')
     
     # #Build model 
     # model = keras.Sequential([

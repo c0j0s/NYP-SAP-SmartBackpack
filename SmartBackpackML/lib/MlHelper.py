@@ -14,4 +14,4 @@ def load_dataset(dataset_path):
             features.append(int_features)
             labels.append(int(columns[-1]))
     
-    return tf.convert_to_tensor(features, dtype=tf.float32), tf.convert_to_tensor(labels, dtype=tf.int32)
+    return tf.convert_to_tensor(features, dtype=tf.float32, name="input"), tf.convert_to_tensor(labels, dtype=tf.int32, name="output")

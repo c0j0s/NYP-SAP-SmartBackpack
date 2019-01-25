@@ -286,12 +286,12 @@ public class LogonActivity extends AppCompatActivity {
 //		});
 
         //bluetooth testing activity
-//        Intent intent = new Intent(LogonActivity.this, IotBtTestingActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(LogonActivity.this, IotBtTestingActivity.class);
+        startActivity(intent);
 
 		//Official Main activities
-		Intent intent = new Intent(LogonActivity.this, MainActivity.class);
-		startActivity(intent);
+//		Intent intent = new Intent(LogonActivity.this, MainActivity.class);
+//		startActivity(intent);
 
 	}
 

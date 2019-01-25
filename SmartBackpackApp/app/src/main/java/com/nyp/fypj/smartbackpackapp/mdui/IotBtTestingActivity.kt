@@ -18,16 +18,37 @@ import com.nyp.fypj.smartbackpackapp.bluetooth.BtWrapper
 import com.nyp.fypj.smartbackpackapp.bluetooth.HoldingZoneData
 
 import kotlinx.android.synthetic.main.activity_iot_bt_testing.*
+import android.os.AsyncTask.execute
+import com.nyp.fypj.smartbackpackapp.ml.IotDataTensorFlowManager
+import java.util.concurrent.Executors
+import android.databinding.adapters.TextViewBindingAdapter.setText
+import android.os.Build
+import android.support.annotation.RequiresApi
+import com.nyp.fypj.smartbackpackapp.ml.Classifier
+import java.nio.FloatBuffer
+
 
 class IotBtTestingActivity : Activity() {
 
     var et_input:EditText? = null
     var et_output:EditText? = null
     var btn_send:Button? = null
+    var btn_ml:Button? = null
     var wv_reference:WebView? = null
 
     var btWrapper:BtWrapper? = null
 
+    private var classifier: Classifier? = null
+    private val executor = Executors.newSingleThreadExecutor()
+
+    private val INPUT_SIZE = 5
+    private val INPUT_NAME = "input:0"
+    private val OUTPUT_NAME = "output:0"
+
+    private val MODEL_FILE = "file:///android_asset/sbp_model.pb"
+    private val LABEL_FILE = "file:///android_asset/sbp_labels.txt"
+
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_iot_bt_testing)
@@ -35,9 +56,10 @@ class IotBtTestingActivity : Activity() {
         et_input = findViewById(R.id.et_input)
         et_output = findViewById(R.id.et_output)
         btn_send = findViewById(R.id.btn_send)
+        btn_ml = findViewById(R.id.btn_ml)
         wv_reference = findViewById(R.id.wv_reference)
 
-        btWrapper = BtWrapper(uiHandlers)
+        //btWrapper = BtWrapper(uiHandlers)
         wv_reference!!.loadUrl("https://github.com/c0j0s/SmartBackpack/blob/master/SmartBackpackIOT/README.md#iot-device-function-codes")
 
         btn_send!!.setOnClickListener {
@@ -81,6 +103,42 @@ class IotBtTestingActivity : Activity() {
                     btWrapper!!.elseTest()
                 }
             }
+        }
+
+        initTensorFlowAndLoadModel()
+
+        btn_ml!!.setOnClickListener {
+
+            val input = FloatBuffer.allocate(INPUT_SIZE)
+            input.put(0.48.toFloat())
+            input.put(0.67.toFloat())
+            input.put(2.52.toFloat())
+            input.put(1.84.toFloat())
+            input.put(0.2.toFloat())
+            input.put(4.toFloat())
+
+            val results = classifier!!.classifyComfortLevel(input)
+
+            if (results.isNotEmpty()) {
+                val value = " Number is : " + results[0].title
+                et_output!!.setText(value)
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun initTensorFlowAndLoadModel() {
+        try {
+            classifier = IotDataTensorFlowManager.create(
+                    assets,
+                    MODEL_FILE,
+                    LABEL_FILE,
+                    INPUT_SIZE,
+                    INPUT_NAME,
+                    OUTPUT_NAME)
+            Log.d(TAG, "Load Success")
+        } catch (e: Exception) {
+            throw RuntimeException("Error initializing TensorFlow!", e)
         }
     }
 

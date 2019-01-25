@@ -50,14 +50,14 @@
 
     <Button
         android:id="@+id/btn_send"
-        android:layout_width="0dp"
+        android:layout_width="195dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="Send"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/btn_ml"
+        app:layout_constraintHorizontal_bias="0.38"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_input" />
 
@@ -97,4 +97,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_output" />
+
+    <Button
+        android:id="@+id/btn_ml"
+        android:layout_width="190dp"
+        android:layout_height="47dp"
+        android:text="MLtest"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_input"
+        tools:layout_editor_absoluteX="213dp" />
 </android.support.constraint.ConstraintLayout>
