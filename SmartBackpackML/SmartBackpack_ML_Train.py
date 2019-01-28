@@ -40,7 +40,7 @@ def model_fn(features, labels, mode, params):
 
     net = tf.identity(net, name="input_tensor")
     
-    net = tf.reshape(net, [160,5])    
+    net = tf.reshape(net, [1,5])    
 
     net = tf.layers.dense(inputs=net, name='layer_fc1',
                         units=10, activation=tf.nn.relu)  
