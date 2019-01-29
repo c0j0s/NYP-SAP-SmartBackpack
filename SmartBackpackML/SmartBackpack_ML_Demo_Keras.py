@@ -1,6 +1,8 @@
 # TensorFlow and tf.keras
 import tensorflow as tf
 from tensorflow import keras
+import tensorflowjs as tfjs
+from numpy import array
 
 # Helper libraries
 # import numpy as np
@@ -10,8 +12,8 @@ from lib.MlHelper import *
 
 print(tf.__version__)
 
-train_dataset_fp = "./training/train_dataset.csv"
-test_dataset_fp = "./training/test_dataset.csv"
+train_dataset_fp = "./training/dataset.csv"
+#test_dataset_fp = "./training/test_dataset.csv"
 manifest_file = "./manifest.json"
 saved_model_path = "./model/"
 
@@ -35,28 +37,38 @@ def main():
     ])
 
     #Compile model 
-    model.compile(optimizer=tf.train.AdamOptimizer(), 
-        loss='sparse_categorical_crossentropy',
-        metrics=['accuracy'])
+    # model.compile(optimizer=tf.train.AdamOptimizer(), 
+    #     loss='sparse_categorical_crossentropy',
+    #     metrics=['accuracy'])
 
-    # model.compile(optimizer='adam', 
-    #             loss=tf.keras.losses.sparse_categorical_crossentropy,
-    #             metrics=['accuracy'])
+    model.compile(optimizer='adam', 
+                loss=tf.keras.losses.sparse_categorical_crossentropy,
+                metrics=['accuracy'])
 
-    tbCallBack=keras.callbacks.TensorBoard(log_dir='./log', histogram_freq=0, write_graph=True)
+    #tbCallBack=keras.callbacks.TensorBoard(log_dir='./log', histogram_freq=0, write_graph=True)
 
     print(train_features)
 
     #Train model 
-    model.fit(train_features, train_labels, epochs=201, steps_per_epoch=32, callbacks=[tbCallBack])
+    model.fit(train_features, train_labels, epochs=101, steps_per_epoch=32)
 
+    #save to jsformat
+    tfjs.converters.save_keras_model(model, saved_model_path)
+
+    sample = array([[0.33,0.18,1.17,1.03,0.1]])
+
+    print(sample.shape)
+
+    y = model.predict(sample)
+
+    print(y[0])
     #save the model
-    tf.contrib.saved_model.save_keras_model(
-        model,
-        saved_model_path,
-        custom_objects=None,
-        as_text=None
-    )
+    # tf.contrib.saved_model.save_keras_model(
+    #     model,
+    #     saved_model_path,
+    #     custom_objects=None,
+    #     as_text=None
+    # )
     
     # model.save('./model/sbp_model.h5')
     # converter = tf.contrib.lite.TFLiteConverter.from_keras_model_file('./model/sbp_model.h5')

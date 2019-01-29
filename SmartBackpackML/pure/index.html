@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.14.2/dist/tf.min.js"></script>
+    </head>
+    <body>
+        
+    </body>
+    <script>
+        const model = tf.loadModel('model/model.json').then(function(){
+            console.log("loadingmodel")
+            console.log(model)
+            const sample = tf.tensor2d([[0.48,0.67,2.52,1.84,0.20]]);
+            const prediction = model.predict(sample);
+            console.log("makingprediction")
+            console.log(prediction)
+        });
+    </script>
+</html>
