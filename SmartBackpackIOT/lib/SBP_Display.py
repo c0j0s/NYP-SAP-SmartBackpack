@@ -1,5 +1,5 @@
 import time,sys
-import smbus
+import smbus2 as smbus
 import RPi.GPIO as GPIO
 
 class SBP_Display:
