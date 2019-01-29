@@ -131,6 +131,7 @@ def init():
             print("\n[SENSOR] INIT: ENVIRONMENT INITIALISATION")
             print("\tredis connection: {}".format(host))
 
+        print("Initialisation complete")
     except Exception as ex:
         print("Initialisation error: " + str(ex))
         print("Exception in user code:")
@@ -186,8 +187,7 @@ def main():
         =================================================================================================================
         """
         while True:
-            
-
+       
             #killer to handle service stopping
             if killer.kill_now:
                 closing()
@@ -200,6 +200,7 @@ def main():
                         initTesting()
                 else:
                     testing_button_triggered = 1
+                    button = None
                 #if not in testing mode
                 if testing_button_triggered is not 0 and button is None:
 
@@ -209,15 +210,11 @@ def main():
                     hum = 0
                     desc = "ok" 
                     alert_triggered = False
-
+   
                     #particle sensor
                     if (pm_sensor.readParticleMeasurement()):
                         pm2_5 = pm_sensor._pm2_5
                         pm10 = pm_sensor._pm10
-
-                        if debug:
-                            print("[HPMA115S0] PM2.5: %d ug/m3" % (pm2_5))
-                            print("[HPMA115S0] PM 10: %d ug/m3" % (pm10))
 
                     #temp and hum sensor
                     [temp,hum] = grovepi.dht(temp_hum,0)  
@@ -255,9 +252,17 @@ def main():
                     if displayAlternate is 1:
                         displayAlternate = 0
                         display.setDisplayText("PM 2.5: %d ug/m3\nPM 10.: %d ug/m3"%(pm2_5,pm10))
+                        
+                        if debug:
+                            print("[HPMA115S0] PM2.5: %d ug/m3" % (pm2_5))
+                            print("[HPMA115S0] PM 10: %d ug/m3" % (pm10))
                     else:
                         displayAlternate = 1
                         display.setDisplayText("T: %.02f'C \nH: %.02f%% %s"%(temp, hum, desc))
+                        
+                        if debug:
+                            print("[TEMP&HUMI] T: %.02f 'C" % (temp))
+                            print("[TEMP&HUMI] H: %.02f per" % (hum))
 
                     #prevent zero values triggering false alarm during initialisation
                     if pm2_5 is not 0 and pm10 is not 0 and temp is not 0 and hum is not 0:
