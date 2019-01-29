@@ -9,6 +9,7 @@ class SBP_Display:
 
     def __init__(self, debug=False):
         self.bus = smbus.SMBus(1)
+        self.debug = debug
 
     def checkIfDisplayAvailable(self):
         try:

@@ -13,13 +13,13 @@
         },
         "sensors":{
             "particle": "/dev/ttyAMA0",
-            "temp_hum": 7,
-            "button":5
+            "temp_hum": 5,
+            "button":8
         },
         "actuators":{
-            "led_green":2,
+            "led_green":4,
             "led_blue":3,
-            "led_red":4,
+            "led_red":2,
             "buzzer":6
         }
     },
@@ -35,14 +35,14 @@
     },
     "settings":{
         "device_sn":"SBPSG000001",
-        "debug":true,
+        "debug":false,
         "BT_Server_Settings":{
             "clear_holding_zone_after_sync":1
         },
         "Sensor_Server_Settings":{
             "CONFIG_ENABLE_BUZZER":0,
             "CONFIG_ENABLE_LED":1,
-            "MINUTES_TO_RECORD_DATA":1,
+            "MINUTES_TO_RECORD_DATA":0.5,
             "SECONDS_TO_UPDATE_DATA":5,
             "humidity_range":{
                 "red":{
