@@ -16,11 +16,11 @@
         <com.sap.cloud.mobile.fiori.contact.ProfileHeader
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:headline="@string/testName"
-            app:subheadline="@string/testTitle"
-            app:description="@string/testAddress"
+            app:headline="testName"
+            app:subheadline="testTitle"
+            app:description="testAddress"
             app:detailImage="@drawable/ic_account_circle_black_24dp"
-            app:detailImageDescription="@string/testDetailImageDesc"
+            app:detailImageDescription="testDetailImageDesc"
             >
             <ImageButton
                 android:layout_width="wrap_content"

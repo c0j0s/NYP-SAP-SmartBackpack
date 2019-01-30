@@ -9,6 +9,7 @@ import android.os.Handler
 import android.os.Message
 import android.provider.Settings
 import android.support.design.widget.BottomNavigationView
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -82,6 +83,10 @@ class MainActivity : AppCompatActivity() {
 
     private var loadingBar:FioriProgressBar? = null
 
+    private var homeFab: FloatingActionButton? = null
+    private var myDevicesFab: FloatingActionButton? = null
+
+
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
@@ -89,6 +94,8 @@ class MainActivity : AppCompatActivity() {
                 if(!homeDisabled) {
                     fm.beginTransaction().hide(active).show(homeFragment).commit()
                     active = homeFragment
+                    changeFab()
+                    setTitle("My Backpack")
                 }else{
                     Toast.makeText(this,"No Backpack Connected, Please select a device from your backpack list",Toast.LENGTH_LONG).show()
                 }
@@ -97,11 +104,15 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_my_devices -> {
                 fm.beginTransaction().hide(active).show(myDevicesFragment).commit()
                 active = myDevicesFragment
+                changeFab()
+                setTitle("All My Backpacks")
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_my_profile -> {
                 fm.beginTransaction().hide(active).show(myProfileFragment).commit()
                 active = myProfileFragment
+                changeFab()
+                setTitle("My Profile")
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -111,7 +122,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setTitle(R.id.action_bar_title)
+        setSupportActionBar(findViewById(R.id.main_toolbar))
+        title = "My Backpack"
 
         fm.beginTransaction().add(R.id.main_container, myProfileFragment, "3").hide(myProfileFragment).commit()
         fm.beginTransaction().add(R.id.main_container, myDevicesFragment, "2").hide(myDevicesFragment).commit()
@@ -119,6 +131,15 @@ class MainActivity : AppCompatActivity() {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         loadingBar = findViewById(R.id.indeterminateBar)
+        homeFab = findViewById(R.id.fab_home)
+        myDevicesFab = findViewById(R.id.fab_my_devices)
+
+        homeFab!!.setOnClickListener {
+
+        }
+        myDevicesFab!!.setOnClickListener {
+
+        }
 
         sapServiceManager = (application as SAPWizardApplication).sapServiceManager
         configurationData = (application as SAPWizardApplication).configurationData
@@ -261,6 +282,7 @@ class MainActivity : AppCompatActivity() {
             when (msg.what) {
                 //handle when device connected
                 Constants.HANDLER_ACTION.CONNECTED.value->{
+                    changeFab()
 
                     //TODO move to after sensor data receviced handler, else empty homepage will be visiable before get sensor data command
                     fm.beginTransaction().hide(active).show(homeFragment).commit()
@@ -377,6 +399,23 @@ class MainActivity : AppCompatActivity() {
                     //state not supported
                     Log.i(TAG,"state not supported: " + msg.what)
                 }
+            }
+        }
+    }
+
+    fun changeFab(){
+        when(active){
+            homeFragment -> {
+                homeFab!!.show()
+                myDevicesFab!!.hide()
+            }
+            myDevicesFragment -> {
+                homeFab!!.hide()
+                myDevicesFab!!.show()
+            }
+            else -> {
+                homeFab!!.hide()
+                myDevicesFab!!.hide()
             }
         }
     }
