@@ -8,7 +8,8 @@ from keras import backend as K
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
-manifest_file = "SmartBackpackML\\manifest.json"
+manifest_file = "manifest.json"
+# manifest_file = "SmartBackpackML\\manifest.json"
 
 @auth.get_password
 def get_password(username):
@@ -71,4 +72,5 @@ def init():
 
 if __name__ == '__main__':
     init()
-    app.run(debug=True)
+    app.run(debug=False, port=80, host='0.0.0.0') 
+    # app.run(debug=True)

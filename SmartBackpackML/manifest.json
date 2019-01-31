@@ -1,7 +1,7 @@
 {
     "ML_CONFIG":{
-        "training_data_path":"SmartBackpackML\\training\\dataset.csv",
-        "model_h5_path":"SmartBackpackML\\model\\sbp_model.h5",
+        "training_data_path":"training/dataset.csv",
+        "model_h5_path":"model/sbp_model.h5",
         "training_epochs":101
     },
     "PREDICTED_COMFORT_LEVEL":{
