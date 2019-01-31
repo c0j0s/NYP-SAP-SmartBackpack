@@ -127,7 +127,7 @@
         <activity
             android:name=".bluetooth.DeviceListActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:label="select_device"
+            android:label="Select Backpack"
             android:theme="@android:style/Theme.Material.Dialog" />
         <activity
             android:name=".mdui.MainActivity"
@@ -136,6 +136,10 @@
         <activity
             android:name=".mdui.IotBtTestingActivity"
             android:label="@string/title_activity_iot_bt_testing"></activity>
+
+        <activity
+            android:name=".app.ErrorNotificationDialog"
+            android:theme="@android:style/Theme.Material.Dialog"></activity>
     </application>
 
 </manifest>
