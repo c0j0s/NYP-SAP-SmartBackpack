@@ -29,6 +29,8 @@ import com.nyp.fypj.smartbackpackapp.mdui.fragments.MyProfileFragment
 import com.nyp.fypj.smartbackpackapp.service.IotDeviceConfigManager
 import com.nyp.fypj.smartbackpackapp.service.SAPServiceManager
 import com.nyp.fypj.smartbackpackapp.Constants
+import com.nyp.fypj.smartbackpackapp.service.IotDataMLServiceManager
+import com.sap.cloud.android.odata.sbp.IotDataType
 import com.sap.cloud.android.odata.sbp.IotdeviceinfoType
 import com.sap.cloud.android.odata.sbp.UserinfosType
 import com.sap.cloud.mobile.fiori.indicator.FioriProgressBar
@@ -271,10 +273,24 @@ class MainActivity : AppCompatActivity() {
                     Log.i(TAG,"Backpack Connected")
 
                     //test get sensor data
-                    btWrapper!!.getSensorData()
+                    //btWrapper!!.getSensorData()
 
                     //test syncholdingzone
                     //btWrapper!!.syncHoldingZone()
+
+                    val iotDataMLServiceManager = IotDataMLServiceManager(sapServiceManager!!,configurationData!!)
+                    val iotDataType = IotDataType()
+                    iotDataType.humidity = 50.toDouble()
+                    iotDataType.temperature = 30.toDouble()
+                    iotDataType.pm25 = 100.toDouble()
+                    iotDataType.pm10 = 104.toDouble()
+                    iotDataMLServiceManager.getLevelAndSuggestion(userProfile!!,iotDataType,{
+                        level, suggestion ->
+                        Log.e(TAG,level.toString() + " " + suggestion.advise)
+                    },{
+                        e: java.lang.RuntimeException ->
+                        Log.e(TAG,e.message)
+                    })
                 }
                 //TODO handle when device disconnected
                 Constants.HANDLER_ACTION.DISCONNECTED.value->{

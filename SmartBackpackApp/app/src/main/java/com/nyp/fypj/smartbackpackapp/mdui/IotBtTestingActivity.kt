@@ -1,31 +1,21 @@
 package com.nyp.fypj.smartbackpackapp.mdui
 
 import android.annotation.SuppressLint
-import android.os.Bundle
 import android.app.Activity
+import android.os.Build
+import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.support.annotation.RequiresApi
 import android.util.Log
-import android.view.View
 import android.webkit.WebView
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import com.nyp.fypj.smartbackpackapp.Constants
 import com.nyp.fypj.smartbackpackapp.R
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtCommandObject
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtWrapper
-import com.nyp.fypj.smartbackpackapp.bluetooth.HoldingZoneData
-
-import kotlinx.android.synthetic.main.activity_iot_bt_testing.*
-import android.os.AsyncTask.execute
-import com.nyp.fypj.smartbackpackapp.ml.IotDataTensorFlowManager
 import java.util.concurrent.Executors
-import android.databinding.adapters.TextViewBindingAdapter.setText
-import android.os.Build
-import android.support.annotation.RequiresApi
-import com.nyp.fypj.smartbackpackapp.ml.Classifier
-import java.nio.FloatBuffer
 
 
 class IotBtTestingActivity : Activity() {
@@ -38,7 +28,6 @@ class IotBtTestingActivity : Activity() {
 
     var btWrapper:BtWrapper? = null
 
-    private var classifier: Classifier? = null
     private val executor = Executors.newSingleThreadExecutor()
 
     private val INPUT_SIZE = 5
@@ -105,42 +94,7 @@ class IotBtTestingActivity : Activity() {
             }
         }
 
-        initTensorFlowAndLoadModel()
 
-        btn_ml!!.setOnClickListener {
-
-            val input = floatArrayOf(
-                    0.48.toFloat(),
-                    0.67.toFloat(),
-                    2.52.toFloat(),
-                    1.84.toFloat(),
-                    0.2.toFloat()
-            )
-
-
-            val results = classifier!!.classifyComfortLevel(input)
-
-            if (results.isNotEmpty()) {
-                val value = " Number is : " + results[0].title
-                et_output!!.setText(value)
-            }
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.N)
-    private fun initTensorFlowAndLoadModel() {
-        try {
-            classifier = IotDataTensorFlowManager.create(
-                    assets,
-                    MODEL_FILE,
-                    LABEL_FILE,
-                    INPUT_SIZE,
-                    INPUT_NAME,
-                    OUTPUT_NAME)
-            Log.d(TAG, "Load Success")
-        } catch (e: Exception) {
-            throw RuntimeException("Error initializing TensorFlow!", e)
-        }
     }
 
     private val uiHandlers = @SuppressLint("HandlerLeak")
