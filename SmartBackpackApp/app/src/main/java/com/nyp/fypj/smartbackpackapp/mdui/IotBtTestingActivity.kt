@@ -1,33 +1,43 @@
 package com.nyp.fypj.smartbackpackapp.mdui
 
 import android.annotation.SuppressLint
-import android.os.Bundle
 import android.app.Activity
+import android.os.Build
+import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.support.annotation.RequiresApi
 import android.util.Log
-import android.view.View
 import android.webkit.WebView
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import com.nyp.fypj.smartbackpackapp.Constants
 import com.nyp.fypj.smartbackpackapp.R
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtCommandObject
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtWrapper
-import com.nyp.fypj.smartbackpackapp.bluetooth.HoldingZoneData
+import java.util.concurrent.Executors
 
-import kotlinx.android.synthetic.main.activity_iot_bt_testing.*
 
 class IotBtTestingActivity : Activity() {
 
     var et_input:EditText? = null
     var et_output:EditText? = null
     var btn_send:Button? = null
+    var btn_ml:Button? = null
     var wv_reference:WebView? = null
 
     var btWrapper:BtWrapper? = null
 
+    private val executor = Executors.newSingleThreadExecutor()
+
+    private val INPUT_SIZE = 5
+    private val INPUT_NAME = "input_tensor"
+    private val OUTPUT_NAME = "output_pred"
+
+    private val MODEL_FILE = "file:///android_asset/sbp_model.tflite"
+    private val LABEL_FILE = "file:///android_asset/sbp_labels.txt"
+
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_iot_bt_testing)
@@ -35,9 +45,10 @@ class IotBtTestingActivity : Activity() {
         et_input = findViewById(R.id.et_input)
         et_output = findViewById(R.id.et_output)
         btn_send = findViewById(R.id.btn_send)
+        btn_ml = findViewById(R.id.btn_ml)
         wv_reference = findViewById(R.id.wv_reference)
 
-        btWrapper = BtWrapper(uiHandlers)
+        //btWrapper = BtWrapper(uiHandlers)
         wv_reference!!.loadUrl("https://github.com/c0j0s/SmartBackpack/blob/master/SmartBackpackIOT/README.md#iot-device-function-codes")
 
         btn_send!!.setOnClickListener {
@@ -82,6 +93,8 @@ class IotBtTestingActivity : Activity() {
                 }
             }
         }
+
+
     }
 
     private val uiHandlers = @SuppressLint("HandlerLeak")

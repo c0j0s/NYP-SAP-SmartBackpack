@@ -46,6 +46,9 @@ public class ConfigurationData {
     // private data members
     private boolean configurationIsValid;
     private String serviceUrl;
+    private String mlServiceUrl;
+    private String mlServiceAccount;
+    private String mlServicePasswd;
 
     // public accessor methods
 
@@ -65,6 +68,18 @@ public class ConfigurationData {
      */
     public String getServiceUrl() {
         return serviceUrl;
+    }
+
+    public String getMlServiceUrl() {
+        return mlServiceUrl;
+    }
+
+    public String getMlServiceAccount() {
+        return mlServiceAccount;
+    }
+
+    public String getMlServicePasswd() {
+        return mlServicePasswd;
     }
 
     /***
@@ -98,6 +113,9 @@ public class ConfigurationData {
                  // Get all configuration values
                 if (configData.has(KEY_SERVICE_URL)) {
                     serviceUrl = configData.getString(KEY_SERVICE_URL);
+                    mlServiceUrl = configData.getString("MLServiceUrl");
+                    mlServiceAccount = configData.getString("MLServiceAccount");
+                    mlServicePasswd = configData.getString("MLServicePassword");
                 } else {
                     // Build the service url from the default discovery service data
                     serviceUrl = String.format(SERVICE_URL_FORMAT,
@@ -138,4 +156,6 @@ public class ConfigurationData {
         configurationIsValid = success;
         return configurationIsValid;
     }
+
+
 }
