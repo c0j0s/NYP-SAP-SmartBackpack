@@ -30,7 +30,7 @@ A wrapper class that encapsulates bluetooth command syntax into simple functions
 
 #### Sample usage
 ```kotlin
-    var btWrapper = BtWrapper(<UiHandler>)
+    val btWrapper = BtWrapper(<UiHandler>)
     btWrapper.getSensorData()
 ```
 
@@ -72,18 +72,18 @@ A wrapper class that handles functions to change IOT device configs.json and fun
 
 #### Sample usage
 ```kotlin
-    var iotDeviceConfigManager = IotDeviceConfigManager(<BtWrapper>,<SapServiceManager>,<userId>,<deviceSn>)
+    val iotDeviceConfigManager = IotDeviceConfigManager(<BtWrapper>,<SapServiceManager>,<userId>,<deviceSn>)
 
     //adds the configs to change list
-    iotDeviceConfigManager!!.toggleBuzzer(true);
+    iotDeviceConfigManager.toggleBuzzer(true);
     .
     .
 
     //execute the final changes and status feedback will be handled in handlers configured for BtWrapper
-    iotDeviceConfigManager!!.commitChanges()
+    iotDeviceConfigManager.commitChanges()
 
     //sync to database
-    iotDeviceConfigManager!!.syncConfigToHana(
+    iotDeviceConfigManager.syncConfigToHana(
         {
             //success callback
         },
@@ -105,13 +105,29 @@ A wrapper class that handles functions to change IOT device configs.json and fun
     fun commitChanges()
 ```
 
-### IotDataFeedbackManager
-A wrapper class that update user feedback of specific iot data to database.
+### IotDataMLServiceManager
+A wrapper class that update user feedback of specific iot data to database, and functions to comunicate with online ml service.
 #### Sample usage
 ```kotlin
-    var iotDataFeedbackManager = IotDataFeedbackManager(<SapServiceManager>,<userId>,<dataId>)
+    val iotDataMLServiceManager = IotDataMLServiceManager(<SapServiceManager>)
 
-    iotDataFeedbackManager!!.setDataFeedback(1)
+    //set feedback
+    iotDataMLServiceManager.setDataFeedback(1)
+
+    //get ml prediction
+    val iotDataType = IotDataType()
+        iotDataType.humidity = 50.0
+        iotDataType.temperature = 30.0
+        iotDataType.pm25 = 100.0
+        iotDataType.pm10 = 104.0
+
+    iotDataMLServiceManager.getLevelAndSuggestion(userProfile!!,iotDataType,{
+        level, suggestion ->
+        ...
+    },{
+        e: RuntimeException ->
+        ...
+    })
 ```
 
 #### Functions
@@ -120,5 +136,9 @@ A wrapper class that update user feedback of specific iot data to database.
 
     fun getFeedbackLabel(level:Int):String
 
+    fun getLevelAndSuggestion(user: UserinfosType, data: IotDataType, success: (level:Int,suggestion:SuggestionsType) -> Unit,error:(e:RuntimeException) -> Unit)
+
     fun getSuggestions(suggestionQuery: DataQuery,success:(suggestion:SuggestionsType) -> Unit,error:(e:RuntimeException) -> Unit)
+
+    fun predictComfortLevel(data: IotDataType, user: UserinfosType, success: (level:Int) -> Unit, error: (e: IOException) -> Unit)
 ```

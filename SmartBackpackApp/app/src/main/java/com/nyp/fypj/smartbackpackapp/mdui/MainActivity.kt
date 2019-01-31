@@ -278,19 +278,19 @@ class MainActivity : AppCompatActivity() {
                     //test syncholdingzone
                     //btWrapper!!.syncHoldingZone()
 
-                    val iotDataMLServiceManager = IotDataMLServiceManager(sapServiceManager!!,configurationData!!)
-                    val iotDataType = IotDataType()
-                    iotDataType.humidity = 50.toDouble()
-                    iotDataType.temperature = 30.toDouble()
-                    iotDataType.pm25 = 100.toDouble()
-                    iotDataType.pm10 = 104.toDouble()
-                    iotDataMLServiceManager.getLevelAndSuggestion(userProfile!!,iotDataType,{
-                        level, suggestion ->
-                        Log.e(TAG,level.toString() + " " + suggestion.advise)
-                    },{
-                        e: java.lang.RuntimeException ->
-                        Log.e(TAG,e.message)
-                    })
+//                    val iotDataMLServiceManager = IotDataMLServiceManager(sapServiceManager!!,configurationData!!)
+//                    val iotDataType = IotDataType()
+//                    iotDataType.humidity = 50.0
+//                    iotDataType.temperature = 30.0
+//                    iotDataType.pm25 = 100.0
+//                    iotDataType.pm10 = 104.0
+//                    iotDataMLServiceManager.getLevelAndSuggestion(userProfile!!,iotDataType,{
+//                        level, suggestion ->
+//                        Log.e(TAG,level.toString() + " " + suggestion.advise)
+//                    },{
+//                        e: RuntimeException ->
+//                        Log.e(TAG,e.message)
+//                    })
                 }
                 //TODO handle when device disconnected
                 Constants.HANDLER_ACTION.DISCONNECTED.value->{
