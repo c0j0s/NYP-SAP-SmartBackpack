@@ -22,3 +22,7 @@ class ManifestHandler:
             return random.sample(featurePath['options'],  1)[0]
         else:
             return random.randrange(featurePath['min'], featurePath['max'])
+
+    def getMLConfigs(self):
+        mlConfigDict = self.manifest['ML_CONFIG']
+        return mlConfigDict
