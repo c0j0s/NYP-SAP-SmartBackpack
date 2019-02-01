@@ -141,7 +141,7 @@ def init():
         #terminate itself when error and wait for monitoring service to restart
         exit(0)
 
-def initTesting():
+def debugInitTesting():
     global testing_button_triggered
     global button
 
@@ -164,6 +164,19 @@ def initTesting():
         print("[SENSOR] initTesting: End Testing Routine")
         time.sleep(2)
 
+def normalInitTesting():
+        print("[SENSOR] initTesting: Start Testing Routine")
+        buzzer.buzzForSeconds(1)
+        time.sleep(0.5)
+        led_controller.getLED('green').on()
+        time.sleep(0.5)
+        led_controller.getLED('blue').on()
+        time.sleep(0.5)
+        led_controller.getLED('red').on()
+        time.sleep(0.5)
+        print("[SENSOR] initTesting: End Testing Routine")
+        time.sleep(1)
+        led_controller.offAllLED()
 
 def main():
     global testing_button_triggered
@@ -197,10 +210,12 @@ def main():
                 #listen for testing mode
                 if debug and button is not None:
                     if grovepi.digitalRead(button) is 1:
-                        initTesting()
+                        debugInitTesting()
                 else:
                     testing_button_triggered = 1
                     button = None
+                    normalInitTesting()
+
                 #if not in testing mode
                 if testing_button_triggered is not 0 and button is None:
 
@@ -328,7 +343,7 @@ def output_data_to_hoding_file(hum,temp,pm2_5,pm10,predict_comfort,alert_trigger
             print("[HOLDING_ZONE] Creating File in " + filepath)
             filemode = "w"
 
-        current = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+        current = datetime.datetime.now().isoformat()
 
         jsonObj = {
                 'RECOREDED_ON':current,
