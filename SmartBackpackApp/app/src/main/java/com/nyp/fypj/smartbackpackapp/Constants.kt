@@ -3,7 +3,8 @@ package com.nyp.fypj.smartbackpackapp
 class Constants {
 
     enum class ACTIVITY_RESULT_CODE(val value: Int){
-        REQUEST_CONNECT_DEVICE(3)
+        REQUEST_CONNECT_DEVICE(3),
+        REQUEST_LOCATION(3)
     }
 
     enum class HANDLER_ACTION(val value: Int) {

@@ -1,16 +1,20 @@
 package com.nyp.fypj.smartbackpackapp.mdui
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.provider.Settings
 import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.FloatingActionButton
+import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
@@ -30,8 +34,6 @@ import com.nyp.fypj.smartbackpackapp.mdui.fragments.MyProfileFragment
 import com.nyp.fypj.smartbackpackapp.service.IotDeviceConfigManager
 import com.nyp.fypj.smartbackpackapp.service.SAPServiceManager
 import com.nyp.fypj.smartbackpackapp.Constants
-import com.nyp.fypj.smartbackpackapp.service.IotDataMLServiceManager
-import com.sap.cloud.android.odata.sbp.IotDataType
 import com.sap.cloud.android.odata.sbp.IotdeviceinfoType
 import com.sap.cloud.android.odata.sbp.UserinfosType
 import com.sap.cloud.mobile.fiori.indicator.FioriProgressBar
@@ -56,9 +58,9 @@ class MainActivity : AppCompatActivity() {
      */
     private val LOGGER = LoggerFactory.getLogger(MainActivity::class.java)
 
-    private var sapServiceManager: SAPServiceManager? = null
-    private var configurationData: ConfigurationData? = null
-    private var secureStoreManager: SecureStoreManager? = null
+    private lateinit var sapServiceManager: SAPServiceManager
+    private lateinit var configurationData: ConfigurationData
+    private lateinit var secureStoreManager: SecureStoreManager
 
 
     /*
@@ -66,20 +68,20 @@ class MainActivity : AppCompatActivity() {
      */
     private var okHttpClient: OkHttpClient? = null
     private var settingsParameter: SettingsParameters? = null
-    private var btWrapper:BtWrapper? = null
     private var iotDeviceConfigManager: IotDeviceConfigManager? = null
 
     private var userProfile: UserinfosType? = null
-    private var userDevices: List<IotdeviceinfoType>? = null
+    private val userDevices: ArrayList<IotdeviceinfoType> = ArrayList()
 
 
     /*
     UI Components
      */
-    private val homeFragment: Fragment = HomeFragment()
-    private val myDevicesFragment: Fragment = MyDevicesFragment()
-    private val myProfileFragment: Fragment = MyProfileFragment()
-    private val fm = supportFragmentManager
+    private var homeFragment: Fragment? = null
+    private var myDevicesFragment: Fragment? = null
+    private var myProfileFragment: Fragment? = null
+
+    val fm = supportFragmentManager
     private var active = homeFragment
     private var homeDisabled:Boolean = false
 
@@ -94,27 +96,21 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.navigation_home -> {
                 if(!homeDisabled) {
-                    fm.beginTransaction().hide(active).show(homeFragment).commit()
+                    fm.beginTransaction().hide(active!!).show(homeFragment!!).commit()
                     active = homeFragment
-                    changeFab()
-                    setTitle("My Backpack")
                 }else{
                     Toast.makeText(this,"No Backpack Connected, Please select a device from your backpack list",Toast.LENGTH_LONG).show()
                 }
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_my_devices -> {
-                fm.beginTransaction().hide(active).show(myDevicesFragment).commit()
+                fm.beginTransaction().hide(active!!).show(myDevicesFragment!!).commit()
                 active = myDevicesFragment
-                changeFab()
-                setTitle("All My Backpacks")
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_my_profile -> {
-                fm.beginTransaction().hide(active).show(myProfileFragment).commit()
+                fm.beginTransaction().hide(active!!).show(myProfileFragment!!).commit()
                 active = myProfileFragment
-                changeFab()
-                setTitle("My Profile")
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -127,30 +123,16 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.main_toolbar))
         title = "My Backpack"
 
-        fm.beginTransaction().add(R.id.main_container, myProfileFragment, "3").hide(myProfileFragment).commit()
-        fm.beginTransaction().add(R.id.main_container, myDevicesFragment, "2").hide(myDevicesFragment).commit()
-        fm.beginTransaction().add(R.id.main_container,homeFragment, "1").hide(homeFragment).commit()
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-
         loadingBar = findViewById(R.id.indeterminateBar)
-        homeFab = findViewById(R.id.fab_home)
-        myDevicesFab = findViewById(R.id.fab_my_devices)
-
-        homeFab!!.setOnClickListener {
-
-        }
-        myDevicesFab!!.setOnClickListener {
-
-        }
 
         sapServiceManager = (application as SAPWizardApplication).sapServiceManager
         configurationData = (application as SAPWizardApplication).configurationData
         secureStoreManager = (application as SAPWizardApplication).secureStoreManager
 
         val mBasicAuthPersistentCredentialStore = BasicAuthPersistentCredentialStore(secureStoreManager)
-        val credential = mBasicAuthPersistentCredentialStore.getCredential(configurationData!!.serviceUrl,"SAP HANA Cloud Platform")
+        val credential = mBasicAuthPersistentCredentialStore.getCredential(configurationData.serviceUrl,"SAP HANA Cloud Platform")
 
-        val settingsParameters = SettingsParameters(configurationData!!.serviceUrl, this.packageName, Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID), "0.0.0.1")
+        val settingsParameters = SettingsParameters(configurationData.serviceUrl, this.packageName, Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID), "0.0.0.1")
         CpmsParameters.init(settingsParameters)
         val appHeadersInterceptor = AppHeadersInterceptor(CpmsParameters.getSettingsParameters())
         ClientProvider.set(OkHttpClient.Builder()
@@ -163,20 +145,34 @@ class MainActivity : AppCompatActivity() {
 
         okHttpClient = ClientProvider.get()
         settingsParameter = CpmsParameters.getSettingsParameters()
-    }
 
-    public override fun onStart() {
-        /**
-         * Check for Bluetooth capabilities, if none, ask for access, else get user logon information
-         */
-        super.onStart()
-        if (!BluetoothAdapter.getDefaultAdapter().isEnabled) {
-            val enableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            startActivityForResult(enableIntent, Constants.ACTIVITY_RESULT_CODE.REQUEST_CONNECT_DEVICE.value)
-        }else{
-            btWrapper = BtWrapper(mHandler)
-            StartUserDeviceSession()
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.BLUETOOTH)
+                != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                            Manifest.permission.ACCESS_FINE_LOCATION)) {
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(
+                        Manifest.permission.BLUETOOTH,
+                        Manifest.permission.BLUETOOTH_ADMIN,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                ), Constants.ACTIVITY_RESULT_CODE.REQUEST_CONNECT_DEVICE.value)
+            }
+        } else {
+            if (!BluetoothAdapter.getDefaultAdapter().isEnabled) {
+                val enableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+
+                startActivityForResult(enableIntent, Constants.ACTIVITY_RESULT_CODE.REQUEST_CONNECT_DEVICE.value)
+            }else{
+                StartUserDeviceSession()
+            }
         }
+
+
     }
 
     override fun onBackPressed() {
@@ -191,8 +187,6 @@ class MainActivity : AppCompatActivity() {
             Constants.ACTIVITY_RESULT_CODE.REQUEST_CONNECT_DEVICE.value ->
                 // When DeviceListActivity returns with a device to connect
                 if (resultCode == Activity.RESULT_OK) {
-                    btWrapper = BtWrapper(mHandler)
-
                     //start logon process after bluetooth access granted
                     StartUserDeviceSession()
                 }
@@ -212,7 +206,7 @@ class MainActivity : AppCompatActivity() {
             override fun onSuccess(o: UserInfo) {
 
                 //open database session
-                sapServiceManager!!.openODataStore {
+                sapServiceManager.openODataStore {
 
                     /*
                     Retrieve user profile from database
@@ -220,7 +214,7 @@ class MainActivity : AppCompatActivity() {
                     val userProfileQuery = DataQuery()
                             .filter(UserinfosType.userId.equal(o.id))
 
-                    sapServiceManager!!.getsbp().getUserinfosAsync(userProfileQuery,
+                    sapServiceManager.getsbp().getUserinfosAsync(userProfileQuery,
                             {userInfos:List<UserinfosType>->
                                 Log.e(TAG, "user " + userInfos.size.toString())
                                 if(userInfos.size == 1){
@@ -228,8 +222,7 @@ class MainActivity : AppCompatActivity() {
                                 }
                             },
                             {re:RuntimeException->
-                                Log.d(TAG, "An error occurred during async query:  "  + re.message);
-                                fm.beginTransaction().hide(active).show(myDevicesFragment).commit()
+                                Log.d(TAG, "An error occurred during async query:  "  + re.message)
                                 active = myDevicesFragment
                             })
 
@@ -240,30 +233,43 @@ class MainActivity : AppCompatActivity() {
                             .filter(IotdeviceinfoType.userId.equal(o.id))
                             .orderBy(IotdeviceinfoType.lastOnline)
 
-                    sapServiceManager!!.getsbp().getIotdeviceinfoAsync(userDeviceQuery,
+                    sapServiceManager.getsbp().getIotdeviceinfoAsync(userDeviceQuery,
                     {deviceList:List<IotdeviceinfoType>->
                         Log.e(TAG, deviceList.size.toString())
-                        if(deviceList.size > 0){
 
-                            userDevices = deviceList
-                            //connect to user first device
-                            btWrapper!!.connectDevice(deviceList[0].deviceAddress)
+                        userDevices.addAll(deviceList)
 
-                        }else{
+                        homeFragment = HomeFragment()
+                        myDevicesFragment = MyDevicesFragment()
+                        myProfileFragment = MyProfileFragment()
 
-                            fm.beginTransaction().hide(active).show(myDevicesFragment).commit()
-                            active = myDevicesFragment
-                            loadingBar!!.visibility = View.INVISIBLE
+                        val fragmentBundles = Bundle()
+                        fragmentBundles.putParcelable("userProfile",userProfile)
+                        fragmentBundles.putParcelableArrayList("userDevices",userDevices)
+
+                        homeFragment!!.arguments = fragmentBundles
+                        myProfileFragment!!.arguments = fragmentBundles
+                        myDevicesFragment!!.arguments = fragmentBundles
+
+                        fm.beginTransaction().add(R.id.main_container, myProfileFragment!!, "3").hide(myProfileFragment!!).commit()
+                        fm.beginTransaction().add(R.id.main_container, myDevicesFragment!!, "2").hide(myDevicesFragment!!).commit()
+                        fm.beginTransaction().add(R.id.main_container,homeFragment!!, "1").show(homeFragment!!).commit()
+                        active = homeFragment
+                        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+                        if(deviceList.size == 0){
                             homeDisabled = true
-
+                            active = myDevicesFragment
                         }
 
+                        loadingBar!!.visibility = View.INVISIBLE
                     },
                     {re:RuntimeException->
                         Log.d(TAG, "An error occurred during async query:  "  + re.message);
-                        fm.beginTransaction().hide(active).show(myDevicesFragment).commit()
                         active = myDevicesFragment
                     })
+
+
                 }
             }
 
@@ -275,165 +281,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
-    }
-
-    private val mHandler = @SuppressLint("HandlerLeak")
-    object : Handler() {
-        override fun handleMessage(msg: Message) {
-            Log.d(TAG, msg.what.toString())
-            when (msg.what) {
-                //handle when device connected
-                Constants.HANDLER_ACTION.CONNECTED.value->{
-                    changeFab()
-
-                    //TODO move to after sensor data receviced handler, else empty homepage will be visiable before get sensor data command
-                    fm.beginTransaction().hide(active).show(homeFragment).commit()
-                    active = homeFragment
-
-                    Toast.makeText(this@MainActivity,"Backpack Connected",Toast.LENGTH_SHORT).show()
-                    loadingBar!!.visibility = View.INVISIBLE
-                    Log.i(TAG,"Backpack Connected")
-
-                    //test get sensor data
-                    //btWrapper!!.getSensorData()
-
-                    //test syncholdingzone
-                    //btWrapper!!.syncHoldingZone()
-
-//                    val iotDataMLServiceManager = IotDataMLServiceManager(sapServiceManager!!,configurationData!!)
-//                    val iotDataType = IotDataType()
-//                    iotDataType.humidity = 50.0
-//                    iotDataType.temperature = 30.0
-//                    iotDataType.pm25 = 100.0
-//                    iotDataType.pm10 = 104.0
-//                    iotDataMLServiceManager.getLevelAndSuggestion(userProfile!!,iotDataType,{
-//                        level, suggestion ->
-//                        Log.e(TAG,level.toString() + " " + suggestion.advise)
-//                    },{
-//                        e: RuntimeException ->
-//                        Log.e(TAG,e.message)
-//                    })
-                }
-                //TODO handle when device disconnected
-                Constants.HANDLER_ACTION.DISCONNECTED.value->{
-
-                    Log.i(TAG,"Backpack disconnected")
-
-                }
-                //TODO handle when device connection lost
-                Constants.HANDLER_ACTION.CONNECT_LOST.value->{
-
-                    Log.i(TAG,"Backpack connection lost")
-
-                }
-                //TODO handle when device connection error
-                Constants.HANDLER_ACTION.CONNECT_ERROR.value->{
-
-                    Log.i(TAG,"Backpack connection error")
-
-                }
-                Constants.HANDLER_ACTION.COMMAND_SEND.value->{
-
-                    Log.i(TAG,"Command send")
-
-                }
-                //TODO sensor data retrieved from device
-                Constants.HANDLER_ACTION.RECEIVE_RESPONSE.value->{
-                    /*
-                    BtCommandObject -> function_code
-                                       data
-                                       end_code
-
-                    refer to documentation
-                     */
-
-                    Log.i(TAG,"Backpack data received")
-
-                    val mBtCommandObject = msg.obj as BtCommandObject
-                    when(mBtCommandObject.function_code){
-                        Constants.BT_FUN_CODE.GET_SENSOR_DATA.code->{
-
-                            Toast.makeText(this@MainActivity,mBtCommandObject.data.toString(),Toast.LENGTH_LONG).show()
-
-                        }
-                        Constants.BT_FUN_CODE.SYNC_HOLDING_ZONE.code->{
-
-                            //all received data is in hashmap form
-                            Toast.makeText(this@MainActivity,mBtCommandObject.data.size.toString(),Toast.LENGTH_LONG).show()
-
-                            //convert to list of holdingZoneData object
-                            val HoldingZoneDataList: MutableList<HoldingZoneData> = mutableListOf()
-                            for (keyValuePair in mBtCommandObject.data){
-                                HoldingZoneDataList.add(HoldingZoneData(keyValuePair.key,keyValuePair.value.toString()))
-                            }
-
-                            //test
-                            Log.e(TAG,"holdingZoneData object test: " + HoldingZoneDataList[0].humidity)
-
-                            //send command to flush holding zone after transmission complete
-                            btWrapper!!.flushHoldingZone()
-                        }
-                        Constants.BT_FUN_CODE.FLUSH_HOLDING_ZONE.code->{
-
-                            Log.i(TAG,"Holding zone flushing complete")
-
-                        }
-                        Constants.BT_FUN_CODE.CHANGE_DEVICE_SETTINGS.code ->{
-
-                            Log.i(TAG,"Device config changed, start hana sync")
-
-                            iotDeviceConfigManager!!.syncConfigToHana({
-
-                                Log.i(TAG,"Hana Config Updated")
-
-                            }, {e:RuntimeException ->
-
-                                Log.e(TAG,"Error when synchronising config to database " + e.message)
-
-                            })
-
-
-                        }
-                        Constants.BT_FUN_CODE.TOGGLE_DEBUG.code->{
-
-
-                        }
-                        else -> {
-                            //received code not supported
-                            Log.i(TAG,"received code not supported: " + mBtCommandObject.function_code)
-                        }
-                        //TODO handle other function code responses
-                    }
-                }
-                //TODO handle exceptions occurred at receiving end
-                Constants.HANDLER_ACTION.RECEIVE_ERROR.value->{
-
-                    Toast.makeText(this@MainActivity,"Error occurred",Toast.LENGTH_SHORT).show()
-
-                }
-                else -> {
-                    //state not supported
-                    Log.i(TAG,"state not supported: " + msg.what)
-                }
-            }
-        }
-    }
-
-    fun changeFab(){
-        when(active){
-            homeFragment -> {
-                homeFab!!.show()
-                myDevicesFab!!.hide()
-            }
-            myDevicesFragment -> {
-                homeFab!!.hide()
-                myDevicesFab!!.show()
-            }
-            else -> {
-                homeFab!!.hide()
-                myDevicesFab!!.hide()
-            }
-        }
     }
 
     companion object {
