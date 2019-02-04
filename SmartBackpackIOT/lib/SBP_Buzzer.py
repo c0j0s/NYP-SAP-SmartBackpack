@@ -14,11 +14,11 @@ class SBP_Buzzer:
     def on(self):
         if self.debug:
             print("[BUZZER] on: mode=" + str(self.enable))
-        grovepi.digitalWrite(self.buzzer,self.enable)
+        grovepi.digitalWrite(self.buzzer,int(self.enable))
 
     def off(self):
         if self.debug:
-            print("[BUZZER] off: mode=" + str(self.enable))
+            print("[BUZZER] off: mode=" + int(self.enable))
         grovepi.digitalWrite(self.buzzer,0)
 
     def buzzForSeconds(self,seconds):

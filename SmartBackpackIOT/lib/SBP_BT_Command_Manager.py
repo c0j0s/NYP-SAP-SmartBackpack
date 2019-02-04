@@ -2,6 +2,8 @@ import json
 import time
 import os
 import subprocess
+import redis
+
 class BtCommandObject:
     def newCommandObject(self, function_code, data, end_code, debug = "",debug_mode=False):
         self.function_code = function_code
@@ -187,6 +189,7 @@ class SBP_BT_Command_Manager:
                 else:
                     changeVal = int(val)
 
+                redis_cursor.set(key,changeVal)
                 sensor_config_path[key] = changeVal
                 print("[changeDeviceConfigs] Config change for: " + key + " to: " + str(changeVal))
 

@@ -97,6 +97,11 @@ def init():
         host = redis_path['host']
         redis_cursor = SBP_Redis_Wrapper(host,debug=debug)
 
+        #init redis default settings
+        redis_cursor.set("CONFIG_ENABLE_BUZZER",sensor_server_settings['CONFIG_ENABLE_BUZZER'])
+        redis_cursor.set("CONFIG_ENABLE_LED",sensor_server_settings['CONFIG_ENABLE_LED'])
+        redis_cursor.set("MINUTES_TO_RECORD_DATA",minute_to_record_data)
+
         #init killer
         killer = GracefulKiller()
 
@@ -205,6 +210,8 @@ def main():
         =================================================================================================================
         """
         while True:
+
+            readTempConfig()
        
             #killer to handle service stopping
             if killer.kill_now:
@@ -373,6 +380,27 @@ def output_data_to_hoding_file(hum,temp,pm2_5,pm10,predict_comfort,alert_trigger
         traceback.print_exc(file=sys.stdout)
         print("-"*60)
         pass
+
+def readTempConfig():
+    global buzzer
+    global led_controller
+    global countdown_to_record_data
+
+    temp_config_buzzer = redis_cursor.get("CONFIG_ENABLE_BUZZER")
+    if int(temp_config_buzzer) != int(buzzer.enable):
+        buzzer.toggleEnable(temp_config_buzzer)
+        print("[CONFIG] Changes Detected: buzzer -> " + str(buzzer.enable))
+
+    temp_config_led = redis_cursor.get("CONFIG_ENABLE_LED")
+    if int(temp_config_led) != int(led_controller.enable):
+        led_controller.toggleEnable(temp_config_led)
+        print("[CONFIG] Changes Detected: led_controller -> " + str(led_controller.enable))
+
+    temp_minute_to_record_data = redis_cursor.get("MINUTES_TO_RECORD_DATA")
+    if float(temp_minute_to_record_data) != float(minute_to_record_data):
+        countdown_to_record_data = calIntervalNeeded(float(temp_minute_to_record_data),seconds_to_update_data)
+        print("[CONFIG] Changes Detected: countdown_to_record_data -> " + str(countdown_to_record_data))
+
 
 def closing():
     display.setDisplayOff()

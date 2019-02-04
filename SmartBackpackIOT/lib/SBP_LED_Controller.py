@@ -10,11 +10,14 @@ class SBP_LED_Controller:
         self.debug = debug
         self.enable = enable
 
+    def toggleEnable(self,enable):
+        self.enable = enable
+
     def set_LED_switch_interval(self,seconds = 1):
         self.led_switch_interval = seconds
 
     def addLED(self,name,port):
-        self.led_port_dist[name] = SBP_LED(port,self.enable,self.debug)
+        self.led_port_dist[name] = SBP_LED(port,int(self.enable),self.debug)
 
     def getLED(self,name):
         return self.led_port_dist[name]

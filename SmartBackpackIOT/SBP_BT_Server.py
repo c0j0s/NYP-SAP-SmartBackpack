@@ -126,7 +126,7 @@ def main():
             elif received.function_code == "30000":
                 command.get_sensor_data(redis_cursor)
             elif received.function_code == "31000":
-                command.changeDeviceConfigs(config_file)
+                command.changeDeviceConfigs(config_file,redis_cursor)
             elif received.function_code == "32000":
                 command.sync_holding_zone()
             elif received.function_code == "32500":
