@@ -98,46 +98,48 @@ class SBP_BT_Command_Manager:
         files_renamed = []
         files_transmitted = []
 
-        end_index = len(holding_zone_files) - 1
-        end_code = "MSE"
-        last_line = ""
+        if len(holding_zone_files) == 0:
+            end_index = len(holding_zone_files) - 1
+            end_code = "MSE"
+            last_line = ""
 
-        for fidx, holding_zone_file in enumerate(holding_zone_files):
-            #rename files
-            if holding_zone_file.startswith("holding_zone_"):
-                oldfile = holding_zone_dir + holding_zone_file
-                newfile = oldfile
-                if not holding_zone_file.endswith(".temp"):
-                    newfile = oldfile + ".temp"
-                    os.rename(oldfile, newfile)
-                files_renamed.append(newfile)
-                
-        print("[sync_holding_zone] File renamed: " + str(files_renamed))
-
-        for fidx, holding_zone_file in enumerate(files_renamed):
-            print(str(holding_zone_file))
-            if holding_zone_file.startswith(holding_zone_dir + "holding_zone_"):
-                if end_index is fidx:
-                    with open(holding_zone_file,"r+") as lc:
-                        last_line = self.toCompactString(list(lc)[-1])
-                        lc.close()
-                
-                with open(holding_zone_file,"r+") as f:
+            for fidx, holding_zone_file in enumerate(holding_zone_files):
+                #rename files
+                if holding_zone_file.startswith("holding_zone_"):
+                    oldfile = holding_zone_dir + holding_zone_file
+                    newfile = oldfile
+                    if not holding_zone_file.endswith(".temp"):
+                        newfile = oldfile + ".temp"
+                        os.rename(oldfile, newfile)
+                    files_renamed.append(newfile)
                     
-                    for line in f:
-                        output = self.toCompactString(line)
+            print("[sync_holding_zone] File renamed: " + str(files_renamed))
 
-                        if output == last_line:
-                            end_code = "EOT"
+            for fidx, holding_zone_file in enumerate(files_renamed):
+                print(str(holding_zone_file))
+                if holding_zone_file.startswith(holding_zone_dir + "holding_zone_"):
+                    if end_index is fidx:
+                        with open(holding_zone_file,"r+") as lc:
+                            last_line = self.toCompactString(list(lc)[-1])
+                            lc.close()
+                    
+                    with open(holding_zone_file,"r+") as f:
+                        
+                        for line in f:
+                            output = self.toCompactString(line)
 
-                        print(str(output) + " l:" + str(last_line))
-                        self.client.send(self.toBTObject(self.command.function_code,output,end_code))
-                        time.sleep(0.05)
+                            if output == last_line:
+                                end_code = "EOT"
 
-                files_transmitted.append(holding_zone_file)
+                            print(str(output) + " l:" + str(last_line))
+                            self.client.send(self.toBTObject(self.command.function_code,output,end_code))
+                            time.sleep(0.05)
 
-        print("[sync_holding_zone] File transmitted: " + str(files_renamed))
+                    files_transmitted.append(holding_zone_file)
 
+            print("[sync_holding_zone] File transmitted: " + str(files_renamed))
+        else:
+            self.client.send(self.toBTObject(self.command.function_code,{},"EOT"))
 
 
     def flush_holding_zone_temp(self,clear_holding_zone_after_sync):

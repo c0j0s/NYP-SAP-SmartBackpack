@@ -165,25 +165,30 @@ def debugInitTesting():
         time.sleep(2)
 
 def normalInitTesting():
-        print("[SENSOR] initTesting: Start Testing Routine")
-        buzzer.buzzForSeconds(1)
-        time.sleep(0.5)
-        led_controller.getLED('green').on()
-        time.sleep(0.5)
-        led_controller.getLED('blue').on()
-        time.sleep(0.5)
-        led_controller.getLED('red').on()
-        time.sleep(0.5)
-        print("[SENSOR] initTesting: End Testing Routine")
-        time.sleep(1)
-        led_controller.offAllLED()
+    global doneInit
+    print("[SENSOR] initTesting: Start Testing Routine")
+    buzzer.buzzForSeconds(1)
+    time.sleep(0.5)
+    led_controller.getLED('green').on()
+    time.sleep(0.5)
+    led_controller.getLED('blue').on()
+    time.sleep(0.5)
+    led_controller.getLED('red').on()
+    time.sleep(0.5)
+    print("[SENSOR] initTesting: End Testing Routine")
+    time.sleep(1)
+    led_controller.offAllLED()
+    doneInit = 1
 
 def main():
     global testing_button_triggered
     global countdown_to_record_data
     global button
+    global doneInit
+
     countdown_to_update = countdown_to_record_data
     displayAlternate = 1
+    doneInit = 0
 
     if debug:
         print("[SENSOR] main: count to write " + str(countdown_to_record_data))
@@ -214,7 +219,8 @@ def main():
                 else:
                     testing_button_triggered = 1
                     button = None
-                    normalInitTesting()
+                    if doneInit == 0:
+                        normalInitTesting()
 
                 #if not in testing mode
                 if testing_button_triggered is not 0 and button is None:

@@ -42,7 +42,7 @@
         "Sensor_Server_Settings":{
             "CONFIG_ENABLE_BUZZER":0,
             "CONFIG_ENABLE_LED":1,
-            "MINUTES_TO_RECORD_DATA":0.5,
+            "MINUTES_TO_RECORD_DATA":0.1,
             "SECONDS_TO_UPDATE_DATA":5,
             "humidity_range":{
                 "red":{
