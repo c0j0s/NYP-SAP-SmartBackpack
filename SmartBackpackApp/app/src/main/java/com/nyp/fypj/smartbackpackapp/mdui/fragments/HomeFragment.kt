@@ -15,7 +15,6 @@ import android.util.Log
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
-import com.fasterxml.jackson.annotation.JsonFormat.Value.forPattern
 import com.nyp.fypj.smartbackpackapp.Constants
 import com.nyp.fypj.smartbackpackapp.R
 import com.nyp.fypj.smartbackpackapp.app.SAPWizardApplication
@@ -28,12 +27,10 @@ import com.sap.cloud.android.odata.sbp.IotdeviceinfoType
 import com.sap.cloud.android.odata.sbp.UserDevicesType
 import com.sap.cloud.android.odata.sbp.UserinfosType
 import com.sap.cloud.mobile.fiori.`object`.GridTableRow
-import com.sap.cloud.mobile.odata.DataQuery
-import com.sap.cloud.mobile.odata.LocalDateTime
+import com.sap.cloud.mobile.odata.*
 import kotlinx.android.synthetic.main.components_iot_data_table_row.view.*
 import kotlinx.android.synthetic.main.fragment_home.*
-import java.text.DateFormat
-import java.time.format.DateTimeFormatter
+import java.lang.Exception
 import java.util.*
 
 
@@ -225,66 +222,101 @@ class HomeFragment : Fragment() {
                             tv_sensor_pm25.text = mBtCommandObject.data["PM2_5"]
 
                         }
-                        Constants.BT_FUN_CODE.SYNC_HOLDING_ZONE.code->{
+                        Constants.BT_FUN_CODE.SYNC_HOLDING_ZONE.code-> {
 
-                            Log.i(TAG,"SYNC_HOLDING_ZONE")
+                            Log.i(TAG, "SYNC_HOLDING_ZONE")
 
-                            val lm:LocationManager = activity!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                            val lm: LocationManager = activity!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
                             var longitude = 0.0
                             var latitude = 0.0
-                            if(lm.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
+                            if (lm.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
                                 val location: Location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER)
                                 longitude = location.getLongitude()
                                 latitude = location.getLatitude()
                             }
 
-                            val HoldingZoneDataList: MutableList<HoldingZoneData> = mutableListOf()
-                            for (keyValuePair in mBtCommandObject.data){
-                                HoldingZoneDataList.add(HoldingZoneData(keyValuePair.key,keyValuePair.value))
+                            val holdingZoneDataList: MutableList<HoldingZoneData> = mutableListOf()
+                            for (keyValuePair in mBtCommandObject.data) {
+                                holdingZoneDataList.add(HoldingZoneData(keyValuePair.key, keyValuePair.value))
                             }
                             pb_syncing.progress = 30
 
-                            val updateIncrement = 60/HoldingZoneDataList.size
+                            if (!holdingZoneDataList.isEmpty()) {
 
+                                val updateIncrement = 60 / holdingZoneDataList.size
 
+                                //Sync to hana database
+                                sapServiceManager.openODataStore {
 
-                            //Sync to hana database
-                            sapServiceManager.openODataStore {
-                                HoldingZoneDataList.forEach {
-                                    //sap parse method cant convert this type
-                                    Log.e(TAG,it.recorededOn)
-                                    Log.e(TAG,LocalDateTime.parse(it.recorededOn).toString())
-                                    val createData = IotDataType()
-                                    createData.userId = userProfile.userId
-                                    createData.deviceSn = connectedDevice.deviceSn
-                                    createData.pm10 = it.pm10.toDouble()
-                                    createData.pm25 = it.pm2_5.toDouble()
-                                    createData.temperature = it.temperature.toDouble()
-                                    createData.humidity = it.humidity.toDouble()
-                                    createData.alertTriggered = it.alertTriggered
-                                    createData.recordedOn = LocalDateTime.parse(it.recorededOn)
-                                    createData.city = "SINGAPORE"
-                                    createData.country = "SINGAPORE"
-                                    createData.countryCode = "SG"
-                                    createData.geoLat = latitude
-                                    createData.geoLng = longitude
+                                    val batch = RequestBatch()
+                                    val updateChangeSet = ChangeSet()
 
-                                    sapServiceManager.getsbp().createEntity(createData)
-                                    pb_syncing.progress += updateIncrement
-                                    Log.i(TAG,"openODataStore " + createData.recordedOn + " " + latitude + " " + longitude)
+                                    val lastIdQuery = DataQuery().top(1).orderBy(IotDataType.dataId, SortOrder.DESCENDING)
+
+                                    sapServiceManager.getsbp().getIotDataAsync(lastIdQuery, {
+
+                                        var dataId = it[0].dataId
+                                        Log.e(TAG, "Increment from ${dataId}")
+
+                                        holdingZoneDataList.forEach {
+                                            try {
+                                                dataId += 1
+
+                                                val createData = IotDataType()
+                                                createData.dataId = dataId
+                                                createData.userId = userProfile.userId
+                                                createData.deviceSn = connectedDevice.deviceSn
+                                                createData.pm10 = it.pm10.toDouble()
+                                                createData.pm25 = it.pm2_5.toDouble()
+                                                createData.temperature = it.temperature.toDouble()
+                                                createData.humidity = it.humidity.toDouble()
+                                                createData.alertTriggered = if (it.alertTriggered == "True") "Y" else "N"
+                                                createData.recordedOn = LocalDateTime.parse(it.recorededOn)
+                                                createData.city = "SINGAPORE"
+                                                createData.country = "SINGAPORE"
+                                                createData.state = "SINGAPORE"
+                                                createData.countryCode = "SG"
+                                                createData.geoLat = latitude
+                                                createData.geoLng = longitude
+
+                                                updateChangeSet.createEntity(createData)
+                                                pb_syncing.progress += updateIncrement
+                                                batch.addChanges(updateChangeSet)
+                                            } catch (e: Exception) {
+                                                Log.e(TAG, e.message)
+                                            }
+
+                                        }
+
+                                        Log.e(TAG, updateChangeSet.size().toString())
+
+                                        sapServiceManager.getsbp().processBatchAsync(batch, {
+                                            val changeSetStatus = updateChangeSet.status
+
+                                            if (changeSetStatus >= 400) {
+                                                val dsEx = updateChangeSet.error
+                                                val response = dsEx.response
+                                                Log.e(TAG, response.message)
+                                            }
+                                        }, { e: RuntimeException ->
+                                            Log.e(TAG, e.message)
+                                        })
+                                    }, { e: RuntimeException ->
+                                        Log.e(TAG, e.message)
+                                    })
+
                                 }
 
+                                pb_syncing.progress = 90
+                                Log.i(TAG, "Holding zone flushing start")
+                                btWrapper.flushHoldingZone()
+                            }else{
+                                setHoldingZoneSyncCompleteState()
                             }
-
-                            pb_syncing.progress = 90
-                            Log.i(TAG,"Holding zone flushing start")
-                            btWrapper.flushHoldingZone()
                         }
                         Constants.BT_FUN_CODE.FLUSH_HOLDING_ZONE.code->{
-
                             Log.i(TAG,"Holding zone flushing complete")
-                            pb_syncing.progress = 100
-                            pb_syncing.visibility = View.GONE
+                            setHoldingZoneSyncCompleteState()
                         }
                         Constants.BT_FUN_CODE.CHANGE_DEVICE_SETTINGS.code ->{
 
@@ -297,7 +329,9 @@ class HomeFragment : Fragment() {
                             //received code not supported
                             Log.i(TAG,"received code not supported: " + mBtCommandObject.function_code)
                         }
+
                     }
+
                 }
                 Constants.HANDLER_ACTION.RECEIVE_ERROR.value->{
 
@@ -310,6 +344,12 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun setHoldingZoneSyncCompleteState() {
+        pb_syncing.progress = 100
+        pb_syncing.visibility = View.GONE
+        Toast.makeText(activity, "Backpack synchronised", Toast.LENGTH_SHORT).show()
     }
 
     companion object {
