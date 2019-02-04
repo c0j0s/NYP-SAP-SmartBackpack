@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/key_line_16dp">
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <com.sap.cloud.mobile.fiori.formcell.SimplePropertyFormCell
+            android:id="@+id/spf_device_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="Device Name"
+            app:value="..." />
+
+        <com.sap.cloud.mobile.fiori.formcell.SwitchFormCell
+            android:id="@+id/sfc_enable_buzzer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:helperEnabled="true"
+            app:helperText="disable buzzer alert is the device detect undesirable condition"
+            app:key="Alert buzzer"
+            />
+
+        <com.sap.cloud.mobile.fiori.formcell.SwitchFormCell
+            android:id="@+id/sfc_enable_led"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:helperEnabled="true"
+            app:helperText="disable comfort level light indicator"
+            app:key="Feedback Light Indicator"
+            />
+
+        <com.sap.cloud.mobile.fiori.formcell.SliderFormCell
+            android:id="@+id/sl_record_interval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:displayValue="10 Minutes"
+            app:endLabelEditControl="false"
+            app:endLabelText="20"
+            app:key="Backpack Data Recording Intervals"
+            app:label="minutes"
+            app:maximumValue="20"
+            app:minimumValue="1"
+            app:startLabelText="1"
+            />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintVertical_bias="1.0">
+
+        <Button
+            android:id="@+id/btn_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="Update Settings"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:clickable="true"
+            android:text="Cancel"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

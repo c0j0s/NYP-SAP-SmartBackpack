@@ -21,6 +21,7 @@ import com.nyp.fypj.smartbackpackapp.app.SAPWizardApplication
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtCommandObject
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtWrapper
 import com.nyp.fypj.smartbackpackapp.bluetooth.HoldingZoneData
+import com.nyp.fypj.smartbackpackapp.mdui.dialogs.ChangeDeviceConfigDialogFragment
 import com.nyp.fypj.smartbackpackapp.service.IotDataMLServiceManager
 import com.nyp.fypj.smartbackpackapp.service.IotDeviceConfigManager
 import com.nyp.fypj.smartbackpackapp.service.SAPServiceManager
@@ -32,6 +33,7 @@ import com.sap.cloud.mobile.fiori.`object`.GridTableRow
 import com.sap.cloud.mobile.odata.*
 import kotlinx.android.synthetic.main.components_iot_data_table_row.view.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_home.view.*
 import java.lang.Exception
 import java.util.*
 
@@ -74,9 +76,14 @@ class HomeFragment : Fragment() {
 
         sapServiceManager = (activity!!.application as SAPWizardApplication).sapServiceManager
         btWrapper = BtWrapper(mHandler)
+        iotDeviceConfigManager = IotDeviceConfigManager(btWrapper,sapServiceManager,userProfile.userId,connectedDevice.deviceSn)
 
         connectedDevice = userDevices[0]
         btWrapper.connectDevice(connectedDevice.deviceAddress)
+
+        rootView.ib_change_device_config.setOnClickListener {
+            //ChangeDeviceConfigDialogFragment(activity!!,iotDeviceConfigManager,connectedDevice).show()
+        }
 
         recyclerView = rootView.findViewById<RecyclerView>(R.id.rcv_iot_data).apply {
             setHasFixedSize(true)
@@ -194,9 +201,7 @@ class HomeFragment : Fragment() {
                         oh_device_ovp.setTag("Air Quality", 1)
 
 
-                    tv_buzzer_config.text = if (connectedDevice.configEnableBuzzer == "Y") "Enabled" else "Disabled"
-                    tv_led_config.text = if (connectedDevice.configEnableLed == "Y") "Enabled" else "Disabled"
-                    tv_data_record_interval_config.text = connectedDevice.minutesToRecordData.toString()
+                    updateDeviceConfigCard(connectedDevice.configEnableBuzzer,connectedDevice.configEnableLed,connectedDevice.minutesToRecordData)
 
                     val thread = object : Thread() {
                         override fun run() {
@@ -338,7 +343,14 @@ class HomeFragment : Fragment() {
                             setHoldingZoneSyncCompleteState()
                         }
                         Constants.BT_FUN_CODE.CHANGE_DEVICE_SETTINGS.code ->{
-
+                            Log.i(TAG,"Change device Settings Complete")
+                            iotDeviceConfigManager.syncConfigToHana({
+                                updateDeviceConfigCard(it.configEnableBuzzer,it.configEnableLed,it.minutesToRecordData)
+                                Toast.makeText(activity,"Backpack Settings Changed", Toast.LENGTH_SHORT)
+                            },{
+                                Toast.makeText(activity,"Fail to Change Backpack Settings", Toast.LENGTH_SHORT)
+                                Log.e(TAG,it.message)
+                            })
                         }
                         Constants.BT_FUN_CODE.TOGGLE_DEBUG.code->{
 
@@ -363,6 +375,12 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun updateDeviceConfigCard(configEnableBuzzer: String, configEnableLed: String, minutesToRecordData: Int) {
+        tv_buzzer_config.text = if (configEnableBuzzer == "Y") "Enabled" else "Disabled"
+        tv_led_config.text = if (configEnableLed == "Y") "Enabled" else "Disabled"
+        tv_data_record_interval_config.text = minutesToRecordData.toString()
     }
 
     private fun setHoldingZoneSyncCompleteState() {

@@ -18,10 +18,10 @@ class IotDeviceConfigManager(
         updateDevice.rememberOld()
     }
 
-    fun syncConfigToHana(success: () -> Unit,error: (e:RuntimeException) -> Unit){
+    fun syncConfigToHana(success: (updateDevice:UserDevicesType) -> Unit,error: (e:RuntimeException) -> Unit){
         sapServiceManager.openODataStore {
             sapServiceManager.getsbp().updateEntityAsync(updateDevice,{
-                success()
+                success(updateDevice)
             },{ e:RuntimeException ->
                 error(e)
             })
@@ -53,6 +53,16 @@ class IotDeviceConfigManager(
         }else{
             return "N"
         }
+    }
+
+    fun toggleBuzzerNow(value: Boolean) {
+        updateDevice.configEnableBuzzer = convertBoolean(value)
+        btWrapper.changeDeviceSettings("CONFIG_ENABLE_BUZZER",value.toString())
+    }
+
+    fun toggleLedNow(value: Boolean) {
+        updateDevice.configEnableLed = convertBoolean(value)
+        btWrapper.changeDeviceSettings("CONFIG_ENABLE_LED",value.toString())
     }
 
     companion object {
