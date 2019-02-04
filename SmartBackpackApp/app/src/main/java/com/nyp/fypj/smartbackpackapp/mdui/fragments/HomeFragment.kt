@@ -21,6 +21,8 @@ import com.nyp.fypj.smartbackpackapp.app.SAPWizardApplication
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtCommandObject
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtWrapper
 import com.nyp.fypj.smartbackpackapp.bluetooth.HoldingZoneData
+import com.nyp.fypj.smartbackpackapp.service.IotDataMLServiceManager
+import com.nyp.fypj.smartbackpackapp.service.IotDeviceConfigManager
 import com.nyp.fypj.smartbackpackapp.service.SAPServiceManager
 import com.sap.cloud.android.odata.sbp.IotDataType
 import com.sap.cloud.android.odata.sbp.IotdeviceinfoType
@@ -40,6 +42,8 @@ private const val USER_DEVICES = "userDevices"
 class HomeFragment : Fragment() {
 
     private lateinit var sapServiceManager: SAPServiceManager
+    private lateinit var iotDeviceConfigManager: IotDeviceConfigManager
+    private lateinit var iotDataMLServiceManager: IotDataMLServiceManager
     private lateinit var btWrapper: BtWrapper
 
     private lateinit var userProfile: UserinfosType
@@ -165,6 +169,7 @@ class HomeFragment : Fragment() {
         btWrapper.syncHoldingZone()
     }
 
+    private val iotDataBgHandler = Handler()
     private val mHandler = @SuppressLint("HandlerLeak")
     object : Handler() {
         override fun handleMessage(msg: Message) {
@@ -193,7 +198,21 @@ class HomeFragment : Fragment() {
                     tv_led_config.text = if (connectedDevice.configEnableLed == "Y") "Enabled" else "Disabled"
                     tv_data_record_interval_config.text = connectedDevice.minutesToRecordData.toString()
 
-                    btWrapper.getSensorData()
+                    val thread = object : Thread() {
+                        override fun run() {
+                            try {
+                                while (true) {
+                                    Thread.sleep(4000)
+                                    Log.i(TAG,"handler triggered")
+                                    btWrapper.getSensorData()
+                                }
+                            } catch (e: InterruptedException) {
+                                e.printStackTrace()
+                            }
+
+                        }
+                    }.start()
+
                 }
                 Constants.HANDLER_ACTION.DISCONNECTED.value->{
                     Toast.makeText(activity,"Backpack Disconnected",Toast.LENGTH_SHORT).show()
@@ -442,4 +461,5 @@ class HomeFragment : Fragment() {
         }
 
     }
+
 }
