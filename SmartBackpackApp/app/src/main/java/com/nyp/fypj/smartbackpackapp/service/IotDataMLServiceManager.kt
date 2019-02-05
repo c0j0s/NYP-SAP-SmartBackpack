@@ -1,5 +1,9 @@
 package com.nyp.fypj.smartbackpackapp.service
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.location.Location
+import android.location.LocationManager
 import com.google.gson.Gson
 import com.sap.cloud.android.odata.sbp.IotDataType
 import com.sap.cloud.android.odata.sbp.SuggestionsType
@@ -13,10 +17,14 @@ import okhttp3.RequestBody
 import android.util.Log
 import com.google.gson.reflect.TypeToken
 import com.nyp.fypj.smartbackpackapp.app.ConfigurationData
+import com.sap.cloud.android.odata.sbp.IotdeviceinfoType
+import com.sap.cloud.mobile.odata.LocalDateTime
+import com.sap.cloud.mobile.odata.SortOrder
 
 class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager,private val configurationData: ConfigurationData) {
 
     private val data:IotDataType = IotDataType()
+    var mlServiceStatus = false
 
     private val feedbackDescription:HashMap<Int,String> = hashMapOf(
             Pair(0,"Very Good"),
@@ -30,14 +38,46 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager,p
         data.rememberOld()
     }
 
-    //NOT TESTED
-    fun setDataFeedback(USER_ID:String,DATA_ID:Long,level:Int,success:() -> Unit,error:(e:RuntimeException) -> Unit) {
+    @SuppressLint("MissingPermission")
+    fun setDataFeedback(activity:Context,userProfile:UserinfosType,connectedDevice:IotdeviceinfoType,realTimeData:IotDataType,level:Int,success:() -> Unit,error:(e:RuntimeException) -> Unit) {
         if (level in 0..4) {
-            data.userId = USER_ID
-            data.dataId = DATA_ID
+
+            val lm: LocationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            var longitude = 0.0
+            var latitude = 0.0
+            if (lm.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
+                val location: Location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                longitude = location.getLongitude()
+                latitude = location.getLatitude()
+            }
+
             sapServiceManager.openODataStore {
-                sapServiceManager.getsbp().updateEntityAsync(data, {
-                    success()
+                val lastIdQuery = DataQuery().top(1).orderBy(IotDataType.dataId, SortOrder.DESCENDING)
+                sapServiceManager.getsbp().getIotDataAsync(lastIdQuery, {
+
+                    val createData = IotDataType()
+                    createData.dataId = it[0].dataId + 1
+                    createData.userId = userProfile.userId
+                    createData.deviceSn = connectedDevice.deviceSn
+                    createData.pm10 = realTimeData.pm10
+                    createData.pm25 = realTimeData.pm25
+                    createData.temperature = realTimeData.temperature.toDouble()
+                    createData.humidity = realTimeData.humidity
+                    createData.alertTriggered = "N"
+                    createData.recordedOn = LocalDateTime.now()
+                    createData.city = "SINGAPORE"
+                    createData.country = "SINGAPORE"
+                    createData.state = "SINGAPORE"
+                    createData.countryCode = "SG"
+                    createData.geoLat = latitude
+                    createData.geoLng = longitude
+
+
+                    sapServiceManager.getsbp().createEntityAsync(createData, {
+                        success()
+                    }, { e: RuntimeException ->
+                        error(e)
+                    })
                 }, { e: RuntimeException ->
                     error(e)
                 })
@@ -56,18 +96,20 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager,p
         }
     }
 
-    fun getLevelAndSuggestion(user: UserinfosType, data: IotDataType, success: (level:Int,suggestion:SuggestionsType) -> Unit,error:(e:RuntimeException) -> Unit){
+    fun getLevelAndSuggestion(user: UserinfosType, data: IotDataType, success: (level:Int,suggestion:SuggestionsType) -> Unit,error:(e:Any) -> Unit){
         predictComfortLevel(data,user, {
             level ->
-            var query = DataQuery().filter(SuggestionsType.comfortLevel.equal(level))
+            val query = DataQuery().filter(SuggestionsType.comfortLevel.equal(level))
             getSuggestions(query,{
                 suggestion ->
                 success(level,suggestion)
             },{e: RuntimeException ->
+                mlServiceStatus = false
                 error(e)
             })
         },{
-            throw IOException()
+            mlServiceStatus = false
+            error(it)
         })
     }
 
@@ -88,7 +130,7 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager,p
         }
     }
 
-    fun predictComfortLevel(data: IotDataType, user: UserinfosType, success: (level:Int) -> Unit, error: (e: IOException) -> Unit){
+    private fun predictComfortLevel(data: IotDataType, user: UserinfosType, success: (level:Int) -> Unit, error: (e: IOException) -> Unit){
         val input = hashMapOf<String,Float>()
         input["HUMIDITY"] = data.humidity.toFloat()
         input["TEMPERATURE"] = data.temperature.toFloat()
@@ -106,7 +148,7 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager,p
 
         val requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonString)
         val request = Request.Builder()
-                .url(configurationData.mlServiceUrl)
+                .url("http://35.240.197.152/predict")
                 .post(requestBody)
                 .build()
 
@@ -117,11 +159,11 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager,p
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    val type = object : TypeToken<HashMap<String, Int>>() {}.getType()
+                    val type = object : TypeToken<HashMap<String, Int>>() {}.type
                     val dataMap:HashMap<String,Int> = gson.fromJson(response.body()!!.string(), type)
 
                     Log.e(TAG,dataMap["PREDICTED_COMFORT_LEVEL"].toString())
-
+                    mlServiceStatus = true
                     success(dataMap["PREDICTED_COMFORT_LEVEL"]!!.toInt())
                 }
 

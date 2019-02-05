@@ -33,6 +33,7 @@ class ChangeDeviceConfigDialogFragment() : DialogFragment() {
                     ) { dialog, id ->
                         dialog.cancel()
                     }
+                    .setTitle("Change Device Settings")
             builder.create()
 
         } ?: throw IllegalStateException("Activity cannot be null")

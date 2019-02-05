@@ -1,14 +1,19 @@
 package com.nyp.fypj.smartbackpackapp.mdui.fragments
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
+import android.content.res.ColorStateList
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.support.annotation.NonNull
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
+import android.support.v4.widget.ImageViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -17,6 +22,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.nyp.fypj.smartbackpackapp.Constants
 import com.nyp.fypj.smartbackpackapp.R
+import com.nyp.fypj.smartbackpackapp.app.ConfigurationData
 import com.nyp.fypj.smartbackpackapp.app.SAPWizardApplication
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtCommandObject
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtWrapper
@@ -30,8 +36,12 @@ import com.sap.cloud.android.odata.sbp.IotdeviceinfoType
 import com.sap.cloud.android.odata.sbp.UserDevicesType
 import com.sap.cloud.android.odata.sbp.UserinfosType
 import com.sap.cloud.mobile.fiori.`object`.GridTableRow
+import com.sap.cloud.mobile.fiori.formcell.FormCell
 import com.sap.cloud.mobile.odata.*
+import kotlinx.android.synthetic.main.abc_activity_chooser_view.view.*
 import kotlinx.android.synthetic.main.components_iot_data_table_row.view.*
+import kotlinx.android.synthetic.main.dialog_change_device_setting.view.*
+import kotlinx.android.synthetic.main.dialog_give_feedback.view.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import java.lang.Exception
@@ -46,6 +56,7 @@ class HomeFragment : Fragment() {
     private lateinit var sapServiceManager: SAPServiceManager
     private lateinit var iotDeviceConfigManager: IotDeviceConfigManager
     private lateinit var iotDataMLServiceManager: IotDataMLServiceManager
+    private lateinit var configurationData: ConfigurationData
     private lateinit var btWrapper: BtWrapper
 
     private lateinit var userProfile: UserinfosType
@@ -57,6 +68,9 @@ class HomeFragment : Fragment() {
     private lateinit var viewManager: RecyclerView.LayoutManager
 
     private var connectedDevice: IotdeviceinfoType = IotdeviceinfoType()
+    private var connectStatus = false
+    private var predictedComfortLevel = 0
+    private var realTimeDate = IotDataType()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,14 +89,20 @@ class HomeFragment : Fragment() {
         setHasOptionsMenu(true)
 
         sapServiceManager = (activity!!.application as SAPWizardApplication).sapServiceManager
+        configurationData = (activity!!.application as SAPWizardApplication).configurationData
         btWrapper = BtWrapper(mHandler)
         iotDeviceConfigManager = IotDeviceConfigManager(btWrapper,sapServiceManager,userProfile.userId,connectedDevice.deviceSn)
+        iotDataMLServiceManager = IotDataMLServiceManager(sapServiceManager,configurationData)
 
         connectedDevice = userDevices[0]
         btWrapper.connectDevice(connectedDevice.deviceAddress)
 
         rootView.ib_change_device_config.setOnClickListener {
-            //ChangeDeviceConfigDialogFragment(activity!!,iotDeviceConfigManager,connectedDevice).show()
+            showChangeDeviceConfigDialog(container)
+        }
+
+        rootView.btn_give_feedback.setOnClickListener {
+            showGiveFeedbackDialog(container)
         }
 
         recyclerView = rootView.findViewById<RecyclerView>(R.id.rcv_iot_data).apply {
@@ -124,7 +144,20 @@ class HomeFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.fragment_home_menu_sync -> {
-                syncDataAndHoldingZone()
+                if(connectStatus)
+                    syncDataAndHoldingZone()
+                else
+                    Toast.makeText(activity,"Backpack not connected", Toast.LENGTH_SHORT).show()
+                return true
+            }
+            R.id.fragment_home_menu_connect -> {
+                if(!connectStatus) {
+                    btWrapper.connectDevice(connectedDevice.deviceAddress)
+                    item.icon = activity!!.getDrawable(R.drawable.ic_close_black_24dp)
+                }else{
+                    btWrapper.disconnectDevice()
+                    item.icon = activity!!.getDrawable(R.drawable.ic_add_circle_outline_black_24dp)
+                }
                 return true
             }
         }
@@ -176,13 +209,11 @@ class HomeFragment : Fragment() {
         btWrapper.syncHoldingZone()
     }
 
-    private val iotDataBgHandler = Handler()
     private val mHandler = @SuppressLint("HandlerLeak")
     object : Handler() {
         override fun handleMessage(msg: Message) {
             Log.d(TAG, msg.what.toString())
             when (msg.what) {
-                //handle when device connected
                 Constants.HANDLER_ACTION.CONNECTED.value->{
 
                     activity!!.title = connectedDevice.deviceName
@@ -203,13 +234,17 @@ class HomeFragment : Fragment() {
 
                     updateDeviceConfigCard(connectedDevice.configEnableBuzzer,connectedDevice.configEnableLed,connectedDevice.minutesToRecordData)
 
-                    val thread = object : Thread() {
+                    Toast.makeText(activity,"Backpack Connected",Toast.LENGTH_SHORT).show()
+
+                    connectStatus = true
+
+                    object : Thread() {
                         override fun run() {
                             try {
                                 while (true) {
                                     Thread.sleep(4000)
-                                    Log.i(TAG,"handler triggered")
-                                    btWrapper.getSensorData()
+                                    if(connectStatus)
+                                        btWrapper.getSensorData()
                                 }
                             } catch (e: InterruptedException) {
                                 e.printStackTrace()
@@ -221,12 +256,16 @@ class HomeFragment : Fragment() {
                 }
                 Constants.HANDLER_ACTION.DISCONNECTED.value->{
                     Toast.makeText(activity,"Backpack Disconnected",Toast.LENGTH_SHORT).show()
+                    connectStatus = false
                 }
                 Constants.HANDLER_ACTION.CONNECT_LOST.value->{
-                    Toast.makeText(activity,"Backpack Connection Lost",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity,"Backpack Disconnected",Toast.LENGTH_SHORT).show()
+                    connectStatus = false
                 }
                 Constants.HANDLER_ACTION.CONNECT_ERROR.value->{
-
+                    Toast.makeText(activity,"Unable to Contact Backpack",Toast.LENGTH_SHORT).show()
+                    pb_loading.visibility = View.GONE
+                    connectStatus = false
                 }
                 Constants.HANDLER_ACTION.COMMAND_SEND.value->{
                     Log.i(TAG,"Command send")
@@ -244,6 +283,13 @@ class HomeFragment : Fragment() {
                             tv_sensor_temp.text = mBtCommandObject.data["TEMPERATURE"]
                             tv_sensor_pm10.text = mBtCommandObject.data["PM10"]
                             tv_sensor_pm25.text = mBtCommandObject.data["PM2_5"]
+
+                            realTimeDate.humidity = mBtCommandObject.data["HUMIDITY"]!!.toDouble()
+                            realTimeDate.temperature = mBtCommandObject.data["TEMPERATURE"]!!.toDouble()
+                            realTimeDate.pm10 = mBtCommandObject.data["PM10"]!!.toDouble()
+                            realTimeDate.pm25 = mBtCommandObject.data["PM2_5"]!!.toDouble()
+
+                            retrieveMLService(realTimeDate)
 
                         }
                         Constants.BT_FUN_CODE.SYNC_HOLDING_ZONE.code-> {
@@ -387,6 +433,160 @@ class HomeFragment : Fragment() {
         pb_syncing.progress = 100
         pb_syncing.visibility = View.GONE
         Toast.makeText(activity, "Backpack synchronised", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun retrieveMLService(data:IotDataType){
+        iotDataMLServiceManager.getLevelAndSuggestion(userProfile,data,{level,suggestion ->
+            when(level){
+                0 -> {
+                    iv_comfort_level_icon.setImageResource(R.drawable.ic_sentiment_very_satisfied_black_24dp)
+                    ImageViewCompat.setImageTintList(iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_positive_text)))
+                }
+                1 -> {
+                    iv_comfort_level_icon.setImageResource(R.drawable.ic_sentiment_satisfied_black_24dp)
+                    ImageViewCompat.setImageTintList(iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_positive_text)))
+                }
+                2 -> {
+                    iv_comfort_level_icon.setImageResource(R.drawable.ic_sentiment_neutral_black_24dp)
+                    ImageViewCompat.setImageTintList(iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_neutral_text)))
+                }
+                3 -> {
+                    iv_comfort_level_icon.setImageResource(R.drawable.ic_sentiment_dissatisfied_black_24dp)
+                    ImageViewCompat.setImageTintList(iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_negative_text)))
+                }
+                4 -> {
+                    iv_comfort_level_icon.setImageResource(R.drawable.ic_sentiment_very_dissatisfied_black_24dp)
+                    ImageViewCompat.setImageTintList(iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_negative_text)))
+                }
+            }
+
+            tv_comfort_level_indicator.text = iotDataMLServiceManager.getFeedbackLabel(level)
+
+            tv_comfort_level_suggestions.visibility = View.VISIBLE
+            tv_comfort_level_suggestions.text = suggestion.advise
+
+            predictedComfortLevel = level
+        },{
+            iv_comfort_level_icon.setImageResource(R.drawable.ic_sentiment_neutral_black_24dp)
+            ImageViewCompat.setImageTintList(iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_neutral_text)))
+            tv_comfort_level_indicator.text = "ML Bot not around"
+            tv_comfort_level_suggestions.text = "Can't provide any advice"
+            Log.e(TAG,(it as Exception).message)
+        })
+    }
+
+    private fun showChangeDeviceConfigDialog(container: ViewGroup?){
+        val dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_change_device_setting, container, false)
+
+        dialogView.spf_device_name.value = connectedDevice.deviceName
+        dialogView.sfc_enable_buzzer.setValue(connectedDevice.configEnableBuzzer == "Y")
+        dialogView.sfc_enable_led.setValue(connectedDevice.configEnableLed == "Y")
+        dialogView.sl_record_interval.value = connectedDevice.minutesToRecordData
+
+        dialogView.sfc_enable_buzzer.cellValueChangeListener = object : FormCell.CellValueChangeListener<Boolean>() {
+            override fun cellChangeHandler(value: Boolean) {
+                iotDeviceConfigManager.toggleBuzzerNow(value)
+            }
+        }
+
+        dialogView.sfc_enable_led.cellValueChangeListener = object : FormCell.CellValueChangeListener<Boolean>() {
+            override fun cellChangeHandler(value: Boolean) {
+                iotDeviceConfigManager.toggleLedNow(value)
+            }
+        }
+
+        dialogView.sl_record_interval.cellValueChangeListener = object : FormCell.CellValueChangeListener<Int>() {
+            override fun cellChangeHandler(value: Int) {
+                dialogView.sl_record_interval.displayValue = "$value Minutes"
+            }
+        }
+
+        val builder = AlertDialog.Builder(ContextThemeWrapper(activity, R.style.AlertDialogStyle))
+
+        builder.setView(dialogView)
+                // Add action buttons
+                .setPositiveButton("Save"
+                ) { dialog, id ->
+                    iotDeviceConfigManager.commitChanges()
+                    dialog.dismiss()
+                }
+                .setNegativeButton(R.string.cancel
+                ) { dialog, _ ->
+                    dialog.cancel()
+                }
+                .setTitle("Change Device Settings")
+
+        val alertDialog = builder.create()
+        alertDialog.show()
+    }
+
+    private fun showGiveFeedbackDialog(container: ViewGroup?){
+        val dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_give_feedback, container, false)
+
+        dialogView.sl_feedback_level.value = predictedComfortLevel
+        handleGiveFeedbackInfopane(dialogView,predictedComfortLevel)
+
+        dialogView.sl_feedback_level.cellValueChangeListener = object : FormCell.CellValueChangeListener<Int>() {
+            override fun cellChangeHandler(value: Int) {
+                dialogView.sl_feedback_level.value = value
+                handleGiveFeedbackInfopane(dialogView,value)
+            }
+        }
+
+        val builder = AlertDialog.Builder(ContextThemeWrapper(activity, R.style.AlertDialogStyle))
+
+        builder.setView(dialogView)
+                // Add action buttons
+                .setPositiveButton("Submit"
+                ) { dialog, _ ->
+                    iotDataMLServiceManager.setDataFeedback(activity!!,userProfile,connectedDevice,realTimeDate, dialogView.sl_feedback_level.value,{
+                        Toast.makeText(activity,"Thank you, I will get smarter next time.",Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
+                    },{
+                        Toast.makeText(activity,"Oops, can you try again?",Toast.LENGTH_SHORT).show()
+                        Log.e(TAG,it.message)
+                    })
+                }
+                .setNegativeButton(R.string.cancel
+                ) { dialog, _ ->
+                    dialog.cancel()
+                }
+                .setTitle("How do you feel")
+
+        val alertDialog = builder.create()
+        alertDialog.show()
+    }
+
+    private fun handleGiveFeedbackInfopane(dialogView:View,value:Int){
+        when(value){
+            0 -> {
+                dialogView.d_tv_comfort_level_info.text = "Very comfortable"
+                dialogView.d_iv_comfort_level_icon.setImageResource(R.drawable.ic_sentiment_very_satisfied_black_24dp)
+                ImageViewCompat.setImageTintList(iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_positive_text)))
+            }
+            1 -> {
+                dialogView.d_tv_comfort_level_info.text = "some info"
+                dialogView.d_iv_comfort_level_icon.setImageResource(R.drawable.ic_sentiment_satisfied_black_24dp)
+                ImageViewCompat.setImageTintList(iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_positive_text)))
+            }
+            2 -> {
+                dialogView.d_tv_comfort_level_info.text = "some info"
+                dialogView.d_iv_comfort_level_icon.setImageResource(R.drawable.ic_sentiment_neutral_black_24dp)
+                ImageViewCompat.setImageTintList(iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_neutral_text)))
+            }
+            3 -> {
+                dialogView.d_tv_comfort_level_info.text = "some info"
+                dialogView.d_iv_comfort_level_icon.setImageResource(R.drawable.ic_sentiment_dissatisfied_black_24dp)
+                ImageViewCompat.setImageTintList(iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_negative_text)))
+            }
+            4 -> {
+                dialogView.d_tv_comfort_level_info.text = "some info"
+                dialogView.d_iv_comfort_level_icon.setImageResource(R.drawable.ic_sentiment_very_dissatisfied_black_24dp)
+                ImageViewCompat.setImageTintList(iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_negative_text)))
+            }
+        }
+
+        dialogView.d_tv_comfort_level_indicator.text = iotDataMLServiceManager.getFeedbackLabel(value)
     }
 
     companion object {
