@@ -14,50 +14,47 @@
 
 
         <com.sap.cloud.mobile.fiori.contact.ProfileHeader
+            android:id="@+id/ph_profile_ovp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:headline="testName"
-            app:subheadline="testTitle"
-            app:description="testAddress"
+            app:headline="My name"
+            app:subheadline="ID"
+            app:description="Gender, Race"
             app:detailImage="@drawable/ic_account_circle_black_24dp"
-            app:detailImageDescription="testDetailImageDesc"
+            android:foregroundTint="@color/white"
             >
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_profile_group="ACTION"
-                android:src="@drawable/ic_phone_black_24dp"
-                />
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_profile_group="ACTION"
-                android:src="@drawable/ic_email_black_24dp"
-                />
         </com.sap.cloud.mobile.fiori.contact.ProfileHeader>
 
         <com.sap.cloud.mobile.fiori.formcell.SimplePropertyFormCell
-            android:id="@+id/SimplePropertyFormCell1"
+            android:id="@+id/spf_asthmatic_level"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:isEditable="false"
-            app:key="Cell key"
-            app:value="Cell value" />
+            app:key="Asthmatic level"
+            app:value="0" />
 
         <com.sap.cloud.mobile.fiori.formcell.SimplePropertyFormCell
-            android:id="@+id/SimplePropertyFormCell2"
+            android:id="@+id/spf_dob_age"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:key="Cell key"
-            app:value="Cell value"
+            app:key="Date of Birth"
+            app:value="..."
             app:isEditable="false"/>
 
         <com.sap.cloud.mobile.fiori.formcell.SimplePropertyFormCell
-            android:id="@+id/SimplePropertyFormCell3"
+            android:id="@+id/spf_user_contact"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:key="Cell key"
-            app:value="Cell value"
+            app:key="Contact Number"
+            app:value="..."
+            app:isEditable="false"/>
+
+        <com.sap.cloud.mobile.fiori.formcell.SimplePropertyFormCell
+            android:id="@+id/spf_user_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:key="Address"
+            app:value="..."
             app:isEditable="false"/>
     </LinearLayout>
 </FrameLayout>

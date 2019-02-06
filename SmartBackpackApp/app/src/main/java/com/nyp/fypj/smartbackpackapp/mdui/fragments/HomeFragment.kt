@@ -221,7 +221,7 @@ class HomeFragment : Fragment() {
                         override fun run() {
                             try {
                                 while (true) {
-                                    Thread.sleep(10000)
+                                    Thread.sleep(5000)
                                     if(connectStatus)
                                         btWrapper.getSensorData()
                                 }

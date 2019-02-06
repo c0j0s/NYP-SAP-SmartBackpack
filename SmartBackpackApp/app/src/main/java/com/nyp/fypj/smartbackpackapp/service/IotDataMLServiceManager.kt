@@ -21,7 +21,7 @@ import com.sap.cloud.android.odata.sbp.IotdeviceinfoType
 import com.sap.cloud.mobile.odata.LocalDateTime
 import com.sap.cloud.mobile.odata.SortOrder
 
-class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager,private val configurationData: ConfigurationData) {
+class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager?,private val configurationData: ConfigurationData?) {
 
     private val data:IotDataType = IotDataType()
     var mlServiceStatus = false
@@ -51,7 +51,7 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager,p
                 latitude = location.latitude
             }
 
-            sapServiceManager.openODataStore {
+            sapServiceManager!!.openODataStore {
                 val lastIdQuery = DataQuery().top(1).orderBy(IotDataType.dataId, SortOrder.DESCENDING)
                 sapServiceManager.getsbp().getIotDataAsync(lastIdQuery, {
 
@@ -115,7 +115,7 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager,p
 
     //NOT TESTED
     fun getSuggestions(suggestionQuery: DataQuery,success:(suggestion:SuggestionsType) -> Unit,error:(e:RuntimeException) -> Unit){
-        sapServiceManager.openODataStore {
+        sapServiceManager!!.openODataStore {
             sapServiceManager.getsbp().getSuggestionsAsync(suggestionQuery, {
                 suggestionList:List<SuggestionsType> ->
                 if (suggestionList.isNotEmpty()){
@@ -143,7 +143,7 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager,p
         val jsonString = gson.toJson(input)
 
         val okHttpClient = OkHttpClient().newBuilder()
-                .addInterceptor(AuthenticationInterceptor(configurationData.mlServiceAccount, configurationData.mlServicePasswd))
+                .addInterceptor(AuthenticationInterceptor(configurationData!!.mlServiceAccount, configurationData.mlServicePasswd))
                 .build()
 
         val requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonString)

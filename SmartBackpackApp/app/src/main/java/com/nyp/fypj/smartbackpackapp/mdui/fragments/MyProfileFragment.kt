@@ -8,25 +8,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.nyp.fypj.smartbackpackapp.R
+import com.nyp.fypj.smartbackpackapp.service.IotDataMLServiceManager
 import com.sap.cloud.android.odata.sbp.IotdeviceinfoType
 import com.sap.cloud.android.odata.sbp.UserDevicesType
 import com.sap.cloud.android.odata.sbp.UserinfosType
+import kotlinx.android.synthetic.main.fragment_my_profile.view.*
+import kotlinx.android.synthetic.main.notification_template_lines_media.view.*
 
 private const val USER_PROFILE = "userProfile"
 private const val USER_DEVICES = "userDevices"
 
 class MyProfileFragment : Fragment() {
 
-    private var userProfile: UserinfosType? = null
-    private var userDevices: ArrayList<IotdeviceinfoType>? = null
+    private lateinit var userProfile: UserinfosType
+    private lateinit var userDevices: ArrayList<IotdeviceinfoType>
     private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            userProfile = it.getParcelable(USER_PROFILE)
-            userDevices = it.getParcelableArrayList(USER_DEVICES)
+            userProfile = it.getParcelable(USER_PROFILE)!!
+            userDevices = it.getParcelableArrayList(USER_DEVICES)!!
         }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -34,6 +38,14 @@ class MyProfileFragment : Fragment() {
         // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_my_profile, container, false)
         activity!!.title = "My Profile"
+        rootView.ph_profile_ovp.headline = userProfile.name
+        rootView.ph_profile_ovp.subheadline = userProfile.userId
+        rootView.ph_profile_ovp.description = if(userProfile.gender == "M") "Male" else "Female" + ", ${userProfile.race}"
+
+        rootView.spf_asthmatic_level.value = userProfile.asthmaticDesc
+        rootView.spf_dob_age.value = "${userProfile.dob.date}, ${userProfile.age}"
+        rootView.spf_user_contact.value = userProfile.contactNo
+        rootView.spf_user_address.value = "${userProfile.userCity}, ${userProfile.userState}, ${userProfile.userCountry}".toLowerCase()
         return rootView
     }
 
