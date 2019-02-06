@@ -1,7 +1,9 @@
 package com.nyp.fypj.smartbackpackapp.service
 
+import android.util.Log
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtWrapper
 import com.sap.cloud.android.odata.sbp.UserDevicesType
+import com.sap.cloud.mobile.odata.LocalDateTime
 
 class IotDeviceConfigManager(
         private val btWrapper: BtWrapper,
@@ -41,6 +43,19 @@ class IotDeviceConfigManager(
     fun changeHoldingZoneRecordInterval(minutes:Int){
         listOfConfigToChange["MINUTES_TO_RECORD_DATA"] = minutes.toString()
         updateDevice.minutesToRecordData = minutes
+    }
+
+    fun changeDeviceName(name:String){
+        updateDevice.deviceName = name
+    }
+
+    fun updateLastOnline(){
+        updateDevice.lastOnline = LocalDateTime.now()
+        syncConfigToHana({
+            Log.e(TAG,"Last online updated")
+        },{
+            Log.e(TAG,it.message)
+        })
     }
 
     fun commitChanges(){

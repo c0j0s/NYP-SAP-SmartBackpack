@@ -10,7 +10,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-import android.support.annotation.NonNull
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.ImageViewCompat
@@ -27,7 +26,6 @@ import com.nyp.fypj.smartbackpackapp.app.SAPWizardApplication
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtCommandObject
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtWrapper
 import com.nyp.fypj.smartbackpackapp.bluetooth.HoldingZoneData
-import com.nyp.fypj.smartbackpackapp.mdui.dialogs.ChangeDeviceConfigDialogFragment
 import com.nyp.fypj.smartbackpackapp.service.IotDataMLServiceManager
 import com.nyp.fypj.smartbackpackapp.service.IotDeviceConfigManager
 import com.nyp.fypj.smartbackpackapp.service.SAPServiceManager
@@ -38,7 +36,6 @@ import com.sap.cloud.android.odata.sbp.UserinfosType
 import com.sap.cloud.mobile.fiori.`object`.GridTableRow
 import com.sap.cloud.mobile.fiori.formcell.FormCell
 import com.sap.cloud.mobile.odata.*
-import kotlinx.android.synthetic.main.abc_activity_chooser_view.view.*
 import kotlinx.android.synthetic.main.components_iot_data_table_row.view.*
 import kotlinx.android.synthetic.main.dialog_change_device_setting.view.*
 import kotlinx.android.synthetic.main.dialog_give_feedback.view.*
@@ -120,12 +117,9 @@ class HomeFragment : Fragment() {
                 Log.e(TAG,iotDataQuery.toString())
                 sapServiceManager.getsbp().getIotDataAsync(iotDataQuery,
                         {iotDataList:List<IotDataType>->
-                            Log.e(TAG,iotDataList.size.toString())
 
                             viewAdapter = IotDataAdapter(iotDataList)
-                            recyclerView.adapter = viewAdapter
-
-                            activity!!.runOnUiThread({ recyclerView.adapter = viewAdapter })
+                            activity!!.runOnUiThread { recyclerView.adapter = viewAdapter }
                         },
                         {re:RuntimeException->
                             Log.d(TAG, "An error occurred during async query:  "  + re.message)
@@ -216,23 +210,8 @@ class HomeFragment : Fragment() {
             when (msg.what) {
                 Constants.HANDLER_ACTION.CONNECTED.value->{
 
-                    activity!!.title = connectedDevice.deviceName
-                    oh_device_ovp.headline = connectedDevice.deviceSn
-                    oh_device_ovp.subheadline = "Last online: ${connectedDevice.lastOnline.date.toString() + " " + connectedDevice.lastOnline.hour + ":" + connectedDevice.lastOnline.minute} "
-                    oh_device_ovp.footnote = connectedDevice.applicationVersion
-                    oh_device_ovp.body = connectedDevice.systemPlatform
-
-                    if(connectedDevice.sensorHumidity == "Y")
-                        oh_device_ovp.setTag("Humidity", 0)
-
-                    if(connectedDevice.sensorTemperature == "Y")
-                        oh_device_ovp.setTag("Temperature", 1)
-
-                    if(connectedDevice.sensorAirQuality == "Y")
-                        oh_device_ovp.setTag("Air Quality", 1)
-
-
-                    updateDeviceConfigCard(connectedDevice.configEnableBuzzer,connectedDevice.configEnableLed,connectedDevice.minutesToRecordData)
+                    updateDeviceConfigCard()
+                    iotDeviceConfigManager.updateLastOnline()
 
                     Toast.makeText(activity,"Backpack Connected",Toast.LENGTH_SHORT).show()
 
@@ -242,7 +221,7 @@ class HomeFragment : Fragment() {
                         override fun run() {
                             try {
                                 while (true) {
-                                    Thread.sleep(4000)
+                                    Thread.sleep(10000)
                                     if(connectStatus)
                                         btWrapper.getSensorData()
                                 }
@@ -391,7 +370,6 @@ class HomeFragment : Fragment() {
                         Constants.BT_FUN_CODE.CHANGE_DEVICE_SETTINGS.code ->{
                             Log.i(TAG,"Change device Settings Complete")
                             iotDeviceConfigManager.syncConfigToHana({
-                                updateDeviceConfigCard(it.configEnableBuzzer,it.configEnableLed,it.minutesToRecordData)
                                 Toast.makeText(activity,"Backpack Settings Changed", Toast.LENGTH_SHORT)
                             },{
                                 Toast.makeText(activity,"Fail to Change Backpack Settings", Toast.LENGTH_SHORT)
@@ -423,10 +401,25 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun updateDeviceConfigCard(configEnableBuzzer: String, configEnableLed: String, minutesToRecordData: Int) {
-        tv_buzzer_config.text = if (configEnableBuzzer == "Y") "Enabled" else "Disabled"
-        tv_led_config.text = if (configEnableLed == "Y") "Enabled" else "Disabled"
-        tv_data_record_interval_config.text = minutesToRecordData.toString()
+    private fun updateDeviceConfigCard() {
+        activity!!.title = connectedDevice.deviceName
+        oh_device_ovp.headline = connectedDevice.deviceSn
+        oh_device_ovp.subheadline = "Last online: ${connectedDevice.lastOnline.date.toString() + " " + connectedDevice.lastOnline.hour + ":" + connectedDevice.lastOnline.minute} "
+        oh_device_ovp.footnote = connectedDevice.applicationVersion
+        oh_device_ovp.body = connectedDevice.systemPlatform
+
+        if(connectedDevice.sensorHumidity == "Y")
+            oh_device_ovp.setTag("Humidity", 0)
+
+        if(connectedDevice.sensorTemperature == "Y")
+            oh_device_ovp.setTag("Temperature", 1)
+
+        if(connectedDevice.sensorAirQuality == "Y")
+            oh_device_ovp.setTag("Air Quality", 1)
+
+        tv_buzzer_config.text = if (connectedDevice.configEnableBuzzer == "Y") "Enabled" else "Disabled"
+        tv_led_config.text = if (connectedDevice.configEnableLed == "Y") "Enabled" else "Disabled"
+        tv_data_record_interval_config.text = connectedDevice.minutesToRecordData.toString()
     }
 
     private fun setHoldingZoneSyncCompleteState() {
@@ -506,8 +499,16 @@ class HomeFragment : Fragment() {
         builder.setView(dialogView)
                 // Add action buttons
                 .setPositiveButton("Save"
-                ) { dialog, id ->
+                ) { dialog, _ ->
+                    connectedDevice.deviceName = dialogView.spf_device_name.value.toString()
+                    connectedDevice.configEnableBuzzer = if(dialogView.sfc_enable_buzzer.value) "Y" else "N"
+                    connectedDevice.configEnableLed = if(dialogView.sfc_enable_led.value) "Y" else "N"
+                    connectedDevice.minutesToRecordData = dialogView.sl_record_interval.value
+                    updateDeviceConfigCard()
+                    iotDeviceConfigManager.changeDeviceName(dialogView.spf_device_name.value.toString())
                     iotDeviceConfigManager.commitChanges()
+
+                    Toast.makeText(activity,"Settings Changed",Toast.LENGTH_SHORT).show()
                     dialog.dismiss()
                 }
                 .setNegativeButton(R.string.cancel
@@ -524,12 +525,12 @@ class HomeFragment : Fragment() {
         val dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_give_feedback, container, false)
 
         dialogView.sl_feedback_level.value = predictedComfortLevel
-        handleGiveFeedbackInfopane(dialogView,predictedComfortLevel)
+        handleGiveFeedbackInfPane(dialogView,predictedComfortLevel)
 
         dialogView.sl_feedback_level.cellValueChangeListener = object : FormCell.CellValueChangeListener<Int>() {
             override fun cellChangeHandler(value: Int) {
                 dialogView.sl_feedback_level.value = value
-                handleGiveFeedbackInfopane(dialogView,value)
+                handleGiveFeedbackInfPane(dialogView,value)
             }
         }
 
@@ -557,32 +558,32 @@ class HomeFragment : Fragment() {
         alertDialog.show()
     }
 
-    private fun handleGiveFeedbackInfopane(dialogView:View,value:Int){
+    private fun handleGiveFeedbackInfPane(dialogView:View, value:Int){
         when(value){
             0 -> {
-                dialogView.d_tv_comfort_level_info.text = "Very comfortable"
+                dialogView.d_tv_comfort_level_info.text = "Air quality is considered satisfactory, and air pollution poses little or no risk."
                 dialogView.d_iv_comfort_level_icon.setImageResource(R.drawable.ic_sentiment_very_satisfied_black_24dp)
-                ImageViewCompat.setImageTintList(iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_positive_text)))
+                ImageViewCompat.setImageTintList(dialogView.d_iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_positive_text)))
             }
             1 -> {
-                dialogView.d_tv_comfort_level_info.text = "some info"
+                dialogView.d_tv_comfort_level_info.text = "Air quality is acceptable; however, for some pollutants there may be a moderate health concern for a very small number of people"
                 dialogView.d_iv_comfort_level_icon.setImageResource(R.drawable.ic_sentiment_satisfied_black_24dp)
-                ImageViewCompat.setImageTintList(iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_positive_text)))
+                ImageViewCompat.setImageTintList(dialogView.d_iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_positive_text)))
             }
             2 -> {
-                dialogView.d_tv_comfort_level_info.text = "some info"
+                dialogView.d_tv_comfort_level_info.text = "Although general public is not likely to be affected at this AQI range, people with lung disease, older adults and children are at a greater risk from exposure to ozone, whereas persons with heart and lung disease, older adults and children are at greater risk from the presence of particles in the air"
                 dialogView.d_iv_comfort_level_icon.setImageResource(R.drawable.ic_sentiment_neutral_black_24dp)
-                ImageViewCompat.setImageTintList(iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_neutral_text)))
+                ImageViewCompat.setImageTintList(dialogView.d_iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_neutral_text)))
             }
             3 -> {
-                dialogView.d_tv_comfort_level_info.text = "some info"
+                dialogView.d_tv_comfort_level_info.text = "This would trigger a health alert signifying that everyone may experience more serious health effects"
                 dialogView.d_iv_comfort_level_icon.setImageResource(R.drawable.ic_sentiment_dissatisfied_black_24dp)
-                ImageViewCompat.setImageTintList(iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_negative_text)))
+                ImageViewCompat.setImageTintList(dialogView.d_iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_negative_text)))
             }
             4 -> {
-                dialogView.d_tv_comfort_level_info.text = "some info"
+                dialogView.d_tv_comfort_level_info.text = "This would trigger a health warnings of emergency conditions. The entire population is more likely to be affected."
                 dialogView.d_iv_comfort_level_icon.setImageResource(R.drawable.ic_sentiment_very_dissatisfied_black_24dp)
-                ImageViewCompat.setImageTintList(iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_negative_text)))
+                ImageViewCompat.setImageTintList(dialogView.d_iv_comfort_level_icon, ColorStateList.valueOf(ContextCompat.getColor(activity!!, R.color.sap_ui_negative_text)))
             }
         }
 

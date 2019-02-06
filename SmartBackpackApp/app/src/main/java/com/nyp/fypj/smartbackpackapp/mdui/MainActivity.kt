@@ -68,7 +68,6 @@ class MainActivity : AppCompatActivity() {
      */
     private var okHttpClient: OkHttpClient? = null
     private var settingsParameter: SettingsParameters? = null
-    private var iotDeviceConfigManager: IotDeviceConfigManager? = null
 
     private var userProfile: UserinfosType? = null
     private val userDevices: ArrayList<IotdeviceinfoType> = ArrayList()
@@ -106,11 +105,13 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_my_devices -> {
                 fm.beginTransaction().hide(active!!).show(myDevicesFragment!!).commit()
                 active = myDevicesFragment
+                title = "My Backpacks (${userDevices.size})"
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_my_profile -> {
                 fm.beginTransaction().hide(active!!).show(myProfileFragment!!).commit()
                 active = myProfileFragment
+                title = "My Profile"
                 return@OnNavigationItemSelectedListener true
             }
         }

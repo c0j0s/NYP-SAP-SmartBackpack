@@ -32,7 +32,9 @@ class MyProfileFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_profile, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_my_profile, container, false)
+        activity!!.title = "My Profile"
+        return rootView
     }
 
     // TODO: Rename method, update argument and hook method into UI event

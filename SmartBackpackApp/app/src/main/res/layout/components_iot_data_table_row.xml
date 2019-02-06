@@ -11,8 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_column="0"
-        app:layout_columnWidth=".20"
-        />
+        app:layout_columnWidth=".20"/>
     <TextView
         android:id="@+id/row_temperature"
         android:layout_width="wrap_content"
@@ -39,6 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/sap_ui_base_text"
+        android:gravity="end"
         app:layout_column="4"
         app:layout_columnWidth=".19"/>
 </com.sap.cloud.mobile.fiori.object.GridTableRow>

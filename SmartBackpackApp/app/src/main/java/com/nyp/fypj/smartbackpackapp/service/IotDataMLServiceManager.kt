@@ -47,8 +47,8 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager,p
             var latitude = 0.0
             if (lm.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
                 val location: Location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-                longitude = location.getLongitude()
-                latitude = location.getLatitude()
+                longitude = location.longitude
+                latitude = location.latitude
             }
 
             sapServiceManager.openODataStore {
@@ -159,12 +159,16 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager,p
                 }
 
                 override fun onResponse(call: Call, response: Response) {
-                    val type = object : TypeToken<HashMap<String, Int>>() {}.type
-                    val dataMap:HashMap<String,Int> = gson.fromJson(response.body()!!.string(), type)
+                    try {
+                        val type = object : TypeToken<HashMap<String, Int>>() {}.type
+                        val dataMap: HashMap<String, Int> = gson.fromJson(response.body()!!.string(), type)
 
-                    Log.e(TAG,dataMap["PREDICTED_COMFORT_LEVEL"].toString())
-                    mlServiceStatus = true
-                    success(dataMap["PREDICTED_COMFORT_LEVEL"]!!.toInt())
+                        Log.e(TAG, dataMap["PREDICTED_COMFORT_LEVEL"].toString())
+                        mlServiceStatus = true
+                        success(dataMap["PREDICTED_COMFORT_LEVEL"]!!.toInt())
+                    }catch (e:Exception){
+                        error(e)
+                    }
                 }
 
             })
