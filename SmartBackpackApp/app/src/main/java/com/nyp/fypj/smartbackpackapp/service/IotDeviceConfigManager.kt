@@ -1,7 +1,9 @@
 package com.nyp.fypj.smartbackpackapp.service
 
+import android.util.Log
 import com.nyp.fypj.smartbackpackapp.bluetooth.BtWrapper
 import com.sap.cloud.android.odata.sbp.UserDevicesType
+import com.sap.cloud.mobile.odata.LocalDateTime
 
 class IotDeviceConfigManager(
         private val btWrapper: BtWrapper,
@@ -18,10 +20,11 @@ class IotDeviceConfigManager(
         updateDevice.rememberOld()
     }
 
-    fun syncConfigToHana(success: () -> Unit,error: (e:RuntimeException) -> Unit){
+    fun syncConfigToHana(success: (updateDevice:UserDevicesType) -> Unit,error: (e:RuntimeException) -> Unit){
         sapServiceManager.openODataStore {
+            Log.e(TAG,"Updating:" + updateDevice.deviceName)
             sapServiceManager.getsbp().updateEntityAsync(updateDevice,{
-                success()
+                success(updateDevice)
             },{ e:RuntimeException ->
                 error(e)
             })
@@ -43,6 +46,19 @@ class IotDeviceConfigManager(
         updateDevice.minutesToRecordData = minutes
     }
 
+    fun changeDeviceName(name:String){
+        updateDevice.deviceName = name
+    }
+
+    fun updateLastOnline(){
+        updateDevice.lastOnline = LocalDateTime.now()
+        syncConfigToHana({
+            Log.e(TAG,"Last online updated")
+        },{
+            Log.e(TAG,it.message)
+        })
+    }
+
     fun commitChanges(){
         btWrapper.changeDeviceMultipleSettings(listOfConfigToChange)
     }
@@ -53,6 +69,16 @@ class IotDeviceConfigManager(
         }else{
             return "N"
         }
+    }
+
+    fun toggleBuzzerNow(value: Boolean) {
+        updateDevice.configEnableBuzzer = convertBoolean(value)
+        btWrapper.changeDeviceSettings("CONFIG_ENABLE_BUZZER",value.toString())
+    }
+
+    fun toggleLedNow(value: Boolean) {
+        updateDevice.configEnableLed = convertBoolean(value)
+        btWrapper.changeDeviceSettings("CONFIG_ENABLE_LED",value.toString())
     }
 
     companion object {

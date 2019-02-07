@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/fragment_home_menu_connect"
+        android:icon="@drawable/ic_close_black_24dp"
+        android:title="Connect"
+        android:visible="true"
+        app:iconTint="@android:color/white"
+        app:showAsAction="ifRoom|withText" />
+
+
+    <item android:id="@+id/fragment_home_menu_sync"
+        android:icon="@drawable/ic_sync_black_24dp"
+        android:title="Refresh"
+        android:visible="true"
+        app:iconTint="@android:color/white"
+        app:showAsAction="ifRoom|withText" />
+</menu>

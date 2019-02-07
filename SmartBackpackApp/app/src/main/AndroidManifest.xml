@@ -5,6 +5,8 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-feature android:name="android.hardware.location.gps" />
 
     <application
         android:name=".app.SAPWizardApplication"
@@ -131,7 +133,8 @@
             android:theme="@android:style/Theme.Material.Dialog" />
         <activity
             android:name=".mdui.MainActivity"
-            android:label="@string/title_activity_main" />
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".mdui.IotBtTestingActivity"
             android:label="@string/title_activity_iot_bt_testing"></activity>

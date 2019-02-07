@@ -5,7 +5,18 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".mdui.MainActivity">
+    android:foregroundTintMode="screen"
+    tools:context=".mdui.MainActivity"
+    android:elevation="0dp">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/main_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="0dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"/>
 
     <com.sap.cloud.mobile.fiori.indicator.FioriProgressBar
         android:id="@+id/indeterminateBar"
@@ -25,11 +36,12 @@
         android:id="@+id/main_container"
         layout="@layout/content_main"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_toolbar" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

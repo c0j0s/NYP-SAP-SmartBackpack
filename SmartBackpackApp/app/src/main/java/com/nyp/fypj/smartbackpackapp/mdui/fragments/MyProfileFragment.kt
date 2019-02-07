@@ -8,40 +8,59 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.nyp.fypj.smartbackpackapp.R
+import com.nyp.fypj.smartbackpackapp.service.IotDataMLServiceManager
+import com.sap.cloud.android.odata.sbp.IotdeviceinfoType
+import com.sap.cloud.android.odata.sbp.UserDevicesType
+import com.sap.cloud.android.odata.sbp.UserinfosType
+import kotlinx.android.synthetic.main.fragment_my_profile.view.*
+import kotlinx.android.synthetic.main.notification_template_lines_media.view.*
+import android.app.AlarmManager
+import android.support.v4.content.ContextCompat.getSystemService
+import android.app.PendingIntent
+import android.content.Intent
+import com.nyp.fypj.smartbackpackapp.mdui.MainActivity
+import android.support.v4.app.ActivityCompat.finishAffinity
 
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Activities that contain this fragment must implement the
- * [MyProfileFragment.OnFragmentInteractionListener] interface
- * to handle interaction events.
- * Use the [MyProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- *
- */
+
+private const val USER_PROFILE = "userProfile"
+private const val USER_DEVICES = "userDevices"
+
 class MyProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var userProfile: UserinfosType
+    private lateinit var userDevices: ArrayList<IotdeviceinfoType>
     private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            try {
+                userProfile = it.getParcelable(USER_PROFILE)!!
+                userDevices = it.getParcelableArrayList(USER_DEVICES)!!
+            }catch (e:Exception){
+                val intent = Intent(activity, MainActivity::class.java)
+                this.startActivity(intent)
+            }
         }
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_profile, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_my_profile, container, false)
+        activity!!.title = "My Profile"
+        rootView.ph_profile_ovp.headline = userProfile.name
+        rootView.ph_profile_ovp.subheadline = userProfile.userId
+        rootView.ph_profile_ovp.description = if(userProfile.gender == "M") "Male" else "Female" + ", ${userProfile.race}"
+
+        rootView.spf_asthmatic_level.value = userProfile.asthmaticDesc
+        rootView.spf_dob_age.value = "${userProfile.dob.date}, ${userProfile.age}"
+        rootView.spf_user_contact.value = userProfile.contactNo
+        rootView.spf_user_address.value = "${userProfile.userCity}, ${userProfile.userState}, ${userProfile.userCountry}".toLowerCase()
+        return rootView
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -80,21 +99,15 @@ class MyProfileFragment : Fragment() {
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MyProfileFragment.
-         */
-        // TODO: Rename and change types and number of parameters
+
+        private const val TAG = "MyProfileFragment"
+
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                MyProfileFragment().apply {
+        fun newInstance(param1: UserinfosType, param2: ArrayList<UserDevicesType>) =
+                HomeFragment().apply {
                     arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
+                        putParcelable(USER_PROFILE, param1)
+                        putParcelableArrayList(USER_DEVICES, param2)
                     }
                 }
     }

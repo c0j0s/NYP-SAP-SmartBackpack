@@ -12,7 +12,7 @@
     <string name="title_notifications">Notifications</string>
     <string name="navigation_my_profile">My Profile</string>
     <string name="navigation_my_devices">My Backpacks</string>
-    <string name="navigation_home">Home</string>
+    <string name="navigation_home">Backpack</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
