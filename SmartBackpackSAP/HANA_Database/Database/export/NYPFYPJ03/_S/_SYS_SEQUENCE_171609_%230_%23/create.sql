@@ -1,0 +1,1 @@
+CREATE SEQUENCE "NYPFYPJ03"."_SYS_SEQUENCE_171609_#0_#" RESET BY select ifnull(MAP( mod((max( "DATA_ID") - (1) ),1),  0, max("DATA_ID") +1,  max("DATA_ID") - mod((max( "DATA_ID") - (1)), 1 ) +1 ) , 1) from "NYPFYPJ03"."IOT_DATA"

@@ -1,7 +1,7 @@
 # SmartBackpackML
 The machine learning component of the entire SmartBackpack solution. 
 
-Due to technical competency level and time constraint, this component might remain in ideation, design and planing phase.  
+Due to technical competency level and time constraint, this component might remain in prototype phase.  
 
 The resources in this folder might be the remains of experimentations and technical research projects, therefore it would not have any implementation values.
 
@@ -33,3 +33,15 @@ __Generated Dataset:__
 All input features except user feedback comfort level will be generated randonly with defined limits configured in the manifest file.
 
 user feedback comfort level will be determinded by inputing the random values generated through handcrafted conditions to output level value.
+
+__Training and Testing Demo Model__
+SmartBackpack_ML_Keras_Training and SmartBackpack_ML_Keras_Predict is the model training and testing scripts respectively  
+
+__Deploying Demo Model__  
+SmartBackpack_ML_Keras_Server is a python flask server that loads pre-trained demo models and expose the inputs to http requestes for SmartBackpackApp to interact with.  
+
+To start flask service:  
+```sh
+    cd SmartBackpackIOT/
+    sudo python3 SmartBackpack_ML_Keras_Server.py >/dev/null 2>&1 &
+```

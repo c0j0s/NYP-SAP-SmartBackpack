@@ -12,7 +12,7 @@ Services writen in Python for Raspberry Pi to handle sensor data and communicati
 An Android companion app that is responsible for user interactions with SmartBackpackIOT, and SAP Services as well.
 
 ### SmartBackpackML
-Pending review
+A simple tensorflow keras model trained on generated data to demonstrate the complete Smart Backpack solution
 
 ### SAP Cloud Platform
 Utilises SAP Cloud Platform Services to power IOT Device.
