@@ -385,6 +385,9 @@ def readTempConfig():
     global buzzer
     global led_controller
     global countdown_to_record_data
+    global minute_to_record_data
+
+    print("[CONFIG] Check for config: CONFIG_ENABLE_BUZZER:{} | CONFIG_ENABLE_LED:{} | MINUTES_TO_RECORD_DATA:{}".format(str(buzzer.enable),str(led_controller.enable),str(minute_to_record_data)))
 
     temp_config_buzzer = redis_cursor.get("CONFIG_ENABLE_BUZZER")
     if int(temp_config_buzzer) != int(buzzer.enable):
@@ -395,9 +398,11 @@ def readTempConfig():
     if int(temp_config_led) != int(led_controller.enable):
         led_controller.toggleEnable(temp_config_led)
         print("[CONFIG] Changes Detected: led_controller -> " + str(led_controller.enable))
+        led_controller.updateAllLEDState()
 
     temp_minute_to_record_data = redis_cursor.get("MINUTES_TO_RECORD_DATA")
     if float(temp_minute_to_record_data) != float(minute_to_record_data):
+        minute_to_record_data = temp_minute_to_record_data
         countdown_to_record_data = calIntervalNeeded(float(temp_minute_to_record_data),seconds_to_update_data)
         print("[CONFIG] Changes Detected: countdown_to_record_data -> " + str(countdown_to_record_data))
 

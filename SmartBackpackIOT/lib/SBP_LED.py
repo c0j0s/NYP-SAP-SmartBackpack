@@ -6,16 +6,24 @@ class SBP_LED:
         self.LED = LED
         self.debug = debug
         self.enable = enable
+        self.isLit = 0
         grovepi.pinMode(LED,"OUTPUT")
     
+    def toggleEnable(self,enable):
+        self.enable = int(enable)
+
     def on(self):
         if self.debug:
             print("[LED] on: " + str(self.LED) + " mode:" + str(self.enable))
-        grovepi.digitalWrite(self.LED,self.enable)
+
+        print("[LED] on: " + str(self.LED) + " mode:" + str(self.enable))
+        self.isLit = self.enable
+        grovepi.digitalWrite(self.LED,int(self.enable))
 
     def off(self):
         if self.debug:
             print("[LED] off: " + str(self.LED) + " mode:" + str(self.enable))
+        self.isLit = 0
         grovepi.digitalWrite(self.LED,0)
 
     def litForSeconds(self,seconds):

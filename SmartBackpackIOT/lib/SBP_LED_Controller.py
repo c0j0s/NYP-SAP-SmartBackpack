@@ -12,6 +12,8 @@ class SBP_LED_Controller:
 
     def toggleEnable(self,enable):
         self.enable = enable
+        for key, led in self.led_port_dist.items():
+            led.toggleEnable(enable)
 
     def set_LED_switch_interval(self,seconds = 1):
         self.led_switch_interval = seconds
@@ -23,16 +25,17 @@ class SBP_LED_Controller:
         return self.led_port_dist[name]
 
     def litSingleLED(self,name):
-        if self.enable is not 0:
+        print("[SBP_LED_Controller] litSingleLED enable state " + str(self.enable))
+        if self.enable != 0:
             for key, led in self.led_port_dist.items():
-                if key is name:
+                if key == name:
                     led.on()
                 else:
                     led.off()
                 time.sleep(self.led_switch_interval)
     
     def litMultipleLED(self,namelist):
-        if self.enable is not 0:
+        if self.enable != 0:
             for key, led in self.led_port_dist.items():
                 if key in namelist:
                     led.on()
@@ -41,9 +44,17 @@ class SBP_LED_Controller:
                 time.sleep(self.led_switch_interval)
 
     def offAllLED(self):
-        if self.enable is not 0:
+        if self.enable != 0:
             for key, led in self.led_port_dist.items():
                 led.off()
                 time.sleep(self.led_switch_interval)
             
+    def updateAllLEDState(self):
+        for key, led in self.led_port_dist.items():
+            if led.isLit == 1:
+                if self.enable == 1:
+                    led.on()
+                else:
+                    led.off()
+            time.sleep(self.led_switch_interval/2)
 

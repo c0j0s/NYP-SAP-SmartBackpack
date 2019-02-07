@@ -13,14 +13,14 @@
         },
         "sensors":{
             "particle": "/dev/ttyAMA0",
-            "temp_hum": 5,
-            "button":8
+            "temp_hum": 8,
+            "button":5
         },
         "actuators":{
             "led_green":4,
             "led_blue":3,
             "led_red":2,
-            "buzzer":6
+            "buzzer":5
         }
     },
     "env":{

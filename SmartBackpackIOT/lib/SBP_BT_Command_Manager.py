@@ -174,7 +174,7 @@ class SBP_BT_Command_Manager:
         time.sleep(1)
         os.system("sudo reboot")
 
-    def changeDeviceConfigs(self,config_file):
+    def changeDeviceConfigs(self,config_file,redis_cursor):
 
         with open(config_file) as f:
             config = json.load(f)
@@ -203,14 +203,6 @@ class SBP_BT_Command_Manager:
             "message":"Config Changed"
         }
         self.client.send(self.toBTObject(self.command.function_code,output,"EOT"))
-
-        try:
-            #restart the sensor service in order to load the new configurations
-            print("[changeDeviceConfigs] Restarting sensor service")
-            os.system("sudo systemctl restart SBP_Sensor_Server.service")
-        except:
-            print("[changeDeviceConfigs] Error occurred while restarting sensor service")
-            pass
 
     def toggle_debug(self,config_file):
         with open(config_file) as f:
