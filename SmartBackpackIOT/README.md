@@ -74,9 +74,6 @@ Others:
             "enable_led":0,
             "minute_to_record_data":0.2,
             "seconds_to_update_data":5,
-            "humidity_range":{
-                "//Not final"
-            }
         }
     }
 }
@@ -90,7 +87,7 @@ The entire transmission string in __JSON__ array format consist of 3 main parts:
     "function_code":"",
     "data":"",
     "end_code":"",
-    "debug":"debug info [optional], only trassmited in debug mode"
+    "debug":"debug info [optional]"
 }
 ```
 __Function code__  
@@ -105,19 +102,20 @@ The first array item is reserved for function identifier code
 |:-------------- |:-----------------------------------|:--------- |
 | 00000 | terminate bluetooth connections             | DISCONNECT |
 | 10000 | restart device                              | REBOOT_DEVICE |
-| 11000 | restart sensor server                       ||
+| 11000 | restart sensor server                       | RESTART_SENSOR_SERVICE|
 | 11500 | get the status of sensor server             | GET_SENSOR_STATUS|
-| 12000 | restart bluetooth server [NOT IMPLEMENTED]  ||
-| 12500 | get the status of bluetooth server          |GET_BLUETOOTH_STATUS|
+| 12000 | restart bluetooth server [NOT IMPLEMENTED]  | RESTART_BLUETOOTH_SERVICE|
+| 12500 | get the status of bluetooth server          | GET_BLUETOOTH_STATUS|
 | 30000 | get real time sensor reading                | GET_SENSOR_DATA|
-| 31000 | set user perferences [NOT IMPLEMENTED]      ||
+| 31000 | set user perferences                        | CHANGE_DEVICE_SETTINGS|
 | 32000 | get holding_zone data                       | SYNC_HOLDING_ZONE |
 | 32000 | flush holding_zone                          | FLUSH_HOLDING_ZONE |
-| 41000 | toggle server debug mode                    | TOOGLE_DEBUG|
-| 42000 | execute custom shell commands               ||
+| 41000 | toggle server debug mode                    | TOOGLE_DEBUG |
+| 42000 | execute custom shell commands               | EXE_SH |
+| 43000 | get network IP address                      | GET_NETWORK_IP |
 
 __Data__  
-The Second array item is reserved for data body  
+The second array item is reserved for data body  
 ```JSON
 {
     "data":{
@@ -136,7 +134,7 @@ Holding zone synchronisation syntax:
 ```
 
 __End Status Code__  
-The Third array item is reserved for transmission ending status  
+The third array item is reserved for transmission ending status  
 ```JSON
 {
     "end_code":"EOT"
@@ -144,27 +142,11 @@ The Third array item is reserved for transmission ending status
 ```
 
 #### Proposed status codes:  
-| Status Code              | Description                               |
-| -------------------------|----------------------------------------     |
+| Status Code | Description                    |
+| ----|----------------------------------------|
 | EOT | end of transmission |
 | MSE | maintain session, more data transmitting |
 | ERR | error occured, transmission terminated and services schedule for reboot |
-
-#### Previous version of bluetooth communication command syntax
-| BT Commands              | Functionality                               | Sample Output  |
-| -------------------------|----------------------------------------     | --------------------|
-| get_sensor_status        | get the status of sensor server             | Active/dead |
-| get_bt_status            | get the status of bluetooth server          | Active/dead |
-| get_sensor_data          | get real time sensor reading                | JSON:  {humidity:0,temperature:0}|
-| set_user_config_(JSON)   | set user perferences [NOT IMPLEMENTED]      |Success/fail|
-| sync_holding_zone        | get holding_zone SQL data                   | INSERT INTO...|
-| cmd_reboot_now           | restart device                              | - |
-| cmd_reboot_sensor_server | restart sensor server                       | Active/dead |
-| cmd_reboot_bt_server     | restart bluetooth server [NOT IMPLEMENTED]  | - |
-| cmd_disconnect           | disconnect bluetooth connections            | Disconnected |
-| cmd_toggle_debug         | toggle server debug mode                    | Debug:True/False |
-| sh_(Bash commands)       | execute custom shell commands               | [Command output] |
-
 
 # SmartBackpackIOT Project Structures
 ### Main Service Scripts:  

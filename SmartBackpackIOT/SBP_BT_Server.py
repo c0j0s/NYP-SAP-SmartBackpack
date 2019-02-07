@@ -135,6 +135,8 @@ def main():
                 command.toggle_debug(config_file)
             elif received.function_code == "42000":
                 command.sh_execute_command(command)
+            elif received.function_code == "43000":
+                command.get_network_ip()
             else:
                 command.message("Function Not Supported")
             

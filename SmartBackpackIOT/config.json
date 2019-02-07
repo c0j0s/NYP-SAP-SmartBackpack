@@ -2,25 +2,25 @@
     "device":{
         "services":{
             "sensor":{
-                "version":"0.0.0.2"
+                "version":"3"
             },
             "bluetooth":{
-                "version":"0.0.0.3"
+                "version":"4"
             },
             "monitoring":{
-                "version":"0.0.0.1"
+                "version":"1"
             }
         },
         "sensors":{
             "particle": "/dev/ttyAMA0",
             "temp_hum": 8,
-            "button":5
+            "button": 5
         },
         "actuators":{
-            "led_green":4,
-            "led_blue":3,
-            "led_red":2,
-            "buzzer":5
+            "led_green": 4,
+            "led_blue": 3,
+            "led_red": 2,
+            "buzzer": 5
         }
     },
     "env":{
@@ -43,21 +43,7 @@
             "CONFIG_ENABLE_BUZZER":0,
             "CONFIG_ENABLE_LED":1,
             "MINUTES_TO_RECORD_DATA":0.1,
-            "SECONDS_TO_UPDATE_DATA":5,
-            "humidity_range":{
-                "red":{
-                    "min":30,
-                    "max":50
-                },
-                "blue":{
-                    "min":30,
-                    "max":10
-                },
-                "green":{
-                    "min":0,
-                    "max":10
-                }
-            }
+            "SECONDS_TO_UPDATE_DATA":5
         }
     }
 }

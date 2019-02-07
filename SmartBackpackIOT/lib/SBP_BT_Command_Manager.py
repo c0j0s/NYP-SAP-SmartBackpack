@@ -3,6 +3,7 @@ import time
 import os
 import subprocess
 import redis
+import socket
 
 class BtCommandObject:
     def newCommandObject(self, function_code, data, end_code, debug = "",debug_mode=False):
@@ -224,6 +225,17 @@ class SBP_BT_Command_Manager:
 
     def sh_execute_command(self,command):
         pass
+
+    def get_network_ip(self):
+        ip = ""
+        try:
+            ip = (([ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] or [[(s.connect(("8.8.8.8", 53)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]]) + ["no IP found"])[0]
+        except:
+            ip = "Cant get IP"
+        output = {
+            'message':ip
+        }
+        self.client.send(self.toBTObject(self.command.function_code,output,"EOT"))
 
     def message(self,message):
         output = {
