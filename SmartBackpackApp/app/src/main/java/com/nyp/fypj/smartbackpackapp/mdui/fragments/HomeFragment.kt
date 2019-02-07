@@ -225,7 +225,7 @@ class HomeFragment : Fragment() {
 
                     Toast.makeText(activity,"Backpack Connected",Toast.LENGTH_SHORT).show()
 
-                    connectStatus = true
+                    updateHeaderConnectionStatusIndicator(true)
 
                     object : Thread() {
                         override fun run() {
@@ -245,18 +245,18 @@ class HomeFragment : Fragment() {
                 }
                 Constants.HANDLER_ACTION.DISCONNECTED.value->{
                     Toast.makeText(activity,"Backpack Disconnected",Toast.LENGTH_SHORT).show()
-                    connectStatus = false
+                    updateHeaderConnectionStatusIndicator(false)
                 }
                 Constants.HANDLER_ACTION.CONNECT_LOST.value->{
                     Toast.makeText(activity,"Backpack Disconnected",Toast.LENGTH_SHORT).show()
-                    connectStatus = false
+                    updateHeaderConnectionStatusIndicator(false)
                 }
                 Constants.HANDLER_ACTION.CONNECT_ERROR.value->{
                     Toast.makeText(activity,"Unable to Contact Backpack",Toast.LENGTH_SHORT).show()
                     pb_loading.visibility = View.GONE
                     updateDeviceConfigCard()
                     tv_comfort_level_indicator.text = "ML Bot Can't Find Your Backpack"
-                    connectStatus = false
+                    updateHeaderConnectionStatusIndicator(false)
                 }
                 Constants.HANDLER_ACTION.COMMAND_SEND.value->{
                     Log.i(TAG,"Command send")
@@ -395,6 +395,7 @@ class HomeFragment : Fragment() {
                         }
                         Constants.BT_FUN_CODE.TOGGLE_DEBUG.code->{
 
+                            Log.i(TAG,"Debug toggled")
 
                         }
                         else -> {
@@ -407,7 +408,7 @@ class HomeFragment : Fragment() {
                 }
                 Constants.HANDLER_ACTION.RECEIVE_ERROR.value->{
 
-
+                    Log.i(TAG,"Receiving error: " + msg.what)
 
                 }
                 else -> {
@@ -437,6 +438,15 @@ class HomeFragment : Fragment() {
         tv_buzzer_config.text = if (connectedDevice.configEnableBuzzer == "Y") "Enabled" else "Disabled"
         tv_led_config.text = if (connectedDevice.configEnableLed == "Y") "Enabled" else "Disabled"
         tv_data_record_interval_config.text = connectedDevice.minutesToRecordData.toString()
+    }
+
+    private fun updateHeaderConnectionStatusIndicator(status:Boolean){
+        if(status){
+            oh_connect_status.setTextColor(activity!!.getColor(R.color.sap_ui_positive_text))
+        }else{
+            oh_connect_status.setTextColor(activity!!.getColor(R.color.sap_ui_negative_text))
+        }
+        connectStatus = status
     }
 
     private fun setHoldingZoneSyncCompleteState() {

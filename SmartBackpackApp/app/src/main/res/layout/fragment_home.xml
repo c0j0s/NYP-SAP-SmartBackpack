@@ -27,6 +27,13 @@
             app:layout_constraintTop_toTopOf="parent"
             app:subheadline="...">
 
+            <TextView
+                android:id="@+id/oh_connect_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="O"
+                android:textColorLink="@color/sap_ui_negative_text"
+                android:visibility="visible" />
         </com.sap.cloud.mobile.fiori.object.ObjectHeader>
 
         <ScrollView

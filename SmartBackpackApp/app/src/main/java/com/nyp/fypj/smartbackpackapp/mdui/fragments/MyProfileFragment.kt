@@ -22,6 +22,7 @@ import android.view.*
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.nyp.fypj.smartbackpackapp.mdui.IotBtTestingActivity
 
 
 private const val USER_PROFILE = "userProfile"
@@ -73,6 +74,10 @@ class MyProfileFragment : Fragment() {
         when (item.itemId) {
             R.id.fragment_my_profile_menu_connect -> {
                 showEditProfileDialog()
+            }
+            R.id.fragment_my_profile_debug -> {
+                var debugIntent = Intent(activity,IotBtTestingActivity::class.java)
+                startActivity(debugIntent)
             }
         }
         return false

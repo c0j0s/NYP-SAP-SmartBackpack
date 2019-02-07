@@ -120,6 +120,7 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager?,
             sapServiceManager.getsbp().getSuggestionsAsync(suggestionQuery, {
                 suggestionList:List<SuggestionsType> ->
                 if (suggestionList.isNotEmpty()){
+                    suggestionList.shuffled()
                     success(suggestionList[0])
                 }else{
                     error("No suggestions found")

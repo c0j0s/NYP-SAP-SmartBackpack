@@ -28,15 +28,6 @@ class IotBtTestingActivity : Activity() {
 
     var btWrapper:BtWrapper? = null
 
-    private val executor = Executors.newSingleThreadExecutor()
-
-    private val INPUT_SIZE = 5
-    private val INPUT_NAME = "input_tensor"
-    private val OUTPUT_NAME = "output_pred"
-
-    private val MODEL_FILE = "file:///android_asset/sbp_model.tflite"
-    private val LABEL_FILE = "file:///android_asset/sbp_labels.txt"
-
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +36,9 @@ class IotBtTestingActivity : Activity() {
         et_input = findViewById(R.id.et_input)
         et_output = findViewById(R.id.et_output)
         btn_send = findViewById(R.id.btn_send)
-        btn_ml = findViewById(R.id.btn_ml)
         wv_reference = findViewById(R.id.wv_reference)
 
-        //btWrapper = BtWrapper(uiHandlers)
+        btWrapper = BtWrapper(uiHandlers)
         wv_reference!!.loadUrl("https://github.com/c0j0s/SmartBackpack/blob/master/SmartBackpackIOT/README.md#iot-device-function-codes")
 
         btn_send!!.setOnClickListener {

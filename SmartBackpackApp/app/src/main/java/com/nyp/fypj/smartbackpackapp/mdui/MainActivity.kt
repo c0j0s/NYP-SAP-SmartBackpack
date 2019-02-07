@@ -253,7 +253,7 @@ class MainActivity : AppCompatActivity() {
                                                 active = homeFragment
                                                 navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-                                                if(deviceList.size == 0){
+                                                if(deviceList.isEmpty()){
                                                     homeDisabled = true
                                                     active = myDevicesFragment
                                                 }
