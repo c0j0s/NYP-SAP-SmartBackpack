@@ -100,7 +100,7 @@ class SBP_BT_Command_Manager:
         files_renamed = []
         files_transmitted = []
 
-        if len(holding_zone_files) == 0:
+        if len(holding_zone_files) != 0:
             end_index = len(holding_zone_files) - 1
             end_code = "MSE"
             last_line = ""
@@ -141,6 +141,7 @@ class SBP_BT_Command_Manager:
 
             print("[sync_holding_zone] File transmitted: " + str(files_renamed))
         else:
+            print("[sync_holding_zone] Holding zone empty ending function")
             self.client.send(self.toBTObject(self.command.function_code,{},"EOT"))
 
 
