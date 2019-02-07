@@ -102,6 +102,7 @@ The first array item is reserved for function identifier code
 |:-------------- |:-----------------------------------|:--------- |
 | 00000 | terminate bluetooth connections             | DISCONNECT |
 | 10000 | restart device                              | REBOOT_DEVICE |
+| 10500 | shutdown device                             |  |
 | 11000 | restart sensor server                       | RESTART_SENSOR_SERVICE|
 | 11500 | get the status of sensor server             | GET_SENSOR_STATUS|
 | 12000 | restart bluetooth server [NOT IMPLEMENTED]  | RESTART_BLUETOOTH_SERVICE|

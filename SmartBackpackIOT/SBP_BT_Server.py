@@ -115,6 +115,8 @@ def main():
                 closing(server_sock,client_sock)
             elif received.function_code == "10000":
                 command.restart_device()
+            elif received.function_code == "10500":
+                command.shutdown_device()
             elif received.function_code == "11000":
                 command.restart_sensor_service()
             elif received.function_code == "11500":

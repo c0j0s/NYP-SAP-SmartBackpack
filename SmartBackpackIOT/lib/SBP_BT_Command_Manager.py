@@ -176,6 +176,14 @@ class SBP_BT_Command_Manager:
         time.sleep(1)
         os.system("sudo reboot")
 
+    def shutdown_device(self):
+        output = {
+            'message':'System shutting down now'
+        }
+        self.client.send(self.toBTObject(self.command.function_code,output,"EOT"))
+        time.sleep(1)
+        os.system("sudo shutdown now")
+
     def changeDeviceConfigs(self,config_file,redis_cursor):
 
         with open(config_file) as f:
