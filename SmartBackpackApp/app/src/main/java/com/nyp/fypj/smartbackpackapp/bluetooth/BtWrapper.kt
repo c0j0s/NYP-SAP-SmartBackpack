@@ -90,6 +90,10 @@ class BtWrapper(private val displayHandler : Handler) {
         sendCommand(Constants.BT_FUN_CODE.TOGGLE_DEBUG)
     }
 
+    fun getNetworkIp(){
+        sendCommand(Constants.BT_FUN_CODE.GET_NETWORK_IP)
+    }
+
     fun restartDevice(){
         sendCommand(Constants.BT_FUN_CODE.REBOOT_DEVICE)
     }

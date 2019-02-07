@@ -14,14 +14,15 @@ An Android companion app that is responsible for user interactions with SmartBac
 | 10000 | restart device                              | Toast |
 | 11000 | restart sensor server                       ||
 | 11500 | get the status of sensor server             | Toast |
-| 12000 | restart bluetooth server [NOT IMPLEMENTED]  ||
+| 12000 | restart bluetooth server   ||
 | 12500 | get the status of bluetooth server          | Toast |
 | 30000 | get real time sensor reading                | Display in home page |
-| 31000 | set user perferences [NOT IMPLEMENTED]      ||
+| 31000 | set user perferences       ||
 | 32000 | get holding_zone data                       | Upload to Hana DB |
 | 32000 | flush holding_zone                          | Toast |
 | 41000 | toggle server debug mode                    | Toast |
 | 42000 | execute custom shell commands               ||
+| 43000 | get IOT Device network IP address        ||
 | 99999 | Error Occurred in IOT Device               | Toast |
 
 ## Wrapper Class Implementation Guide
@@ -60,6 +61,8 @@ A wrapper class that encapsulates bluetooth command syntax into simple functions
 
     fun toggleDebug()
 
+    fun getNetworkIp()
+
     fun restartDevice()
 
     fun exeShCommand(command:String)
@@ -83,13 +86,11 @@ A wrapper class that handles functions to change IOT device configs.json and fun
     iotDeviceConfigManager.commitChanges()
 
     //sync to database
-    iotDeviceConfigManager.syncConfigToHana(
-        {
-            //success callback
-        },
-        { e:RuntimeException ->
-            //error callback
-        })
+    iotDeviceConfigManager.syncConfigToHana({
+        //success callback
+    },{ e:RuntimeException ->
+        //error callback
+    })
 ```
 
 #### Functions
@@ -101,6 +102,10 @@ A wrapper class that handles functions to change IOT device configs.json and fun
     fun toggleLed(enable:Boolean)
 
     fun changeHoldingZoneRecordInterval(minutes:Int)
+
+    fun toggleBuzzerNow(enable:Boolean)
+
+    fun toggleLedNow(enable:Boolean)
 
     fun commitChanges()
 ```
