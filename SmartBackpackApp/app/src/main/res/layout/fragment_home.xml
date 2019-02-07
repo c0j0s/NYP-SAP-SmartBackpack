@@ -74,7 +74,7 @@
                                 android:layout_marginTop="8dp"
                                 android:layout_marginBottom="8dp"
                                 android:layout_weight="1"
-                                android:src="@drawable/ic_sentiment_satisfied_black_24dp"
+                                android:src="@drawable/ic_sentiment_neutral_black_24dp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />

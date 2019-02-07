@@ -94,11 +94,19 @@ class HomeFragment : Fragment() {
         iotDataMLServiceManager = IotDataMLServiceManager(sapServiceManager,configurationData)
 
         rootView.ib_change_device_config.setOnClickListener {
-            showChangeDeviceConfigDialog(container)
+            if (connectStatus) {
+                showChangeDeviceConfigDialog(container)
+            }else{
+                Toast.makeText(activity,"Backpack not connected", Toast.LENGTH_SHORT).show()
+            }
         }
 
         rootView.btn_give_feedback.setOnClickListener {
-            showGiveFeedbackDialog(container)
+            if (connectStatus) {
+                showGiveFeedbackDialog(container)
+            }else{
+                Toast.makeText(activity,"Backpack not connected", Toast.LENGTH_SHORT).show()
+            }
         }
 
         recyclerView = rootView.findViewById<RecyclerView>(R.id.rcv_iot_data).apply {
@@ -146,10 +154,8 @@ class HomeFragment : Fragment() {
             R.id.fragment_home_menu_connect -> {
                 if(!connectStatus) {
                     btWrapper.connectDevice(connectedDevice.deviceAddress)
-                    item.icon = activity!!.getDrawable(R.drawable.ic_close_black_24dp)
                 }else{
                     btWrapper.disconnectDevice()
-                    item.icon = activity!!.getDrawable(R.drawable.ic_add_circle_outline_black_24dp)
                 }
                 return true
             }
@@ -248,6 +254,8 @@ class HomeFragment : Fragment() {
                 Constants.HANDLER_ACTION.CONNECT_ERROR.value->{
                     Toast.makeText(activity,"Unable to Contact Backpack",Toast.LENGTH_SHORT).show()
                     pb_loading.visibility = View.GONE
+                    updateDeviceConfigCard()
+                    tv_comfort_level_indicator.text = "ML Bot Can't Find Your Backpack"
                     connectStatus = false
                 }
                 Constants.HANDLER_ACTION.COMMAND_SEND.value->{
