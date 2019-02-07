@@ -19,6 +19,7 @@ import android.util.Log
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
+import com.google.common.collect.Ordering
 import com.nyp.fypj.smartbackpackapp.Constants
 import com.nyp.fypj.smartbackpackapp.R
 import com.nyp.fypj.smartbackpackapp.app.ConfigurationData
@@ -114,25 +115,7 @@ class HomeFragment : Fragment() {
             layoutManager = viewManager
         }
 
-        Thread(Runnable {
-            sapServiceManager.openODataStore {
-                val iotDataQuery = DataQuery()
-                        .filter(IotDataType.userId.equal(userProfile.userId))
-                        .filter(IotDataType.deviceSn.equal(connectedDevice.deviceSn))
-                        .top(10)
-
-                Log.e(TAG,iotDataQuery.toString())
-                sapServiceManager.getsbp().getIotDataAsync(iotDataQuery,
-                        {iotDataList:List<IotDataType>->
-
-                            viewAdapter = IotDataAdapter(iotDataList)
-                            activity!!.runOnUiThread { recyclerView.adapter = viewAdapter }
-                        },
-                        {re:RuntimeException->
-                            Log.d(TAG, "An error occurred during async query:  "  + re.message)
-                        })
-            }
-        }).start()
+        refreshIotDataTable()
 
         return rootView
     }
@@ -211,6 +194,29 @@ class HomeFragment : Fragment() {
 
         pb_syncing.progress = 20
         btWrapper.syncHoldingZone()
+    }
+
+    private fun refreshIotDataTable() {
+        Thread(Runnable {
+            sapServiceManager.openODataStore {
+                val iotDataQuery = DataQuery()
+                        .filter(IotDataType.userId.equal(userProfile.userId))
+                        .filter(IotDataType.deviceSn.equal(connectedDevice.deviceSn))
+                        .orderBy(IotDataType.recordedOn, SortOrder.DESCENDING)
+                        .top(10)
+
+                Log.e(TAG,iotDataQuery.toString())
+                sapServiceManager.getsbp().getIotDataAsync(iotDataQuery,
+                        {iotDataList:List<IotDataType>->
+
+                            viewAdapter = IotDataAdapter(iotDataList)
+                            activity!!.runOnUiThread { recyclerView.adapter = viewAdapter }
+                        },
+                        {re:RuntimeException->
+                            Log.d(TAG, "An error occurred during async query:  "  + re.message)
+                        })
+            }
+        }).start()
     }
 
     private val mHandler = @SuppressLint("HandlerLeak")
@@ -452,6 +458,7 @@ class HomeFragment : Fragment() {
     private fun setHoldingZoneSyncCompleteState() {
         pb_syncing.progress = 100
         pb_syncing.visibility = View.GONE
+        refreshIotDataTable()
         Toast.makeText(activity, "Backpack synchronised", Toast.LENGTH_SHORT).show()
     }
 
