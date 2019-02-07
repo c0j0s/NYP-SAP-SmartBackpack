@@ -88,11 +88,10 @@ class HomeFragment : Fragment() {
         sapServiceManager = (activity!!.application as SAPWizardApplication).sapServiceManager
         configurationData = (activity!!.application as SAPWizardApplication).configurationData
         btWrapper = BtWrapper(mHandler)
-        iotDeviceConfigManager = IotDeviceConfigManager(btWrapper,sapServiceManager,userProfile.userId,connectedDevice.deviceSn)
-        iotDataMLServiceManager = IotDataMLServiceManager(sapServiceManager,configurationData)
-
         connectedDevice = userDevices[0]
         btWrapper.connectDevice(connectedDevice.deviceAddress)
+        iotDeviceConfigManager = IotDeviceConfigManager(btWrapper,sapServiceManager,userProfile.userId,connectedDevice.deviceSn)
+        iotDataMLServiceManager = IotDataMLServiceManager(sapServiceManager,configurationData)
 
         rootView.ib_change_device_config.setOnClickListener {
             showChangeDeviceConfigDialog(container)
@@ -221,7 +220,7 @@ class HomeFragment : Fragment() {
                         override fun run() {
                             try {
                                 while (true) {
-                                    Thread.sleep(5000)
+                                    Thread.sleep(7000)
                                     if(connectStatus)
                                         btWrapper.getSensorData()
                                 }
@@ -505,6 +504,7 @@ class HomeFragment : Fragment() {
                     connectedDevice.configEnableLed = if(dialogView.sfc_enable_led.value) "Y" else "N"
                     connectedDevice.minutesToRecordData = dialogView.sl_record_interval.value
                     updateDeviceConfigCard()
+                    iotDeviceConfigManager.changeHoldingZoneRecordInterval(dialogView.sl_record_interval.value)
                     iotDeviceConfigManager.changeDeviceName(dialogView.spf_device_name.value.toString())
                     iotDeviceConfigManager.commitChanges()
 
@@ -540,7 +540,7 @@ class HomeFragment : Fragment() {
                 // Add action buttons
                 .setPositiveButton("Submit"
                 ) { dialog, _ ->
-                    iotDataMLServiceManager.setDataFeedback(activity!!,userProfile,connectedDevice,realTimeDate, dialogView.sl_feedback_level.value,{
+                    iotDataMLServiceManager.setDataFeedback(activity!!,userProfile,connectedDevice,realTimeDate,dialogView.sl_feedback_level.value,predictedComfortLevel,{
                         Toast.makeText(activity,"Thank you, I will get smarter next time.",Toast.LENGTH_SHORT).show()
                         dialog.dismiss()
                     },{

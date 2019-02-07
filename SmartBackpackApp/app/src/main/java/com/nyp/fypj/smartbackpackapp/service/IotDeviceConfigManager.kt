@@ -22,6 +22,7 @@ class IotDeviceConfigManager(
 
     fun syncConfigToHana(success: (updateDevice:UserDevicesType) -> Unit,error: (e:RuntimeException) -> Unit){
         sapServiceManager.openODataStore {
+            Log.e(TAG,"Updating:" + updateDevice.deviceName)
             sapServiceManager.getsbp().updateEntityAsync(updateDevice,{
                 success(updateDevice)
             },{ e:RuntimeException ->

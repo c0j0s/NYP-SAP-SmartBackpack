@@ -14,6 +14,15 @@ import com.sap.cloud.android.odata.sbp.UserDevicesType
 import com.sap.cloud.android.odata.sbp.UserinfosType
 import kotlinx.android.synthetic.main.fragment_my_profile.view.*
 import kotlinx.android.synthetic.main.notification_template_lines_media.view.*
+import android.app.AlarmManager
+import android.support.v4.content.ContextCompat.getSystemService
+import android.app.PendingIntent
+import android.content.Intent
+import com.nyp.fypj.smartbackpackapp.mdui.MainActivity
+import android.support.v4.app.ActivityCompat.finishAffinity
+
+
+
 
 private const val USER_PROFILE = "userProfile"
 private const val USER_DEVICES = "userDevices"
@@ -27,8 +36,13 @@ class MyProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            userProfile = it.getParcelable(USER_PROFILE)!!
-            userDevices = it.getParcelableArrayList(USER_DEVICES)!!
+            try {
+                userProfile = it.getParcelable(USER_PROFILE)!!
+                userDevices = it.getParcelableArrayList(USER_DEVICES)!!
+            }catch (e:Exception){
+                val intent = Intent(activity, MainActivity::class.java)
+                this.startActivity(intent)
+            }
         }
 
     }

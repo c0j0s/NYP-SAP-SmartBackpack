@@ -1,6 +1,6 @@
 {
   "ServiceUrl" : "https://mobile-c49f5a6cb.ap1.hana.ondemand.com/",
-  "MLServiceUrl" : "http://35.240.197.152/predict",
+  "MLServiceUrl" : "http://35.198.225.149/predict",
   "MLServiceAccount" : "mlservice",
   "MLServicePassword" : "passwd"
 }

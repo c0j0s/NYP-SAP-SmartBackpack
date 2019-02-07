@@ -39,8 +39,8 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager?,
     }
 
     @SuppressLint("MissingPermission")
-    fun setDataFeedback(activity:Context,userProfile:UserinfosType,connectedDevice:IotdeviceinfoType,realTimeData:IotDataType,level:Int,success:() -> Unit,error:(e:RuntimeException) -> Unit) {
-        if (level in 0..4) {
+    fun setDataFeedback(activity:Context,userProfile:UserinfosType,connectedDevice:IotdeviceinfoType,realTimeData:IotDataType,feedbackLevel:Int,predictedLevel:Int,success:() -> Unit,error:(e:RuntimeException) -> Unit) {
+        if (feedbackLevel in 0..4) {
 
             val lm: LocationManager = activity.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             var longitude = 0.0
@@ -72,6 +72,8 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager?,
                     createData.geoLat = latitude
                     createData.geoLng = longitude
 
+                    createData.userFeedbackComfortLevel = feedbackLevel
+                    createData.predictedComfortLevel = predictedLevel
 
                     sapServiceManager.getsbp().createEntityAsync(createData, {
                         success()
@@ -87,7 +89,6 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager?,
         }
     }
 
-    //NOT TESTED
     fun getFeedbackLabel(level:Int):String{
         if (level in 0..4) {
             return feedbackDescription[level]!!
@@ -148,7 +149,7 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager?,
 
         val requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonString)
         val request = Request.Builder()
-                .url("http://35.240.197.152/predict")
+                .url("http://35.198.225.149/predict")
                 .post(requestBody)
                 .build()
 
