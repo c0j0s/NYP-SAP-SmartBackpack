@@ -189,7 +189,7 @@ sap.ui.define([
 							selected:((oObject.CONFIG_ENABLE_BUZZER === "Y") ? true : false)
 						}),
 						new sap.m.CheckBox("input-enableled",{
-							text:"Enable LED [NOT IMPLEMENTED]",
+							text:"Enable LED ",
 							selected:((oObject.CONFIG_ENABLE_LED === "Y") ? true : false)
 						}),
 						],

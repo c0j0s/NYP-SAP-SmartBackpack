@@ -198,7 +198,7 @@ sap.ui.define([
 			this.pressDialog = new Dialog({
 				title: "Update user profile",
 				type: "Message",
-				contentWidth: "410px",
+				contentWidth: "415px",
 				content: [
 					new sap.m.Label({
 						text: "Personal Details",
@@ -262,8 +262,9 @@ sap.ui.define([
 						max: 4,
 						value: oObject.ASTHMATIC_LEVEL,
 						liveChange: this.handleAsthmaticSliderChanges,
-						width: "100%"
+						width: "95%"
 					}),
+					new sap.m.VBox({}),
 					new sap.m.Text("input-asthlevel-info", {
 						text: oObject.ASTHMATIC_LEVEL
 					}),
@@ -311,9 +312,7 @@ sap.ui.define([
 							GENDER: (gender === 0) ? "M" : "F",
 							DOB: "/Date(" + dob + ")/"
 						};
-						// console.log(oObject.DOB)
-						// console.log(sap.ui.getCore().byId("input-dob").getValue())
-						// console.log(oEntry);
+						
 						var that = this;
 						oModel.update("/user('" + oObject.USER_ID + "')", oEntry, {
 							success: function () {
@@ -403,7 +402,7 @@ sap.ui.define([
 						selected: true
 					}),
 					new sap.m.CheckBox("input-enableled", {
-						text: "Enable LED [NOT IMPLEMENTED]",
+						text: "Enable LED",
 						selected: true
 					}),
 				],
@@ -431,7 +430,6 @@ sap.ui.define([
 							CONFIG_ENABLE_LED: (enableled) ? "Y" : "N",
 							CONFIG_UPDATED_ON: "/Date(" + timeint + ")/",
 						};
-						console.log(oEntry);
 
 						oModel.create("/userDevices", oEntry, {
 							success: function () {
