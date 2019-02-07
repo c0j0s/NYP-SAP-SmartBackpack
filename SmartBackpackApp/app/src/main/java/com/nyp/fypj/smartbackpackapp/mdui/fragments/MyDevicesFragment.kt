@@ -10,10 +10,12 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.nyp.fypj.smartbackpackapp.R
 import com.sap.cloud.android.odata.sbp.IotdeviceinfoType
 import com.sap.cloud.android.odata.sbp.UserinfosType
 import kotlinx.android.synthetic.main.components_user_devices_list.view.*
+import kotlinx.android.synthetic.main.fragment_my_devices.view.*
 
 private const val USER_PROFILE = "userProfile"
 private const val USER_DEVICES = "userDevices"
@@ -49,6 +51,10 @@ class MyDevicesFragment : Fragment() {
             layoutManager = viewManager
             viewAdapter = UserDevicesAdapter(userDevices!!)
             adapter = viewAdapter
+        }
+
+        rootView.fab_my_devices.setOnClickListener {
+            Toast.makeText(activity,"Add Backpack Not Available",Toast.LENGTH_SHORT).show()
         }
 
         return rootView
