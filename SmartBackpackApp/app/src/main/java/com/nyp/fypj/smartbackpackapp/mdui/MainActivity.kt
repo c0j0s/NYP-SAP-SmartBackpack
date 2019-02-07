@@ -97,6 +97,7 @@ class MainActivity : AppCompatActivity() {
                 if(!homeDisabled) {
                     fm.beginTransaction().hide(active!!).show(homeFragment!!).commit()
                     active = homeFragment
+                    title = userDevices[0].deviceName
                 }else{
                     Toast.makeText(this,"No Backpack Connected, Please select a device from your backpack list",Toast.LENGTH_LONG).show()
                 }
@@ -220,57 +221,55 @@ class MainActivity : AppCompatActivity() {
                                 Log.e(TAG, "user " + userInfos.size.toString())
                                 if(userInfos.size == 1){
                                     userProfile = userInfos[0]
+
+                                    /*
+                                    Retrieve user devices from database
+                                     */
+                                    val userDeviceQuery = DataQuery()
+                                            .filter(IotdeviceinfoType.userId.equal(o.id))
+                                            .orderBy(IotdeviceinfoType.lastOnline)
+
+                                    sapServiceManager.getsbp().getIotdeviceinfoAsync(userDeviceQuery,
+                                            {deviceList:List<IotdeviceinfoType>->
+                                                Log.e(TAG, deviceList.size.toString())
+
+                                                userDevices.addAll(deviceList)
+
+                                                homeFragment = HomeFragment()
+                                                myDevicesFragment = MyDevicesFragment()
+                                                myProfileFragment = MyProfileFragment()
+
+                                                val fragmentBundles = Bundle()
+                                                fragmentBundles.putParcelable("userProfile",userProfile!!)
+                                                fragmentBundles.putParcelableArrayList("userDevices",userDevices)
+
+                                                homeFragment!!.arguments = fragmentBundles
+                                                myProfileFragment!!.arguments = fragmentBundles
+                                                myDevicesFragment!!.arguments = fragmentBundles
+
+                                                fm.beginTransaction().add(R.id.main_container, myProfileFragment!!, "3").hide(myProfileFragment!!).commit()
+                                                fm.beginTransaction().add(R.id.main_container, myDevicesFragment!!, "2").hide(myDevicesFragment!!).commit()
+                                                fm.beginTransaction().add(R.id.main_container,homeFragment!!, "1").show(homeFragment!!).commit()
+                                                active = homeFragment
+                                                navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
+                                                if(deviceList.size == 0){
+                                                    homeDisabled = true
+                                                    active = myDevicesFragment
+                                                }
+
+                                                loadingBar!!.visibility = View.INVISIBLE
+                                            },
+                                            {re:RuntimeException->
+                                                Log.d(TAG, "An error occurred during async query:  "  + re.message);
+                                                active = myDevicesFragment
+                                            })
                                 }
                             },
                             {re:RuntimeException->
                                 Log.d(TAG, "An error occurred during async query:  "  + re.message)
                                 active = myDevicesFragment
                             })
-
-                    /*
-                    Retrieve user devices from database
-                     */
-                    val userDeviceQuery = DataQuery()
-                            .filter(IotdeviceinfoType.userId.equal(o.id))
-                            .orderBy(IotdeviceinfoType.lastOnline)
-
-                    sapServiceManager.getsbp().getIotdeviceinfoAsync(userDeviceQuery,
-                    {deviceList:List<IotdeviceinfoType>->
-                        Log.e(TAG, deviceList.size.toString())
-
-                        userDevices.addAll(deviceList)
-
-                        homeFragment = HomeFragment()
-                        myDevicesFragment = MyDevicesFragment()
-                        myProfileFragment = MyProfileFragment()
-
-                        val fragmentBundles = Bundle()
-                        fragmentBundles.putParcelable("userProfile",userProfile)
-                        fragmentBundles.putParcelableArrayList("userDevices",userDevices)
-
-                        homeFragment!!.arguments = fragmentBundles
-                        myProfileFragment!!.arguments = fragmentBundles
-                        myDevicesFragment!!.arguments = fragmentBundles
-
-                        fm.beginTransaction().add(R.id.main_container, myProfileFragment!!, "3").hide(myProfileFragment!!).commit()
-                        fm.beginTransaction().add(R.id.main_container, myDevicesFragment!!, "2").hide(myDevicesFragment!!).commit()
-                        fm.beginTransaction().add(R.id.main_container,homeFragment!!, "1").show(homeFragment!!).commit()
-                        active = homeFragment
-                        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-
-                        if(deviceList.size == 0){
-                            homeDisabled = true
-                            active = myDevicesFragment
-                        }
-
-                        loadingBar!!.visibility = View.INVISIBLE
-                    },
-                    {re:RuntimeException->
-                        Log.d(TAG, "An error occurred during async query:  "  + re.message);
-                        active = myDevicesFragment
-                    })
-
-
                 }
             }
 

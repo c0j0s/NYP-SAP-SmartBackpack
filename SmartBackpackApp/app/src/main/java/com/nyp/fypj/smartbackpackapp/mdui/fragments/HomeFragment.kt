@@ -157,6 +157,11 @@ class HomeFragment : Fragment() {
         return false
     }
 
+    override fun onStart() {
+        super.onStart()
+        activity!!.title = connectedDevice.deviceName
+    }
+
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {
         listener?.onFragmentInteraction(uri)
@@ -327,9 +332,14 @@ class HomeFragment : Fragment() {
                                                 createData.geoLat = latitude
                                                 createData.geoLng = longitude
 
-                                                updateChangeSet.createEntity(createData)
-                                                pb_syncing.progress += updateIncrement
-                                                batch.addChanges(updateChangeSet)
+                                                iotDataMLServiceManager.predictComfortLevel(createData,userProfile,{ level ->
+                                                    createData.predictedComfortLevel = level
+                                                    updateChangeSet.createEntity(createData)
+                                                    pb_syncing.progress += updateIncrement
+                                                    batch.addChanges(updateChangeSet)
+                                                },{
+                                                    Log.e(TAG, it.message)
+                                                })
                                             } catch (e: Exception) {
                                                 Log.e(TAG, e.message)
                                             }

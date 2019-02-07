@@ -131,7 +131,7 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager?,
         }
     }
 
-    private fun predictComfortLevel(data: IotDataType, user: UserinfosType, success: (level:Int) -> Unit, error: (e: IOException) -> Unit){
+    public fun predictComfortLevel(data: IotDataType, user: UserinfosType, success: (level:Int) -> Unit, error: (e: IOException) -> Unit){
         val input = hashMapOf<String,Float>()
         input["HUMIDITY"] = data.humidity.toFloat()
         input["TEMPERATURE"] = data.temperature.toFloat()
