@@ -1,7 +1,7 @@
 import csv
 import json
 from lib.ManifestHandler import ManifestHandler
-
+import random
 
 
 manifestPath = "manifest.json"
@@ -13,11 +13,11 @@ exclude_list = ["AGE","RACE","GENDER"]
 def main():
     mode  = input("mode train/test: ")
     if mode == 'train':
-        inputFile = "generated/train_dataset.json"
-        outputFile = "training/train_dataset.csv"
+        inputFile = "src/train_dataset.json"
+        outputFile = "training/dataset.csv"
     else:
-        inputFile = "generated/test_dataset.json"
-        outputFile = "training/test_dataset.csv"
+        inputFile = "src/test_dataset.json"
+        outputFile = "training/dataset_test.csv"
 
     manifestHandler = ManifestHandler(manifestPath)
     festures = manifestHandler.getFeatures()
@@ -61,6 +61,13 @@ def compressValue(feature,value):
     else:
         return str(float(value)/100)
 
+def plusMinus(value,stype):
+    if stype == "temp":
+        res = random.randint(-3, 10)
+    else:
+        res = random.randint(-20, 20)
+    return res
+
 def generatePredictedComfortLevel(dataset):
     #filter extreme conditions
     if int(dataset["TEMPERATURE"]) >= 61 or int(dataset["TEMPERATURE"]) <= -31:
@@ -74,8 +81,8 @@ def generatePredictedComfortLevel(dataset):
 
     weight = dataset["ASTHMATIC_LEVEL"]
 
-    new_temperature_level_base_on_user = getFeatureLevel(-30,60,20,weight)
-    new_humidity_level_base_on_user = getFeatureLevel(0,100,50,weight)
+    new_temperature_level_base_on_user = getFeatureLevel(-30,60,plusMinus(20,"temp"),weight)
+    new_humidity_level_base_on_user = getFeatureLevel(0,100,plusMinus(50,"hum"),weight)
     new_pm2_5_level_base_on_user = getFeatureLevel(0,250,0,weight)
     new_PM10_level_base_on_user = getFeatureLevel(0,430,0,weight)
 
@@ -131,16 +138,11 @@ def getLevelMinMax(start, min_to_mid_interval,mid_to_max_interval,weight):
     return results
 
 def getAllFeatureLevels(jobs,dataset_value):
-    print(str(dataset_value))
     accessment = []
     for idx,item in enumerate(jobs):
-        print(item)
         for interval in item:
             if float(dataset_value[idx]) < float(interval['max']) and float(dataset_value[idx]) >= float(interval['min']) :
                 accessment.append(interval['level'])
-
-    print(accessment)
-    print("=========")
     return accessment
 
 def getFinalComfortLevel(accessments):

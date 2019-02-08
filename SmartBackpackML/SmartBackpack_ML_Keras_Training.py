@@ -7,7 +7,7 @@ import os
 import importlib
 from keras import backend as K
 
-manifest_file = "SmartBackpackML\\manifest.json"
+manifest_file = "manifest.json"
 
 def set_keras_backend(backend):
     if K.backend() != backend:
@@ -50,7 +50,7 @@ def main():
     model.fit(train_features, train_labels, epochs=mlconfig['training_epochs'], steps_per_epoch=32)
 
     #Save model
-    model.save(mlconfig['model_h5_path'])
+    model.save(mlconfig['model_h5_path_2'])
 
 if __name__ == "__main__":
     init()

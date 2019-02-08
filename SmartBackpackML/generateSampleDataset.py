@@ -6,9 +6,9 @@ mode  = input("mode train/test: ")
 manifestPath = "manifest.json"
 
 if mode == 'train':
-    outputFile = "generated/train_dataset.json"
+    outputFile = "src/train_dataset.json"
 else:
-    outputFile = "generated/test_dataset.json"
+    outputFile = "src/test_dataset.json"
 
 
 def main():

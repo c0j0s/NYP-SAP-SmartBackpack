@@ -1,7 +1,9 @@
 {
     "ML_CONFIG":{
         "training_data_path":"training/dataset.csv",
+        "test_data_path":"training/dataset_test.csv",
         "model_h5_path":"model/sbp_model.h5",
+        "model_h5_path_2":"model/sbp_model_test.h5",
         "training_epochs":101
     },
     "PREDICTED_COMFORT_LEVEL":{

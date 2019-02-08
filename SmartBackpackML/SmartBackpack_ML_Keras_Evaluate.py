@@ -2,6 +2,7 @@ import tensorflow as tf
 from tensorflow import keras
 import numpy as np
 from lib.ManifestHandler import *
+from lib.MlHelper import *
 from keras import backend as K
 
 manifest_file = "manifest.json"
@@ -15,26 +16,13 @@ def init():
     mlconfig = manifestHandler.getMLConfigs()
 
     #load ml model
-    model = keras.models.load_model(mlconfig['model_h5_path'])
+    model = keras.models.load_model(mlconfig['model_h5_path_2'])
 
 def main():
-    x = np.array([[
-        float(48)/100,
-        float(67)/100,
-        float(252)/100,
-        float(184)/100,
-        float(2)/10
-    ]])
+    test_features, test_labels = load_dataset(mlconfig['test_data_path'])
 
-    print(x)
-
-    y_prob = model.predict(x) 
-    print(y_prob)
-
-    K.clear_session()
-
-    y_classes = y_prob.argmax(axis=-1)
-    print(y_classes)
+    test_loss, test_acc = model.evaluate(test_features, test_labels, steps=1)
+    print('Test accuracy:', test_acc)
 
 if __name__ == "__main__":
     init()
