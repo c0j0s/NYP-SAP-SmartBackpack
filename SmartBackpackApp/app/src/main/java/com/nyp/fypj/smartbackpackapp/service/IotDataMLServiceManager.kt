@@ -150,7 +150,7 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager?,
 
         val requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonString)
         val request = Request.Builder()
-                .url("http://35.198.225.149/predict")
+                .url("http://35.240.197.152/predict")
                 .post(requestBody)
                 .build()
 

@@ -19,7 +19,6 @@ import android.util.Log
 import android.view.*
 import android.widget.TextView
 import android.widget.Toast
-import com.google.common.collect.Ordering
 import com.nyp.fypj.smartbackpackapp.Constants
 import com.nyp.fypj.smartbackpackapp.R
 import com.nyp.fypj.smartbackpackapp.app.ConfigurationData
