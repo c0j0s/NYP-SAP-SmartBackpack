@@ -251,6 +251,12 @@ class SBP_BT_Command_Manager:
         }
         self.client.send(self.toBTObject(self.command.function_code,output,"EOT"))
 
+    def errorMessage(self,function_code,message):
+        output = {
+            'message':message
+        }
+        self.client.send(self.toBTObject(function_code,output,"ERR"))
+
     def toBTObject(self,function_code,data,end_code,debug=""):
         result = {}
         result["function_code"] = function_code
