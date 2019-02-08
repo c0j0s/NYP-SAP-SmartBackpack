@@ -297,8 +297,8 @@ class HomeFragment : Fragment() {
                             var latitude = 0.0
                             if (lm.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
                                 val location: Location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-                                longitude = location.getLongitude()
-                                latitude = location.getLatitude()
+                                longitude = location.longitude
+                                latitude = location.latitude
                             }
 
                             val holdingZoneDataList: MutableList<HoldingZoneData> = mutableListOf()
@@ -324,7 +324,7 @@ class HomeFragment : Fragment() {
                                         var dataId = it[0].dataId
                                         Log.e(TAG, "Increment from ${dataId}")
 
-                                        holdingZoneDataList.forEach {
+                                        holdingZoneDataList.forEach { iotData ->
                                             try {
                                                 dataId += 1
 
@@ -332,12 +332,12 @@ class HomeFragment : Fragment() {
                                                 createData.dataId = dataId
                                                 createData.userId = userProfile.userId
                                                 createData.deviceSn = connectedDevice.deviceSn
-                                                createData.pm10 = it.pm10.toDouble()
-                                                createData.pm25 = it.pm2_5.toDouble()
-                                                createData.temperature = it.temperature.toDouble()
-                                                createData.humidity = it.humidity.toDouble()
-                                                createData.alertTriggered = if (it.alertTriggered == "True") "Y" else "N"
-                                                createData.recordedOn = LocalDateTime.parse(it.recorededOn)
+                                                createData.pm10 = iotData.pm10.toDouble()
+                                                createData.pm25 = iotData.pm2_5.toDouble()
+                                                createData.temperature = iotData.temperature.toDouble()
+                                                createData.humidity = iotData.humidity.toDouble()
+                                                createData.alertTriggered = if (iotData.alertTriggered == "True") "Y" else "N"
+                                                createData.recordedOn = LocalDateTime.parse(iotData.recorededOn)
                                                 createData.city = "SINGAPORE"
                                                 createData.country = "SINGAPORE"
                                                 createData.state = "SINGAPORE"
@@ -351,7 +351,11 @@ class HomeFragment : Fragment() {
                                                     pb_syncing.progress += updateIncrement
                                                     batch.addChanges(updateChangeSet)
                                                 },{
+                                                    Log.e(TAG, "ML Bot Not Online, not retrieving prediction")
                                                     Log.e(TAG, it.message)
+                                                    updateChangeSet.createEntity(createData)
+                                                    pb_syncing.progress += updateIncrement
+                                                    batch.addChanges(updateChangeSet)
                                                 })
                                             } catch (e: Exception) {
                                                 Log.e(TAG, e.message)
