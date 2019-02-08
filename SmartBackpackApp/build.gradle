@@ -6,6 +6,9 @@ buildscript {
             maven {
              url "C:\\Users\\L30606\\AppData\\Local\\Android\\SAP-CP-SDK-for-Android-1.1.4\\repository"
           }
+        maven {
+            url "C:\\Users\\L30605\\SAP-CP-SDK-for-Android-1.1.4\\m2repository"
+        }
         google()
         jcenter()
     }
@@ -21,6 +24,9 @@ allprojects {
     repositories {
         maven {
             url "C:\\Users\\L30606\\AppData\\Local\\Android\\SAP-CP-SDK-for-Android-1.1.4\\repository"
+        }
+        maven {
+            url "C:\\Users\\L30605\\SAP-CP-SDK-for-Android-1.1.4\\m2repository"
         }
         google()
         jcenter()
