@@ -3,7 +3,7 @@ A NYP FYPJ collaboration project with SAP Digital Labs.
 Embedding technologies into a backpack designed for hikers people with asthmatic conditions.
 
 ## Overview of Smart Backpack Project
-![service overview](https://github.com/c0j0s/SmartBackpack/blob/master/Documentations/0_service_overview.jpegg)  
+![service overview](https://github.com/c0j0s/SmartBackpack/blob/master/Documentations/0_service_overview.jpeg)  
 
 __Technical Overview__  
 ![technical overview](https://github.com/c0j0s/SmartBackpack/blob/master/Documentations/1_integrated_overview.jpeg)
