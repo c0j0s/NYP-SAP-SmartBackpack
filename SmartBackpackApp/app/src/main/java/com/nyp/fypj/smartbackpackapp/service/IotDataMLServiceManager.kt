@@ -132,7 +132,7 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager?,
         }
     }
 
-    public fun predictComfortLevel(data: IotDataType, user: UserinfosType, success: (level:Int) -> Unit, error: (e: IOException) -> Unit){
+    fun predictComfortLevel(data: IotDataType, user: UserinfosType, success: (level:Int) -> Unit, error: (e: IOException) -> Unit){
         val input = hashMapOf<String,Float>()
         input["HUMIDITY"] = data.humidity.toFloat()
         input["TEMPERATURE"] = data.temperature.toFloat()
@@ -150,7 +150,7 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager?,
 
         val requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonString)
         val request = Request.Builder()
-                .url("http://35.240.197.152/predict")
+                .url("http://35.198.225.149/predict")
                 .post(requestBody)
                 .build()
 
