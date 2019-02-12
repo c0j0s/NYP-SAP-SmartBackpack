@@ -111,36 +111,39 @@ def main():
             # Handle the request
             command = SBP_BT_Command_Manager(client_sock,received)
 
-            if received.function_code == "00000":
-                closing(server_sock,client_sock)
-            elif received.function_code == "10000":
-                command.restart_device()
-            elif received.function_code == "10500":
-                command.shutdown_device()
-            elif received.function_code == "11000":
-                command.restart_sensor_service()
-            elif received.function_code == "11500":
-                command.get_service_status('sensor')
-            elif received.function_code == "12000":
-                command.restart_bt_service()
-            elif received.function_code == "12500":
-                command.get_service_status('bt')
-            elif received.function_code == "30000":
-                command.get_sensor_data(redis_cursor)
-            elif received.function_code == "31000":
-                command.changeDeviceConfigs(config_file,redis_cursor)
-            elif received.function_code == "32000":
-                command.sync_holding_zone()
-            elif received.function_code == "32500":
-                command.flush_holding_zone_temp(clear_holding_zone_after_sync)
-            elif received.function_code == "41000":
-                command.toggle_debug(config_file)
-            elif received.function_code == "42000":
-                command.sh_execute_command(command)
-            elif received.function_code == "43000":
-                command.get_network_ip()
+            if hasattr(received, 'function_code') and hasattr(received, 'data') and hasattr(received, 'end_code'):
+                if received.function_code == "00000":
+                    closing(server_sock,client_sock)
+                elif received.function_code == "10000":
+                    command.restart_device()
+                elif received.function_code == "10500":
+                    command.shutdown_device()
+                elif received.function_code == "11000":
+                    command.restart_sensor_service()
+                elif received.function_code == "11500":
+                    command.get_service_status('sensor')
+                elif received.function_code == "12000":
+                    command.restart_bt_service()
+                elif received.function_code == "12500":
+                    command.get_service_status('bt')
+                elif received.function_code == "30000":
+                    command.get_sensor_data(redis_cursor)
+                elif received.function_code == "31000":
+                    command.changeDeviceConfigs(config_file,redis_cursor)
+                elif received.function_code == "32000":
+                    command.sync_holding_zone()
+                elif received.function_code == "32500":
+                    command.flush_holding_zone_temp(clear_holding_zone_after_sync)
+                elif received.function_code == "41000":
+                    command.toggle_debug(config_file)
+                elif received.function_code == "42000":
+                    command.sh_execute_command(command)
+                elif received.function_code == "43000":
+                    command.get_network_ip()
+                else:
+                    command.message("Function Not Supported")
             else:
-                command.message("Function Not Supported")
+                command.errorMessage("-1","Invalid command syntax")
             
         except IOError: 
             closing(server_sock,client_sock,msg="IOError ")
@@ -156,10 +159,9 @@ def closing(server_sock,client_sock,msg="Closing",exception=""):
     client_sock.close()
     server_sock.close()
 
-    if debug:
-        print("-"*60)
-        traceback.print_exc(file=sys.stdout)
-        print("-"*60)
+    print("-"*60)
+    traceback.print_exc(file=sys.stdout)
+    print("-"*60)
 
 if __name__ == '__main__':
     init()

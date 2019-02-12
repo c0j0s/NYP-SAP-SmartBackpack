@@ -40,8 +40,6 @@ public class SettingsFragment extends PreferenceFragment
 implements Logging.UploadListener
 {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EntitySetListActivity.class);
-
     private SAPWizardApplication sapWizardApplication;
     private SecureStoreManager secureStoreManager;
     private ErrorHandler errorHandler;
@@ -168,7 +166,6 @@ implements Logging.UploadListener
     public void onSuccess() {
         enableLogUploadButton();
         Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.log_upload_ok), Toast.LENGTH_LONG).show();
-        LOGGER.info("Log is uploaded to the server.");
     }
 
     @Override
@@ -177,7 +174,6 @@ implements Logging.UploadListener
         String errorCause = throwable.getLocalizedMessage();
         ErrorMessage errorMessage = new ErrorMessage(getActivity().getResources().getString(R.string.log_upload_failed), errorCause, new Exception(throwable), false);
         errorHandler.sendErrorMessage(errorMessage);
-        LOGGER.error("Log upload failed with error message: " + errorCause);
     }
 
     @Override

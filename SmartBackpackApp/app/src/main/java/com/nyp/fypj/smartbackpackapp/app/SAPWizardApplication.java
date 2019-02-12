@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.provider.Settings;
 import android.webkit.CookieManager;
 import com.nyp.fypj.smartbackpackapp.R;
-import com.nyp.fypj.smartbackpackapp.data.DataContentUtilities;
 import com.nyp.fypj.smartbackpackapp.service.SAPServiceManager;
 import com.nyp.fypj.smartbackpackapp.logon.ClientPolicyManager;
 import com.nyp.fypj.smartbackpackapp.logon.LogonActivity;
@@ -90,7 +89,6 @@ public class SAPWizardApplication extends Application {
      * Utility class implementing CRUD access to OData services on top of the underlying OData
      * stores.
      */
-    private DataContentUtilities dataContentUtilities;
     /**
      * Provides access to locally persisted configuration that is loaded via {@link ConfigurationLoader}.
      */
@@ -140,9 +138,6 @@ public class SAPWizardApplication extends Application {
      *
      * @return the data content utilities
      */
-    public DataContentUtilities getDataContentUtilities() {
-        return dataContentUtilities;
-    }
 
     /**
      * Returns the application-wide configuration data.
@@ -242,7 +237,6 @@ public class SAPWizardApplication extends Application {
         configurationData = new ConfigurationData(this, errorHandler);
         basicAuthPersistentCredentialStore = new BasicAuthPersistentCredentialStore(secureStoreManager);
         sapServiceManager = new SAPServiceManager(configurationData);
-        dataContentUtilities = new DataContentUtilities(sapServiceManager);
         clientPolicyManager = new ClientPolicyManager(this);
 		sapWizardLifecycleObserver = new SAPWizardLifecycleObserver(secureStoreManager);
 		

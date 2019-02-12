@@ -129,14 +129,21 @@ class SBP_BT_Command_Manager:
                     with open(holding_zone_file,"r+") as f:
                         
                         for line in f:
-                            output = self.toCompactString(line)
+                            try:
+                                output = self.toCompactString(line)
 
-                            if output == last_line:
-                                end_code = "EOT"
+                                if output == last_line:
+                                    end_code = "EOT"
 
-                            print(str(output) + " l:" + str(last_line))
-                            self.client.send(self.toBTObject(self.command.function_code,output,end_code))
-                            time.sleep(0.05)
+                                print(str(output) + " l:" + str(last_line))
+                                self.client.send(self.toBTObject(self.command.function_code,output,end_code))
+                                time.sleep(0.05)
+                            except:
+                                print("[sync_holding_zone] Exception occurred")
+                                print("-"*60)
+                                traceback.print_exc(file=sys.stdout)
+                                print("-"*60)
+                                pass
 
                     files_transmitted.append(holding_zone_file)
 
@@ -250,6 +257,12 @@ class SBP_BT_Command_Manager:
             'message':message
         }
         self.client.send(self.toBTObject(self.command.function_code,output,"EOT"))
+
+    def errorMessage(self,function_code,message):
+        output = {
+            'message':message
+        }
+        self.client.send(self.toBTObject(function_code,output,"ERR"))
 
     def toBTObject(self,function_code,data,end_code,debug=""):
         result = {}
