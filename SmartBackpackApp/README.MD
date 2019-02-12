@@ -10,14 +10,14 @@ An Android companion app that is responsible for user interactions with SmartBac
 ### Android App Handler Action For IOT Data Function Codes Received  
 | Function Code  | Description                        | Action      | 
 |:-------------- |:-----------------------------------|:--------- |
-| 00000 | terminate bluetooth connections             | Toast |
+| 00000 | terminate Bluetooth connections             | Toast |
 | 10000 | restart device                              | Toast |
 | 11000 | restart sensor server                       ||
 | 11500 | get the status of sensor server             | Toast |
-| 12000 | restart bluetooth server   ||
-| 12500 | get the status of bluetooth server          | Toast |
+| 12000 | restart Bluetooth server   ||
+| 12500 | get the status of Bluetooth server          | Toast |
 | 30000 | get real time sensor reading                | Display in home page |
-| 31000 | set user perferences       ||
+| 31000 | set user preferences       ||
 | 32000 | get holding_zone data                       | Upload to Hana DB |
 | 32000 | flush holding_zone                          | Toast |
 | 41000 | toggle server debug mode                    | Toast |
@@ -27,7 +27,7 @@ An Android companion app that is responsible for user interactions with SmartBac
 
 ## Wrapper Class Implementation Guide
 ### BtWrapper
-A wrapper class that encapsulates bluetooth command syntax into simple functions for front-end implementation.  
+A wrapper class that encapsulates Bluetooth command syntax into simple functions for front-end implementation.  
 
 #### Sample usage
 ```kotlin
@@ -147,3 +147,105 @@ A wrapper class that update user feedback of specific iot data to database, and 
 
     fun predictComfortLevel(data: IotDataType, user: UserinfosType, success: (level:Int) -> Unit, error: (e: IOException) -> Unit)
 ```
+
+# Documentation for SAP Cloud Platform Mobile SDK Implementation
+The follow is the documentation for implementing SAP SCP Mobile SDK
+
+## Initial Setup
+A SAP Project Creation Wizard is provided by the SDK to create the project. The urls can be found in the mobile service portal in SAP Cloud Platform under important links. Here you can create a new mobile project of create from predefined projects in the mobile service portal.  
+![wizard 1](https://github.com/c0j0s/SmartBackpack/blob/master/Documentations/MobileSDK/1_setup_wizard.png)  
+
+Here you will supply the database OData access url for the wizard to retrieve the metadata file and generate all entity classes based on the tables defined in OData, the entity classes is needed when interacting with the database.  
+![wizard 2](https://github.com/c0j0s/SmartBackpack/blob/master/Documentations/MobileSDK/2_setup_wizard.png)  
+the metadata file can be found in android > res > raw > [OData name].xml  
+
+## SAP Services
+The following are some of the functionalities and services provided by the SDK for app development, the full list of services can be found in the official SDK website, here I am only describing some of the services I research and implemented during development.
+
+__SDK Services:__  
+- User Authentication and App Security  
+SAP Cloud Platform account authentication  
+App lock with fingerprint capabilities
+
+- BasicAuthPersistentCredentialStore  
+This object contains user login credentials like user email and password, this can be use if you require authentication in other component of the mobile app, for example retrieving data from database using the user email.
+
+- SAPServiceManager  
+This is a utility class to establish session with the database. By using the openODataStore() function, this creates an database connection session where you can execute the database query to retrieve your result. You can also retrieve your database connection url using the get<Name>() function which is needed to execute database queries.
+
+- SecureStoreManager  
+This object is a utility class that provide secure key-value pair data storage for the mobile app.
+
+- ConfigurationData  
+This object contains configuration data such as service url. (SAP mobile service url)
+
+## Database Usage
+When interacting with the database, always open a connection session using the openODataStore() function in SAPServiceManager, else null exception will be thrown. Also always using asynchronies function for database operations.  
+
+__Query__   
+```kotlin
+sapServiceManager.openODataStore {
+
+    /*
+    Retrieve user profile from database
+    */
+    val USER_ID = "example"
+    val userProfileQuery = DataQuery()
+                            .filter(<GeneratedEntityClass>.userId.equal(USER_ID))
+
+    sapServiceManager.getsbp().getUserinfosAsync(userProfileQuery,
+    {userInfos:List<<GeneratedEntityClass>>->
+        //Success callback
+    },
+    {re:RuntimeException->
+        //Error callback
+    })
+}
+```
+
+__Create and Update__
+```kotlin
+sapServiceManager.openODataStore {
+
+    /*
+    Create
+
+    <Generated Odata Function> = Odata name
+    e.g. getsbp() when name is sbp
+    */
+    val demoEntity = GeneratedEntityClass()
+    demoEntity.field = "example"
+
+    sapServiceManager.get<Generated Odata Function>().createEntityAsync(demoEntity, {
+        //Success callback
+    }, { e: RuntimeException ->
+        //Success callback
+    })
+
+    /*
+    Update
+    */
+    demoEntity.field = "update example"
+
+    sapServiceManager.get<Generated Odata Function>().updateEntityAsync(demoEntity, {
+        //Success callback
+    }, { e: RuntimeException ->
+        //Success callback
+    })
+}
+```
+
+__Delete can be found under OData API section in official documentation__
+
+## SAP Fiori UI Component
+Here are some of the Fiori components used in the Mobile App
+- ObjectHeader
+- ProfileHeader
+- FioriProgressBar
+- GridTableRow
+- Form
+  - SimplePropertyFormCell
+  - SwitchFormCell
+  - SliderFormCell
+
+__*Details instruction can be found in the official SDK documentation__

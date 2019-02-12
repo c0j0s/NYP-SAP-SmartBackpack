@@ -10,7 +10,7 @@ __Technical Overview__
 
 
 ### SmartBackpackIOT
-Daemon Services writen in Python for Raspberry Pi to handle sensor data and communication with Android App.
+Daemon Services written in Python for Raspberry Pi to handle sensor data and communication with Android App.
 
 ### SmartBackpackApp
 An Android companion app that is responsible for user interactions with SmartBackpackIOT, and SAP Services as well.

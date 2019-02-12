@@ -1,14 +1,14 @@
 # SmartBackpackIOT
-Services writen in Python for Raspberry Pi to handle sensor data and communication with Android App.
+Services written in Python for Raspberry Pi to handle sensor data and communication with Android App.
 
 ## Software Architecture of SmartBackpackIOT
 ![software architecture](https://github.com/c0j0s/SmartBackpack/blob/master/Documentations/2_iot_software_architecture.jpeg)
 
 ## Components of SmartBackpackIOT
-The BT, Sensor and Service monitor processes will startup automatically on boot.
+The BT, Sensor and Service monitor processes will start-up automatically on boot.
 
 BT Service:  
-A bluetooth service that is responsible for communicating with the Android companion app.
+A Bluetooth service that is responsible for communicating with the Android companion app.
 
 Sensor Service:  
 Responsible for handling sensor readings.
@@ -22,7 +22,7 @@ holding_zone for long-term sensor readings in SQL format.
 
 Config.json:  
 A configuration file that controls the behaviour of BT and Sensor Server.  
-e.g. debug mode, buzzer toogle, reading interval control.  
+e.g. debug mode, buzzer toggle, reading interval control.  
 
 # SmartBackpackIOT Specifications
 ## Runtime Environment
@@ -100,15 +100,15 @@ The first array item is reserved for function identifier code
 #### IOT Device Function Codes:  
 | Function Code  | Description                        | Enum      |
 |:-------------- |:-----------------------------------|:--------- |
-| 00000 | terminate bluetooth connections             | DISCONNECT |
+| 00000 | terminate Bluetooth connections             | DISCONNECT |
 | 10000 | restart device                              | REBOOT_DEVICE |
 | 10500 | shutdown device                             |  |
 | 11000 | restart sensor server                       | RESTART_SENSOR_SERVICE|
 | 11500 | get the status of sensor server             | GET_SENSOR_STATUS|
-| 12000 | restart bluetooth server [NOT IMPLEMENTED]  | RESTART_BLUETOOTH_SERVICE|
-| 12500 | get the status of bluetooth server          | GET_BLUETOOTH_STATUS|
+| 12000 | restart Bluetooth server [NOT IMPLEMENTED]  | RESTART_BLUETOOTH_SERVICE|
+| 12500 | get the status of Bluetooth server          | GET_BLUETOOTH_STATUS|
 | 30000 | get real time sensor reading                | GET_SENSOR_DATA|
-| 31000 | set user perferences                        | CHANGE_DEVICE_SETTINGS|
+| 31000 | set user preferences                        | CHANGE_DEVICE_SETTINGS|
 | 32000 | get holding_zone data                       | SYNC_HOLDING_ZONE |
 | 32000 | flush holding_zone                          | FLUSH_HOLDING_ZONE |
 | 41000 | toggle server debug mode                    | TOOGLE_DEBUG |
@@ -147,7 +147,7 @@ The third array item is reserved for transmission ending status
 | ----|----------------------------------------|
 | EOT | end of transmission |
 | MSE | maintain session, more data transmitting |
-| ERR | error occured, transmission terminated and services schedule for reboot |
+| ERR | error occurred, transmission terminated and services schedule for reboot |
 
 # SmartBackpackIOT Project Structures
 ### Main Service Scripts:  
@@ -167,7 +167,7 @@ contains sensor libraries and wrapper classes.
 contains empty file for logging, require setup in `/etc/rsyslog.d/rsyslog.conf`.
 
 /src  
-contains reference source for configuraton.
+contains reference source for configuration.
 
 /utils  
 contains scripts to setup the runtime environment.

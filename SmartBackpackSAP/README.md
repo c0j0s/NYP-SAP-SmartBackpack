@@ -1,8 +1,8 @@
 # SAP HANA Database 
 HANA_Database repo contains archives for database configuration, structures and data.
 
-## Database Struture 
-![Database Struture ](https://github.com/c0j0s/SmartBackpack/blob/master/Documentations/0_hana_database_structure.jpeg)
+## Database Structure 
+![Database Structure ](https://github.com/c0j0s/SmartBackpack/blob/master/Documentations/0_hana_database_structure.jpeg)
 
 ## Database Tables
 USER_PROFILE:  
@@ -21,12 +21,12 @@ SUGGESTIONS:
 Table for all comfort level suggestions
 
 ## HANA XS OData
-Database Odata access API:  
+Database OData access API:  
 ```
 https://<subaccountid>.ap1.hana.ondemand.com/NYPFYPJ_SMARTBACKPACK/sbp.xsodata/<TableName>
 ```
 
-### Exposed Odata
+### Exposed OData
 Table access:  
 - user
 - userDevices

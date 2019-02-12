@@ -1,28 +1,28 @@
 # SAP NewDB - do not edit
-# indexid: NYPFYPJ03:SUGGESTIONS (t 4076)
+# indexid: NYPFYPJ03:SUGGESTIONS (t 4078)
 creationtimestamp=1547795277621
-modifytimestamp=0
-lastmergetimestamp=1549008163146
+modifytimestamp=1549527690797
+lastmergetimestamp=1549527731404
 lasthistorizationmergetid=0
-lastreplaylogtimestamp=1547795277623
+lastreplaylogtimestamp=1549527693586
 lastcorrectiontimestamp=0
-lasttruncationtimestamp=0
+lasttruncationtimestamp=1549527690797
 lastoctimestamp=0
-rawcountmain=5
+rawcountmain=28
 rawcountdelta=0
 lastoptimizedcompressionrowcount=0
-changedrowcountsincelastoptimizecompression=5
+changedrowcountsincelastoptimizecompression=28
 deletedrowsinmainafterlastmerge=0
-visiblecountmain=5
+visiblecountmain=28
 visiblecountdelta=0
-estimatedmaxmemsizemain=285369
+estimatedmaxmemsizemain=286416
 estimatedmaxmemsizedelta=77512
-lastestimatedmemsize=362881
-lastestimatedmemsizetime=1549008163146
-maxrowid=5
+lastestimatedmemsize=363928
+lastestimatedmemsizetime=1549527731404
+maxrowid=28
 maxhashid=4294967296
 hashidcounters=
-maxudiv0=5
+maxudiv0=28
 maxudiv1=0
 maxmergecid=0
-singlevaluecache=206,207,208
+singlevaluecache=207,208
