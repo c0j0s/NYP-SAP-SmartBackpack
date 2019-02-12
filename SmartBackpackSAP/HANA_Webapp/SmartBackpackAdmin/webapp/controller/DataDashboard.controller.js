@@ -14,10 +14,6 @@ sap.ui.define([
 		 * Can be used to modify the View before it is displayed, to bind event handlers and do other one-time initialization.
 		 * @memberOf sbp.SmartBackpackAdmin.view.DataDashboard
 		 */
-		// max: {
-		//      	"r":"SG",
-		//      	"c":0
-		//       },
 		onInit: function () {
 			var oViewModel = new JSONModel({
 				busy: false,
@@ -55,10 +51,6 @@ sap.ui.define([
 					var list = data.results;
 					for (var i = 0; i < list.length; i++) {
 						if (list[i].ALERT_TRIGGERED === "Y") {
-							// if(list[i].COUNT >= this.max.c){
-							// 	this.max.r = list[i].COUNTRY;
-							// 	this.max.c = list[i].COUNT;
-							// }
 							idata.Regions.push({
 								"COUNTRY_CODE": list[i].COUNTRY_CODE,
 								"COUNTRY": list[i].COUNTRY + " " + list[i].COUNT,
@@ -107,65 +99,7 @@ sap.ui.define([
 			// set the device model
 			var oDeviceModel = new JSONModel(Device);
 			oDeviceModel.setDefaultBindingMode("OneWay");
-			this.getView().setModel(oDeviceModel, "device"); // //      1.Get the id of the VizFrame		
-			// var oVizFrame = this.getView().byId("viz_user_no");
-			// //      2.Create a JSON Model and set the data
-			// var oModel = new sap.ui.model.json.JSONModel();
-			// var data = {
-			// 	"user": [{
-			// 		REGISTERED_ON: 1514764800,
-			// 		REGISTERED_COUNT: 1
-			// 	}, {
-			// 		REGISTERED_ON: 1517443200,
-			// 		REGISTERED_COUNT: 50
-			// 	}, {
-			// 		REGISTERED_ON: 1519862400,
-			// 		REGISTERED_COUNT: 351
-			// 	}, {
-			// 		REGISTERED_ON: 1522540800,
-			// 		REGISTERED_COUNT: 1555
-			// 	}, {
-			// 		REGISTERED_ON: 1525132800,
-			// 		REGISTERED_COUNT: 11412
-			// 	}]
-			// };
-			// oModel.setData(data);
-			// Format.numericFormatter(ChartFormatter.getInstance());
-			// oVizFrame.setVizProperties({
-			//             title: {
-			//                 visible: true,
-			//                 text: 'Revenue by City and Store Name'
-			//             }
-			//         });
-			//         var oDataset = new sap.viz.ui5.data.FlattenedDataset({
-			// 	dimensions : [{
-			// 		name : 'date',
-			// 		value : "{REGISTERED_ON}"
-			// 	}],
-			// 	measures : [{
-			// 		group : 1,
-			// 		name : 'count',
-			// 		value : '{REGISTERED_COUNT}'
-			// 	}],
-			// 	data : {
-			// 		path : "/user"
-			// 	}
-			// });
-			// oVizFrame.setDataset(oDataset);
-			// oVizFrame.setModel(oModel);
-			// oVizFrame.setVizType('line');
-			// var feedValueAxis = new sap.viz.ui5.controls.common.feeds.FeedItem({
-			// 	'uid': "valueAxis",
-			// 	'type': "Measure",
-			// 	'values': ["count"]
-			// }),
-			// feedCategoryAxis = new sap.viz.ui5.controls.common.feeds.FeedItem({
-			// 	'uid': "categoryAxis",
-			// 	'type': "Dimension",
-			// 	'values': ["date"]
-			// });
-			// oVizFrame.addFeed(feedValueAxis);
-			// oVizFrame.addFeed(feedCategoryAxis);
+			this.getView().setModel(oDeviceModel, "device"); 
 		},
 		/**
 		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered

@@ -163,20 +163,20 @@ the metadata file can be found in android > res > raw > [OData name].xml
 The following are some of the functionalities and services provided by the SDK for app development, the full list of services can be found in the official SDK website, here I am only describing some of the services I research and implemented during development.
 
 __SDK Services:__  
-- User Authentication and App Security  
+- User Authentication and App Security:  
 SAP Cloud Platform account authentication  
 App lock with fingerprint capabilities
 
-- BasicAuthPersistentCredentialStore  
+- BasicAuthPersistentCredentialStore:  
 This object contains user login credentials like user email and password, this can be use if you require authentication in other component of the mobile app, for example retrieving data from database using the user email.
 
-- SAPServiceManager  
+- SAPServiceManager:  
 This is a utility class to establish session with the database. By using the openODataStore() function, this creates an database connection session where you can execute the database query to retrieve your result. You can also retrieve your database connection url using the get<Name>() function which is needed to execute database queries.
 
-- SecureStoreManager  
+- SecureStoreManager:  
 This object is a utility class that provide secure key-value pair data storage for the mobile app.
 
-- ConfigurationData  
+- ConfigurationData:  
 This object contains configuration data such as service url. (SAP mobile service url)
 
 ## Database Usage
@@ -248,4 +248,8 @@ Here are some of the Fiori components used in the Mobile App
   - SwitchFormCell
   - SliderFormCell
 
-__*Details instruction can be found in the official SDK documentation__
+__Details instruction can be found in the official SDK documentation__  
+Official Mobile SDK Documentation:  
+https://help.sap.com/doc/c2d571df73104f72b9f1b73e06c5609a/Latest/en-US/docs/index.html 
+
+__SDK Version Implemented: 1.1.14__

@@ -34,7 +34,7 @@ All input features except user feedback comfort level will be generated randomly
 
 user feedback comfort level will be determined by inputting the random values generated through handcrafted conditions to output level value.
 
-__Training and Testing Demo Model__
+__Training and Testing Demo Model__  
 SmartBackpack_ML_Keras_Training and SmartBackpack_ML_Keras_Predict is the model training and testing scripts respectively  
 
 __Deploying Demo Model__  

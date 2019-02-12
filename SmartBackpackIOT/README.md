@@ -29,29 +29,34 @@ e.g. debug mode, buzzer toggle, reading interval control.
 Environment:  
 - Python3
 - Redis
-- ...
 	
 Python packages: (install through pip3)  
 - GrovePi
 - Pybluez
 - Redis
-- ...
 	
 Others:
-- SSH Connections
-- SFTP Connections
+- SSH/SFTP Connections
 
 ## Start Services Manually
 1. Change to service folder directory
-    ```sh
-    $ cd /home/pi/SmartbackpackIOT
-    ```
-2. Execute following command
-    ```sh
-    $ Python3 SBP_Sensor_Server.py
-    $ sudo Python3 SBP_BT_Server.py
-    $ Python3 SBP_Service_Monitor.py
-    ```
+```sh
+$ cd /home/pi/SmartbackpackIOT
+```
+2. Execute following command to start service scripts [Debugging]
+```sh
+$ Python3 SBP_Sensor_Server.py
+$ sudo Python3 SBP_BT_Server.py
+$ Python3 SBP_Service_Monitor.py
+```
+or Execute following command to start services [Production]
+```sh
+$ sudo service SBP_Sensor_Server start
+$ sudo service SBP_BT_Server start
+$ sudo service SBP_Service_Monitor start
+```
+Both method works however starting service method will not output any print log.
+
 ## Config.json Specifications
 ```json
 {

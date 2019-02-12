@@ -46,6 +46,25 @@ Analytic view access:
 - incidentMap
   - Data view with geographical information
 
+## Configuration of SAP HANA Development tool for Eclipse IDE 
+### Prerequisites
+- Eclipse Photon  
+download from official Eclipse website
+- SAP HANA Development Tools  
+ https://tools.hana.ondemand.com/Neon  
+__Old version__ is used as new version removed some options related to creating connection with SAP Cloud
+__"Create Cloud System"__ option is not visible in the new version
+- Install SAP HANA and cloud platform plugins 
+
+### Procedures
+1. Change Perspective
+2. Change to system tab
+3. Right Click "Create Cloud System"
+4. Enter SAP Cloud Platform credentials  
+(Subaccount name can be found in SAP Cloud Platform Cockpit)
+5. Enter database credentials
+6. Eclipse IDE setup complete
+	
 # SAPUI5 Webapp 
 HANA_Webapp is a backup repo for the admin portal webapps  
 
