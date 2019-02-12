@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nyp.fypj.smartbackpackapp">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
@@ -29,12 +29,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".mdui.EntitySetListActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/application_name"
-            android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name="com.sap.cloud.mobile.onboarding.launchscreen.LaunchScreenActivity"
             android:label="@string/application_name">
             <meta-data
@@ -42,31 +36,10 @@
                 android:value="com.nyp.fypj.smartbackpackapp.logon.LaunchScreenActionHandlerImpl" />
         </activity>
         <activity
-            android:name=".mdui.ItemListActivity"
-            android:label="@string/application_name"
-            android:launchMode="singleTop"
-            android:parentActivityName=".mdui.EntitySetListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".mdui.EntitySetListActivity" />
-        </activity>
-        <activity
-            android:name=".mdui.ItemDetailActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:label="@string/application_name"
-            android:parentActivityName=".mdui.ItemListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".mdui.ItemListActivity" />
-        </activity>
-        <activity
             android:name=".mdui.SettingsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/settings_activity_name"
             android:launchMode="singleTop"
-            android:parentActivityName=".mdui.EntitySetListActivity"
             android:screenOrientation="sensor" />
         <activity
             android:name="com.sap.cloud.mobile.onboarding.passcode.SetPasscodeActivity"

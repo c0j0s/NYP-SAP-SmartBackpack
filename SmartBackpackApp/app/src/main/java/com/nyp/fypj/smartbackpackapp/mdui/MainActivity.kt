@@ -183,8 +183,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        LOGGER.debug("EntitySetListActivity::onActivityResult, request code: $requestCode result code: $resultCode")
-
         when (requestCode) {
             Constants.ACTIVITY_RESULT_CODE.REQUEST_CONNECT_DEVICE.value ->
                 // When DeviceListActivity returns with a device to connect
@@ -256,6 +254,7 @@ class MainActivity : AppCompatActivity() {
                                                 if(deviceList.isEmpty()){
                                                     homeDisabled = true
                                                     active = myDevicesFragment
+                                                    fm.beginTransaction().add(R.id.main_container, myDevicesFragment!!, "2").show(myDevicesFragment!!).commit()
                                                 }
 
                                                 loadingBar!!.visibility = View.INVISIBLE
