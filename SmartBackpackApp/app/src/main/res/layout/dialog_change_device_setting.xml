@@ -44,7 +44,7 @@
             app:displayValue="10 Minutes"
             app:endLabelEditControl="false"
             app:endLabelText="20"
-            app:key="Backpack Data Recording Intervals (Minutes)"
+            app:key="Recording Intervals (Minutes)"
             app:label="minutes"
             app:maximumValue="20"
             app:minimumValue="1"

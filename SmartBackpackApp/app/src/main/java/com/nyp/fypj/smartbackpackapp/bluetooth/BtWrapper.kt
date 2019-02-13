@@ -90,6 +90,10 @@ class BtWrapper(private val displayHandler : Handler) {
         sendCommand(Constants.BT_FUN_CODE.TOGGLE_DEBUG)
     }
 
+    fun buzzerTest(){
+        sendCommand(Constants.BT_FUN_CODE.BUZZER_TEST)
+    }
+
     fun getNetworkIp(){
         sendCommand(Constants.BT_FUN_CODE.GET_NETWORK_IP)
     }

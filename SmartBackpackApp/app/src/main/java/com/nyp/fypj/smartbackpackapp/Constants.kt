@@ -48,6 +48,7 @@ class Constants {
         TOGGLE_DEBUG("41000"),
         EXE_SH("42000"),
         GET_NETWORK_IP("43000"),
+        BUZZER_TEST("44000"),
         ELSE("-1"),
 
     }

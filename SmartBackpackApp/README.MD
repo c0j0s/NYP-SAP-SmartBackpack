@@ -19,10 +19,11 @@ An Android companion app that is responsible for user interactions with SmartBac
 | 30000 | get real time sensor reading                | Display in home page |
 | 31000 | set user preferences       ||
 | 32000 | get holding_zone data                       | Upload to Hana DB |
-| 32000 | flush holding_zone                          | Toast |
+| 32500 | flush holding_zone                          | Toast |
 | 41000 | toggle server debug mode                    | Toast |
 | 42000 | execute custom shell commands               ||
 | 43000 | get IOT Device network IP address        ||
+| 44000 | activate the buzzer for 1 second        ||
 | 99999 | Error Occurred in IOT Device               | Toast |
 
 ## Wrapper Class Implementation Guide

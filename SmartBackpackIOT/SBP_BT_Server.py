@@ -3,6 +3,7 @@
 from lib.SBP_Redis_Wrapper import SBP_Redis_Wrapper
 from lib.Common import *
 from lib.SBP_BT_Command_Manager import *
+from lib.SBP_Buzzer import SBP_Buzzer
 #utils
 import sys, traceback
 import os
@@ -140,6 +141,9 @@ def main():
                     command.sh_execute_command(command)
                 elif received.function_code == "43000":
                     command.get_network_ip()
+                elif received.function_code == "44000":
+                    buzzer = SBP_Buzzer(5,1)
+                    command.testBuzzer(buzzer)
                 else:
                     command.message("Function Not Supported")
             else:

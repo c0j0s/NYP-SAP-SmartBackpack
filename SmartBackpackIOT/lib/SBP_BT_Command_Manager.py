@@ -150,6 +150,7 @@ class SBP_BT_Command_Manager:
             print("[sync_holding_zone] File transmitted: " + str(files_renamed))
         else:
             print("[sync_holding_zone] Holding zone empty ending function")
+            time.sleep(0.5)
             self.client.send(self.toBTObject(self.command.function_code,{},"EOT"))
 
 
@@ -249,6 +250,13 @@ class SBP_BT_Command_Manager:
             ip = "Cant get IP"
         output = {
             'message':ip
+        }
+        self.client.send(self.toBTObject(self.command.function_code,output,"EOT"))
+
+    def testBuzzer(self,buzzer):
+        buzzer.buzzForSeconds(1)
+        output = {
+            'message':"Done"
         }
         self.client.send(self.toBTObject(self.command.function_code,output,"EOT"))
 

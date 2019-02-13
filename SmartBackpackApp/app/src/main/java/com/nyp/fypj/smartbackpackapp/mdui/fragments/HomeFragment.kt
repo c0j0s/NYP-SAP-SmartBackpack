@@ -68,6 +68,7 @@ class HomeFragment : Fragment() {
     private var connectStatus = false
     private var predictedComfortLevel = 0
     private var realTimeDate = IotDataType()
+    private var shownIotData  = listOf<IotDataType>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -185,7 +186,7 @@ class HomeFragment : Fragment() {
         fun onFragmentInteraction(uri: Uri)
     }
 
-    fun syncDataAndHoldingZone(){
+    private fun syncDataAndHoldingZone(){
         pb_syncing.visibility = View.VISIBLE
 
         pb_syncing.progress = 10
@@ -207,9 +208,12 @@ class HomeFragment : Fragment() {
                 Log.e(TAG,iotDataQuery.toString())
                 sapServiceManager.getsbp().getIotDataAsync(iotDataQuery,
                         {iotDataList:List<IotDataType>->
-
-                            viewAdapter = IotDataAdapter(iotDataList)
-                            activity!!.runOnUiThread { recyclerView.adapter = viewAdapter }
+                            shownIotData = iotDataList
+                            Log.i(TAG,"Updating IOT Table")
+                            viewAdapter = IotDataAdapter(shownIotData)
+                            activity!!.runOnUiThread {
+                                recyclerView.adapter = viewAdapter
+                            }
                         },
                         {re:RuntimeException->
                             Log.d(TAG, "An error occurred during async query:  "  + re.message)
@@ -327,7 +331,7 @@ class HomeFragment : Fragment() {
                                         holdingZoneDataList.forEach { iotData ->
                                             try {
                                                 dataId += 1
-
+                                                Log.i(TAG,"Data id:"+ dataId.toString())
                                                 val createData = IotDataType()
                                                 createData.dataId = dataId
                                                 createData.userId = userProfile.userId
@@ -461,6 +465,8 @@ class HomeFragment : Fragment() {
     private fun setHoldingZoneSyncCompleteState() {
         pb_syncing.progress = 100
         pb_syncing.visibility = View.GONE
+        shownIotData = listOf()
+        viewAdapter.notifyDataSetChanged()
         refreshIotDataTable()
         Toast.makeText(activity, "Backpack synchronised", Toast.LENGTH_SHORT).show()
     }
@@ -515,6 +521,9 @@ class HomeFragment : Fragment() {
 
         dialogView.sfc_enable_buzzer.cellValueChangeListener = object : FormCell.CellValueChangeListener<Boolean>() {
             override fun cellChangeHandler(value: Boolean) {
+                if(value){
+                    btWrapper.buzzerTest()
+                }
                 iotDeviceConfigManager.toggleBuzzerNow(value)
             }
         }
@@ -716,7 +725,6 @@ class HomeFragment : Fragment() {
         private fun getItem(position: Int): IotDataType {
             return iotData[position - 1]
         }
-
     }
 
 }

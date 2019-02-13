@@ -17,7 +17,7 @@ Service Monitor:
 A monitoring service to ensure the BT and Sensor services are always online.
 
 Data storage:  
-redis for short-term real time sensor readings.  
+redis is used for short-term real time sensor readings.  
 holding_zone for long-term sensor readings in SQL format.
 
 Config.json:  
@@ -57,6 +57,10 @@ $ sudo service SBP_Service_Monitor start
 ```
 Both method works however starting service method will not output any print log.
 
+### About service auto start-up on boot
+
+## Pairing mobile with IOT device
+
 ## Config.json Specifications
 ```json
 {
@@ -75,10 +79,10 @@ Both method works however starting service method will not output any print log.
         },
         "Sensor_Server_Settings":{
             "//User perference options, can be customised"
-            "enable_buzzer":0,
-            "enable_led":0,
-            "minute_to_record_data":0.2,
-            "seconds_to_update_data":5,
+            "CONFIG_ENABLE_BUZZER":0,
+            "CONFIG_ENABLE_LED":1,
+            "MINUTES_TO_RECORD_DATA":0.1,
+            "SECONDS_TO_UPDATE_DATA":5
         }
     }
 }
@@ -115,10 +119,11 @@ The first array item is reserved for function identifier code
 | 30000 | get real time sensor reading                | GET_SENSOR_DATA|
 | 31000 | set user preferences                        | CHANGE_DEVICE_SETTINGS|
 | 32000 | get holding_zone data                       | SYNC_HOLDING_ZONE |
-| 32000 | flush holding_zone                          | FLUSH_HOLDING_ZONE |
+| 32500 | flush holding_zone                          | FLUSH_HOLDING_ZONE |
 | 41000 | toggle server debug mode                    | TOOGLE_DEBUG |
 | 42000 | execute custom shell commands               | EXE_SH |
 | 43000 | get network IP address                      | GET_NETWORK_IP |
+| 44000 | activate the buzzer for 1 second            | BUZZER_TEST |
 
 __Data__  
 The second array item is reserved for data body  

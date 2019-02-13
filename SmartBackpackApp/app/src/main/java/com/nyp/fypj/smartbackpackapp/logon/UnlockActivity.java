@@ -35,14 +35,14 @@ public class UnlockActivity extends Activity {
         PasscodePolicy passcodePolicy = clientPolicyManager.getClientPolicy(false).getPasscodePolicy();
 
         //TODO fingerprint function disabled due to some unknown issue preventing access to switch to passcode method
-//        if (passcodePolicy.allowsFingerprint() && secureStoreManager
-//                .getApplicationStoreState() == EncryptionState.PASSCODE_BIOMETRIC) {
-//            unlockWithFingerprint();
-//        } else {
-//            unlockWithPasscode();
-//        }
+        if (passcodePolicy.allowsFingerprint() && secureStoreManager
+                .getApplicationStoreState() == EncryptionState.PASSCODE_BIOMETRIC) {
+            unlockWithFingerprint();
+        } else {
+            unlockWithPasscode();
+        }
 
-        unlockWithPasscode();
+//        unlockWithPasscode();
     }
 
     private void unlockWithPasscode() {
