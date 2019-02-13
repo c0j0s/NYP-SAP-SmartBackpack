@@ -38,6 +38,7 @@ import com.sap.cloud.mobile.fiori.formcell.FormCell
 import com.sap.cloud.mobile.odata.*
 import kotlinx.android.synthetic.main.components_iot_data_table_row.view.*
 import kotlinx.android.synthetic.main.dialog_change_device_setting.view.*
+import kotlinx.android.synthetic.main.dialog_demo_prediction.view.*
 import kotlinx.android.synthetic.main.dialog_give_feedback.view.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
@@ -66,6 +67,7 @@ class HomeFragment : Fragment() {
 
     private var connectedDevice: IotdeviceinfoType = IotdeviceinfoType()
     private var connectStatus = false
+    private var demoTriggered = false
     private var predictedComfortLevel = 0
     private var realTimeDate = IotDataType()
     private var shownIotData  = listOf<IotDataType>()
@@ -122,7 +124,7 @@ class HomeFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater!!.inflate(R.menu.fragment_home_menu,menu);
+        inflater!!.inflate(R.menu.fragment_home_menu,menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -141,6 +143,43 @@ class HomeFragment : Fragment() {
                     btWrapper.disconnectDevice()
                 }
                 return true
+            }
+            R.id.fragment_home_menu_demo -> {
+                demoTriggered = true
+                val dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_demo_prediction, null, false)
+
+                val builder = AlertDialog.Builder(ContextThemeWrapper(activity, R.style.AlertDialogStyle))
+
+                builder.setView(dialogView)
+                        // Add action buttons
+                        .setPositiveButton("Predict"
+                        ) { dialog, _ ->
+
+                            realTimeDate.humidity = dialogView.sl_humidity.value.toDouble()
+                            realTimeDate.temperature = dialogView.sl_temperature.value.toDouble()
+                            realTimeDate.pm25 = dialogView.sl_pm2_5.value.toDouble()
+                            realTimeDate.pm10 = dialogView.sl_pm10.value.toDouble()
+
+                            tv_sensor_hum.text = realTimeDate.humidity.toString()
+                            tv_sensor_temp.text = realTimeDate.temperature.toString()
+                            tv_sensor_pm10.text = realTimeDate.pm10.toString()
+                            tv_sensor_pm25.text = realTimeDate.pm25.toString()
+                            retrieveMLService(realTimeDate)
+
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton(R.string.cancel
+                        ) { dialog, _ ->
+                            demoTriggered = false
+                            dialog.cancel()
+                        }
+                        .setTitle("Demo")
+
+                val alertDialog = builder.create()
+                alertDialog.show()
+
+
+
             }
         }
         return false
@@ -240,9 +279,10 @@ class HomeFragment : Fragment() {
                         override fun run() {
                             try {
                                 while (true) {
-                                    Thread.sleep(7000)
+                                    Thread.sleep(5000)
                                     if(connectStatus)
-                                        btWrapper.getSensorData()
+                                        if(!demoTriggered)
+                                            btWrapper.getSensorData()
                                 }
                             } catch (e: InterruptedException) {
                                 e.printStackTrace()

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <com.sap.cloud.mobile.fiori.formcell.SliderFormCell
+            android:id="@+id/sl_humidity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endLabelEditControl="false"
+            app:endLabelText="100"
+            app:key="Humidity (%)"
+            app:maximumValue="100"
+            app:minimumValue="1"
+            app:startLabelText="1" />
+
+        <com.sap.cloud.mobile.fiori.formcell.SliderFormCell
+            android:id="@+id/sl_temperature"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endLabelEditControl="false"
+            app:endLabelText="100"
+            app:key="Temperature (Degree C)"
+            app:maximumValue="100"
+            app:minimumValue="1"
+            app:startLabelText="1" />
+
+        <com.sap.cloud.mobile.fiori.formcell.SliderFormCell
+            android:id="@+id/sl_pm2_5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endLabelEditControl="false"
+            app:endLabelText="500"
+            app:key="PM 2.5 (micro/m3)"
+            app:maximumValue="500"
+            app:minimumValue="1"
+            app:startLabelText="1" />
+
+        <com.sap.cloud.mobile.fiori.formcell.SliderFormCell
+            android:id="@+id/sl_pm10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endLabelEditControl="false"
+            app:endLabelText="500"
+            app:key="PM 10 (micro/m3)"
+            app:maximumValue="500"
+            app:minimumValue="1"
+            app:startLabelText="1" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
