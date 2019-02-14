@@ -35,6 +35,9 @@ import com.sap.cloud.android.odata.sbp.UserDevicesType
 import com.sap.cloud.android.odata.sbp.UserinfosType
 import com.sap.cloud.mobile.fiori.`object`.GridTableRow
 import com.sap.cloud.mobile.fiori.formcell.FormCell
+import com.sap.cloud.mobile.foundation.configurationprovider.ConfigurationLoader
+import com.sap.cloud.mobile.foundation.configurationprovider.DiscoveryServiceConfigurationProvider
+import com.sap.cloud.mobile.foundation.configurationprovider.JsonConfigurationProvider
 import com.sap.cloud.mobile.odata.*
 import kotlinx.android.synthetic.main.components_iot_data_table_row.view.*
 import kotlinx.android.synthetic.main.dialog_change_device_setting.view.*

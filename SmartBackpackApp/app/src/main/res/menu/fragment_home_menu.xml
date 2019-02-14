@@ -16,7 +16,6 @@
         app:showAsAction="ifRoom|withText" />
 
     <item android:id="@+id/fragment_home_menu_connect"
-        android:icon="@drawable/ic_menu_refresh"
         android:title="Toggle Connection"
         android:visible="true"
         app:iconTint="@android:color/white"

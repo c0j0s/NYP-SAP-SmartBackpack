@@ -18,13 +18,17 @@ import android.util.Log
 import com.google.gson.reflect.TypeToken
 import com.nyp.fypj.smartbackpackapp.app.ConfigurationData
 import com.sap.cloud.android.odata.sbp.IotdeviceinfoType
+import com.sap.cloud.mobile.foundation.configurationprovider.JsonConfigurationProvider
 import com.sap.cloud.mobile.odata.LocalDateTime
 import com.sap.cloud.mobile.odata.SortOrder
 
 class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager?,private val configurationData: ConfigurationData?) {
 
     private val data:IotDataType = IotDataType()
-    var mlServiceStatus = false
+    private var mlServiceStatus = false
+    private val mlServiceUrl = "http://35.198.225.149/predict"
+    private val mlServiceAccount = "mlservice"
+    private val mlServicePassword = "passwd"
 
     private val feedbackDescription:HashMap<Int,String> = hashMapOf(
             Pair(0,"Very Good"),
@@ -145,12 +149,12 @@ class IotDataMLServiceManager(private val sapServiceManager: SAPServiceManager?,
         val jsonString = gson.toJson(input)
 
         val okHttpClient = OkHttpClient().newBuilder()
-                .addInterceptor(AuthenticationInterceptor(configurationData!!.mlServiceAccount, configurationData.mlServicePasswd))
+                .addInterceptor(AuthenticationInterceptor(mlServiceAccount, mlServicePassword))
                 .build()
 
         val requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), jsonString)
         val request = Request.Builder()
-                .url("http://35.198.225.149/predict")
+                .url(mlServiceUrl)
                 .post(requestBody)
                 .build()
 
