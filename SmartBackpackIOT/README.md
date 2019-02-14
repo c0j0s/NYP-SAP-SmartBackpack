@@ -55,11 +55,17 @@ $ sudo service SBP_Sensor_Server start
 $ sudo service SBP_BT_Server start
 $ sudo service SBP_Service_Monitor start
 ```
-Both method works however starting service method will not output any print log.
+Both method works however starting service method will not output any print log.  
+Instead print logs will be recorded in dedicated log file under /log folder
 
 ### About service auto start-up on boot
+Start-up script is stored under utils folder, a symbolic link was created in the linux /lib/systemd/system/<Service name>, therefore you can directly modify the scripts in the utils folder.
+
+Please refer to Method 4 - SYSTEMD:  
+https://www.dexterindustries.com/howto/run-a-program-on-your-raspberry-pi-at-startup/
 
 ## Pairing mobile with IOT device
+The Mobile app will connect with the backpack automatically, however, for first time usage, you have to pair it manually in the settings app of your mobile phone.
 
 ## Config.json Specifications
 ```json

@@ -45,3 +45,57 @@ To start flask service:
     cd SmartBackpackIOT/
     sudo python3 SmartBackpack_ML_Keras_Server.py >/dev/null 2>&1 &
 ```
+
+# Deploying Model
+Due to the technical difficulties for deploying the model directly in the mobile app using tflite format, the demo model is been deployed in a virtual machine instance running on Google Cloud Platform. If needed the model can be deployed at other machine as well.
+
+__Deployment environment:__  
+Python 3 with following packages
+- flask
+- flask_httpauth
+- tensorflow
+
+__Start up Server:__  
+You will have to upload SmartbackpackML into virtual machine.  
+```sh
+$ cd SmartbackpackML
+#for production
+$ sudo python3 SmartBackpack_ML_Keras_Server.py >/dev/null 2>&1 &
+
+#for debugging
+$ sudo python3 SmartBackpack_ML_Keras_Server.py
+```
+__Service Access__
+```
+http://<vm static ip>/predict
+method:post
+
+authentcation:basic
+mlservice
+passwd
+
+body:json
+{
+    "HUMIDITY":0,
+    "TEMPERATURE":0,
+    "PM2_5":0,
+    "PM10":0,
+    "ASTHMATIC_LEVEL":0
+}
+```
+
+# Connect SmartBackpackApp to deployed model
+In order to connect the app to the ml server, the access url in the app must be updated.
+
+File to change: service > IotDataMlServiceManager.kt
+```kotlin
+class IotDataMLServiceManager(...) {
+
+    ...
+    private val mlServiceUrl = "http://<vm static ip>/predict"
+    private val mlServiceAccount = "mlservice"
+    private val mlServicePassword = "passwd"
+    ...
+
+}
+```
