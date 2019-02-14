@@ -63,3 +63,5 @@ https://openui5.hana.ondemand.com/#
 https://blogs.sap.com/2018/07/02/how-to-expose-a-hana-table-via-odata/  
 https://blogs.sap.com/2016/02/08/odata-everything-that-you-need-to-know-part-1/  
 https://www.youtube.com/watch?v=Dv3bf91_UfE
+
+__and many more...__

@@ -38,13 +38,8 @@ __Training and Testing Demo Model__
 SmartBackpack_ML_Keras_Training and SmartBackpack_ML_Keras_Predict is the model training and testing scripts respectively  
 
 __Deploying Demo Model__  
-SmartBackpack_ML_Keras_Server is a python flask server that loads pre-trained demo models and expose the inputs to http requestes for SmartBackpackApp to interact with.  
-
-To start flask service:  
-```sh
-    cd SmartBackpackIOT/
-    sudo python3 SmartBackpack_ML_Keras_Server.py >/dev/null 2>&1 &
-```
+SmartBackpack_ML_Keras_Server is a python flask server that loads pre-trained demo models and expose the inputs to http requests for SmartBackpackApp to interact with.  
+Details are below.
 
 # Deploying Model
 Due to the technical difficulties for deploying the model directly in the mobile app using tflite format, the demo model is been deployed in a virtual machine instance running on Google Cloud Platform. If needed the model can be deployed at other machine as well.
@@ -86,7 +81,7 @@ body:json
 ```
 
 # Connect SmartBackpackApp to deployed model
-In order to connect the app to the ml server, the access url in the app must be updated.
+In order to connect the app to the ml server, the access url in  SmartBackpackApp must be updated.
 
 File to change: service > IotDataMlServiceManager.kt
 ```kotlin

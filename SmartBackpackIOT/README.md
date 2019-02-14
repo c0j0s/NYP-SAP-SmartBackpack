@@ -1,7 +1,7 @@
 # SmartBackpackIOT
 Services written in Python for Raspberry Pi to handle sensor data and communication with Android App.
 
-## Software Architecture of SmartBackpackIOT
+## Software Architecture
 ![software architecture](https://github.com/c0j0s/SmartBackpack/blob/master/Documentations/2_iot_software_architecture.jpeg)
 
 ## Components of SmartBackpackIOT
@@ -35,8 +35,35 @@ Python packages: (install through pip3)
 - Pybluez
 - Redis
 	
-Others:
-- SSH/SFTP Connections
+## Development Tools
+The following are some of the tools used for development, feel free to use other alternative as long as it is capable of performing the development task.  
+
+__Development cycle:__
+```
+code -> sync to iot device -> activate
+```
+__Visual studio code__ is used for coding the scripts  
+__WinSCP__ is used to sync the scripts to the iot device  
+__Bitvise SSH Client__ is used to send bash command to the device to activate the scripts  
+
+__Getting network IP of iot device for ssh/sFtp connection:__  
+
+__locally for initial setup__  
+The device is connected to the school wifi automatically on boot, the credentials used is school wifi login credentials.  
+
+To change the wifi/update wifi credentials, connect the device to an external monitor, keyboard and mouse, use either GUI(enter startx to switch to GUI mode if you boot into command line mode) or bash command to change the wifi configs.
+
+Now you can retrieve the IP address of the device using ifconfig command.
+
+__remotely__  
+Ones the wifi connection is ready, you can retrieve the address using the bluetooth. To do so please download a Bluetooth terminal app in your mobile phone, here __Serial Bluetooth__ is used for Android.
+
+1. connect the iot device
+2. send following command as a string:
+```
+{"function_code":"43000","data":"","end_code":"EOT"}
+```
+3. the terminal should output the response with IP address in the data body
 
 ## Start Services Manually
 1. Change to service folder directory
@@ -65,8 +92,25 @@ Start-up script is stored under utils folder, a symbolic link was created in the
 Please refer to Method 4 - SYSTEMD:  
 https://www.dexterindustries.com/howto/run-a-program-on-your-raspberry-pi-at-startup/
 
+### Regarding the clock of iot device
+As raspberry pi does not keep track of time when it is powered off, the clock will have to be manually set to the correct timing.
+If possible, network time can be used to sync the clock whenever it is online, but little time is invested to solve this issue.
+
+__Update clock manually__  
+```ssh
+$ sudo date -s "01 JAN 2019 00:00:00"
+```
+This will be needed if you need the iot to record sensor data with correct timing
+
 ## Pairing mobile with IOT device
 The Mobile app will connect with the backpack automatically, however, for first time usage, you have to pair it manually in the settings app of your mobile phone.
+
+If your mobile phone could not detect the iot device, please check if the iot device Bluetooth discoverable is on, otherwise you can use bluetoothctl to pair the devices manually.
+```sh
+$ sudo bluetoothctl
+$ pair <phone bluetooth address>
+```
+refer to official bluetoothctl documentations for all the commands
 
 ## Config.json Specifications
 The following field are values that will affect how the services run, other fields not stated does not impact the services in anyway.  

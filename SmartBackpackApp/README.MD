@@ -251,7 +251,7 @@ Here are some of the Fiori components used in the Mobile App
   - SwitchFormCell
   - SliderFormCell
 
-__Details instruction can be found in the official SDK documentation__  
+__Details can be found in the official SDK documentation__  
 Official Mobile SDK Documentation:  
 https://help.sap.com/doc/c2d571df73104f72b9f1b73e06c5609a/Latest/en-US/docs/index.html 
 
