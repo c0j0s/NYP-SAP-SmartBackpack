@@ -7,22 +7,22 @@ Services written in Python for Raspberry Pi to handle sensor data and communicat
 ## Components of SmartBackpackIOT
 The BT, Sensor and Service monitor processes will start-up automatically on boot.
 
-BT Service:  
+__BT Service:__  
 A Bluetooth service that is responsible for communicating with the Android companion app.
 
-Sensor Service:  
+__Sensor Service:__  
 Responsible for handling sensor readings.
 
-Service Monitor:  
-A monitoring service to ensure the BT and Sensor services are always online.
+__Service Monitor:__  
+A monitoring service to ensure the BT and Sensor services are always online. restart services if any is found dead.
 
-Data storage:  
+__Data storage:__  
 redis is used for short-term real time sensor readings.  
 holding_zone for long-term sensor readings in SQL format.
 
-Config.json:  
+__Config.json:__  
 A configuration file that controls the behaviour of BT and Sensor Server.  
-e.g. debug mode, buzzer toggle, reading interval control.  
+e.g. debug mode, buzzer and led toggle, reading interval control.  
 
 # SmartBackpackIOT Specifications
 ## Runtime Environment
@@ -43,18 +43,19 @@ Others:
 ```sh
 $ cd /home/pi/SmartbackpackIOT
 ```
-2. Execute following command to start service scripts [Debugging]
+2. Execute following command to start service scripts 
 ```sh
+#for production
+$ sudo service SBP_Sensor_Server start
+$ sudo service SBP_BT_Server start
+$ sudo service SBP_Service_Monitor start
+
+#for debugging
 $ Python3 SBP_Sensor_Server.py
 $ sudo Python3 SBP_BT_Server.py
 $ Python3 SBP_Service_Monitor.py
 ```
-or Execute following command to start services [Production]
-```sh
-$ sudo service SBP_Sensor_Server start
-$ sudo service SBP_BT_Server start
-$ sudo service SBP_Service_Monitor start
-```
+
 Both method works however starting service method will not output any print log.  
 Instead print logs will be recorded in dedicated log file under /log folder
 
@@ -68,23 +69,33 @@ https://www.dexterindustries.com/howto/run-a-program-on-your-raspberry-pi-at-sta
 The Mobile app will connect with the backpack automatically, however, for first time usage, you have to pair it manually in the settings app of your mobile phone.
 
 ## Config.json Specifications
+The following field are values that will affect how the services run, other fields not stated does not impact the services in anyway.  
 ```json
 {
     "device":{
-        "//Device Configurations"
+        "below contains the digital port number of grovepi connected with the sensor"
+        "sensors":{
+            "particle": "/dev/ttyAMA0",
+            "temp_hum": 8,
+            "button": 5
+        },
+        "actuators":{
+            "led_green": 4, 
+            "led_blue": 3,
+            "led_red": 2,
+            "buzzer": 5
+        }
     },
     "env":{
-        "//Environment Configurations"
+        "redis":{
+            "host":"localhost",
+            "port":"6379",
+            "db":"0"
+        },
     },
     "settings":{
-        "//Service options"
-        "device_sn":"SBPSG000001",
         "debug":true,
-        "BT_Server_Settings":{
-            "clear_holding_zone_after_sync":1
-        },
         "Sensor_Server_Settings":{
-            "//User perference options, can be customised"
             "CONFIG_ENABLE_BUZZER":0,
             "CONFIG_ENABLE_LED":1,
             "MINUTES_TO_RECORD_DATA":0.1,
@@ -96,7 +107,7 @@ The Mobile app will connect with the backpack automatically, however, for first 
 
 ## Bluetooth Commands
 ### Bluetooth communication command syntax
-The entire transmission string in __JSON__ array format consist of 3 main parts:  
+The entire transmission string in __JSON__ object format consist of 3 main parts:  
 ```JSON
 {
     "function_code":"",
@@ -106,7 +117,7 @@ The entire transmission string in __JSON__ array format consist of 3 main parts:
 }
 ```
 __Function code__  
-The first array item is reserved for function identifier code
+The first item is reserved for function identifier code
 ```JSON
 {
     "function_code":"00001",
@@ -132,7 +143,7 @@ The first array item is reserved for function identifier code
 | 44000 | activate the buzzer for 1 second            | BUZZER_TEST |
 
 __Data__  
-The second array item is reserved for data body  
+The second item is reserved for data body  
 ```JSON
 {
     "data":{
@@ -151,7 +162,7 @@ Holding zone synchronisation syntax:
 ```
 
 __End Status Code__  
-The third array item is reserved for transmission ending status  
+The third item is reserved for transmission ending status  
 ```JSON
 {
     "end_code":"EOT"
@@ -165,7 +176,7 @@ The third array item is reserved for transmission ending status
 | MSE | maintain session, more data transmitting |
 | ERR | error occurred, transmission terminated and services schedule for reboot |
 
-# SmartBackpackIOT Project Structures
+# Project Folder Structure
 ### Main Service Scripts:  
 - SBP_BT_Server.py  
 - SBP_Sensor_Server.py  
@@ -193,3 +204,24 @@ for testing purposes.
 
 /holding_zone  
 for holding zone files
+
+# Backpack Embedding
+__Items:__
+- Iot Container
+- Power Bank
+- Supporting Structures(cardboards)
+
+![mounting_guide](https://github.com/c0j0s/SmartBackpack/blob/master/Documentations/Others/EmbeddingGuide/0_instruction_overview.png)
+
+__Attaching:__
+1. first align the leds, temperature and humidity sensor with the cut outs, push gently to expose the leds.
+2. connect the air particle sensor pins with the external pins from the iot container, use the flaps for guidance when connecting the pins.
+3. align the container with the velcro pads in the backpack and attach it firmly.
+4. [optional] insert the bottom and side supporting structures to support the containers weight
+5. attach power bank to the usb power supply cable and the device should automatically start.
+
+__Detaching:__
+1. disconnect the power supply and air quality sensor pins
+2. [optional] remove the bottom and side supporting structures
+3. push led into the backpacks to avoid damaging the led pins
+4. detach the velcros and pull the container out

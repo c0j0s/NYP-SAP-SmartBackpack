@@ -10,21 +10,24 @@ __Technical Overview__
 
 
 ### SmartBackpackIOT
-Daemon Services written in Python for Raspberry Pi to handle sensor data and communication with Android App.
+Daemon Services written in Python for Raspberry Pi to handle sensor data and communication with Android App.  
+[Details](https://github.com/c0j0s/SmartBackpack/blob/master/SmartBackpackIOT/README.md)
 
 ### SmartBackpackApp
-An Android companion app that is responsible for user interactions with SmartBackpackIOT, and SAP Services as well.
+An Android companion app that is responsible for user interactions with SmartBackpackIOT, and SAP Services as well.  
+[Details](https://github.com/c0j0s/SmartBackpack/blob/master/SmartBackpackApp/README.MD)  
 
 ### SmartBackpackML
-A simple tensorflow keras model trained on generated data to demonstrate the complete Smart Backpack solution
+A simple tensorflow keras model trained on generated data to demonstrate the complete Smart Backpack solution  
+[Details](https://github.com/c0j0s/SmartBackpack/blob/master/SmartBackpackML/README.md)
 
 ### SAP Cloud Platform
 Utilises SAP Cloud Platform Services to power IOT Solution.
 - SAPUI5 Webapps for dashboard and data analytic presentations.
-- HANA DB for online sensor data storage.
+- HANA DB for online sensor data storage.  
+- Mobile Service app configuration
 
----
-___Details can be found in README.md in each subfolders.___
+[Details](https://github.com/c0j0s/SmartBackpack/blob/master/SmartBackpackSAP/README.md)
 
 ## Reference Sources
 #### SmartBackpackIOT

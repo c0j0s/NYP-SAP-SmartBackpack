@@ -69,6 +69,7 @@ __Service Access__
 ```
 http://<vm static ip>/predict
 method:post
+port:80
 
 authentcation:basic
 mlservice

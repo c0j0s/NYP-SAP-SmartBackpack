@@ -4,7 +4,7 @@ An Android companion app that is responsible for user interactions with SmartBac
 ## Software Architecture of SmartBackpackApp
 ![software architecture](https://github.com/c0j0s/SmartBackpack/blob/master/Documentations/3_android_structure.jpeg)
 
-### IOT Communication layer
+### IOT Communication layer (Back-end)
 ![IOT Communication layer](https://github.com/c0j0s/SmartBackpack/blob/master/Documentations/4_android_bt_flow.jpeg)
 
 ### Android App Handler Action For IOT Data Function Codes Received  
@@ -26,7 +26,7 @@ An Android companion app that is responsible for user interactions with SmartBac
 | 44000 | activate the buzzer for 1 second        ||
 | 99999 | Error Occurred in IOT Device               | Toast |
 
-## Wrapper Class Implementation Guide
+## Back-end Wrapper Class Implementation Guide
 ### BtWrapper
 A wrapper class that encapsulates Bluetooth command syntax into simple functions for front-end implementation.  
 
@@ -79,7 +79,7 @@ A wrapper class that handles functions to change IOT device configs.json and fun
     val iotDeviceConfigManager = IotDeviceConfigManager(<BtWrapper>,<SapServiceManager>,<userId>,<deviceSn>)
 
     //adds the configs to change list
-    iotDeviceConfigManager.toggleBuzzer(true);
+    iotDeviceConfigManager.toggleBuzzerNow(true);
     .
     .
 
@@ -112,7 +112,7 @@ A wrapper class that handles functions to change IOT device configs.json and fun
 ```
 
 ### IotDataMLServiceManager
-A wrapper class that update user feedback of specific iot data to database, and functions to comunicate with online ml service.
+A wrapper class that update user feedback of specific iot data to database, and functions to communicate with online ml service. Here you will need to provide the hosted ml access url and login credentials
 #### Sample usage
 ```kotlin
     val iotDataMLServiceManager = IotDataMLServiceManager(<SapServiceManager>)
@@ -149,14 +149,16 @@ A wrapper class that update user feedback of specific iot data to database, and 
     fun predictComfortLevel(data: IotDataType, user: UserinfosType, success: (level:Int) -> Unit, error: (e: IOException) -> Unit)
 ```
 
-# Documentation for SAP Cloud Platform Mobile SDK Implementation
+# SAP Cloud Platform Mobile SDK Implementation
 The follow is the documentation for implementing SAP SCP Mobile SDK
 
 ## Initial Setup
 A SAP Project Creation Wizard is provided by the SDK to create the project. The urls can be found in the mobile service portal in SAP Cloud Platform under important links. Here you can create a new mobile project of create from predefined projects in the mobile service portal.  
+
 ![wizard 1](https://github.com/c0j0s/SmartBackpack/blob/master/Documentations/MobileSDK/1_setup_wizard.png)  
 
 Here you will supply the database OData access url for the wizard to retrieve the metadata file and generate all entity classes based on the tables defined in OData, the entity classes is needed when interacting with the database.  
+
 ![wizard 2](https://github.com/c0j0s/SmartBackpack/blob/master/Documentations/MobileSDK/2_setup_wizard.png)  
 the metadata file can be found in android > res > raw > [OData name].xml  
 
@@ -164,20 +166,20 @@ the metadata file can be found in android > res > raw > [OData name].xml
 The following are some of the functionalities and services provided by the SDK for app development, the full list of services can be found in the official SDK website, here I am only describing some of the services I research and implemented during development.
 
 __SDK Services:__  
-- User Authentication and App Security:  
+- __User Authentication and App Security:__  
 SAP Cloud Platform account authentication  
 App lock with fingerprint capabilities
 
-- BasicAuthPersistentCredentialStore:  
+- __BasicAuthPersistentCredentialStore__:  
 This object contains user login credentials like user email and password, this can be use if you require authentication in other component of the mobile app, for example retrieving data from database using the user email.
 
-- SAPServiceManager:  
+- __SAPServiceManager__:  
 This is a utility class to establish session with the database. By using the openODataStore() function, this creates an database connection session where you can execute the database query to retrieve your result. You can also retrieve your database connection url using the get<Name>() function which is needed to execute database queries.
 
-- SecureStoreManager:  
+- __SecureStoreManager__:  
 This object is a utility class that provide secure key-value pair data storage for the mobile app.
 
-- ConfigurationData:  
+- __ConfigurationData__:  
 This object contains configuration data such as service url. (SAP mobile service url)
 
 ## Database Usage
