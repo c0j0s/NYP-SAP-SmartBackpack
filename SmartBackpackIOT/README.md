@@ -46,17 +46,22 @@ __Visual studio code__ is used for coding the scripts
 __WinSCP__ is used to sync the scripts to the iot device  
 __Bitvise SSH Client__ is used to send bash command to the device to activate the scripts  
 
+Raspberry Pi login credentials
+```
+user: pi
+password: root
+```
 __Getting network IP of iot device for ssh/sFtp connection:__  
 
 __locally for initial setup__  
-The device is connected to the school wifi automatically on boot, the credentials used is school wifi login credentials.  
+The device is connected to the school WIFI automatically on boot, the credentials used is school WIFI login credentials.  
 
-To change the wifi/update wifi credentials, connect the device to an external monitor, keyboard and mouse, use either GUI(enter startx to switch to GUI mode if you boot into command line mode) or bash command to change the wifi configs.
+To change the WIFI/update WIFI credentials, connect the device to an external monitor, keyboard and mouse, use either GUI(enter startx to switch to GUI mode if you boot into command line mode) or bash command to change the WIFI configs.
 
 Now you can retrieve the IP address of the device using ifconfig command.
 
 __remotely__  
-Ones the wifi connection is ready, you can retrieve the address using the bluetooth. To do so please download a Bluetooth terminal app in your mobile phone, here __Serial Bluetooth__ is used for Android.
+Once the WIFI connection is ready, you can retrieve the address using the Bluetooth. To do so please download a Bluetooth terminal app in your mobile phone, here __Serial Bluetooth__ is used for Android.
 
 1. connect the iot device
 2. send following command as a string:
@@ -108,7 +113,7 @@ The Mobile app will connect with the backpack automatically, however, for first 
 If your mobile phone could not detect the iot device, please check if the iot device Bluetooth discoverable is on, otherwise you can use bluetoothctl to pair the devices manually.
 ```sh
 $ sudo bluetoothctl
-$ pair <phone bluetooth address>
+$ pair <phone Bluetooth address>
 ```
 refer to official bluetoothctl documentations for all the commands
 
@@ -151,6 +156,9 @@ The following field are values that will affect how the services run, other fiel
 
 ## Bluetooth Commands
 ### Bluetooth communication command syntax
+This Bluetooth communication syntax is develop to handle various propose features for interacting with companion apps.  
+As the serial communication transmits with raw strings, complex commands would not be possible without a standard protocol shared by both components, as such the following protocol was developed.
+
 The entire transmission string in __JSON__ object format consist of 3 main parts:  
 ```JSON
 {
@@ -190,9 +198,7 @@ __Data__
 The second item is reserved for data body  
 ```JSON
 {
-    "data":{
-
-    },
+    "data":{},
 }
 ```
 
@@ -206,7 +212,7 @@ Holding zone synchronisation syntax:
 ```
 
 __End Status Code__  
-The third item is reserved for transmission ending status  
+The third item is reserved for transmission ending status, the end status code will indicate the mobile app when is the transmission of data completed and therefore continue with other tasks.   
 ```JSON
 {
     "end_code":"EOT"
@@ -232,7 +238,31 @@ The third item is reserved for transmission ending status
 
 ### Project Structures
 /lib  
-contains sensor libraries and wrapper classes.
+contains sensor libraries and wrapper classes for front-end development.
+
+- Common  
+Contains static functions that is commonly used in various places
+
+- HPMA115S0  
+Object for interacting with air particle sensor
+- SBP_BT_Command_Manager  
+Wrapper class for handling complex Bluetooth communication syntax
+
+- SBP_Buzzer  
+Object class for controlling buzzer
+
+- SBP_Display  
+Object class for controlling with the lcd display
+
+- SBP_LED_Controller  
+Wrapper class for controlling a cluster of led groups
+
+- SBP_LED  
+Object for controlling individual leds
+
+- SBP_Redis_Wrapper  
+Wrapper class for interacting with redis
+
 
 /log  
 contains empty file for logging, require setup in `/etc/rsyslog.d/rsyslog.conf`.
@@ -269,3 +299,20 @@ __Detaching:__
 2. [optional] remove the bottom and side supporting structures
 3. push led into the backpacks to avoid damaging the led pins
 4. detach the velcros and pull the container out
+
+# Troubleshooting 
+- __If the air particle sensor is not running__  
+Ensure the pins are connected correctly and firmly with the iot container external pin connectors or GPIO pins.
+
+| air particle sensor | Raspberry pi gpio |
+| ------------------- | ----------------- |
+| pin 2 | pin 4  (5V power) |
+| pin 6 | pin 8  (UART_TXD) |
+| pin 7 | pin 10 (UART_RXD) |
+| pin 8 | pin 6  (Ground)   |
+
+- __If the sensor service lit up for initial testing and did not lit up for normal runtime__  
+Ensure sensors are connected correctly, the led will not lit if the air quality, temperature & humidity sensor does not provide values to the sensor service.
+
+- __If the sensors are connected, the sensor service did not lit up__
+Ensure if the led setting in device config is turn on, otherwise restart the service manually using command line.

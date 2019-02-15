@@ -222,7 +222,7 @@ sapServiceManager.openODataStore {
     sapServiceManager.get<Generated Odata Function>().createEntityAsync(demoEntity, {
         //Success callback
     }, { e: RuntimeException ->
-        //Success callback
+        //Error callback
     })
 
     /*
@@ -233,7 +233,7 @@ sapServiceManager.openODataStore {
     sapServiceManager.get<Generated Odata Function>().updateEntityAsync(demoEntity, {
         //Success callback
     }, { e: RuntimeException ->
-        //Success callback
+        //Error callback
     })
 }
 ```
@@ -253,6 +253,6 @@ Here are some of the Fiori components used in the Mobile App
 
 __Details can be found in the official SDK documentation__  
 Official Mobile SDK Documentation:  
-https://help.sap.com/doc/c2d571df73104f72b9f1b73e06c5609a/Latest/en-US/docs/index.html 
+https://help.sap.com/doc/c2d571df73104f72b9f1b73e06c5609a/Latest/en-US/docs/fioriui/fiori_ui_overview.html
 
 __SDK Version Implemented: 1.1.14__
