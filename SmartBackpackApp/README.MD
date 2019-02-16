@@ -1,6 +1,29 @@
 # SmartBackpackApp
 An Android companion app that is responsible for user interactions with SmartBackpackIOT, and SAP Services as well.
 
+__Releases__  
+The following is the final version of the demo app used in presentations. It includes features that interact and control iot device, synchronisation of sensor data function and ML prediction demo controls.
+
+Final demo version:   
+[Download](https://raw.githubusercontent.com/c0j0s/SmartBackpack/master/SmartBackpackApp/release/SmartBackpackApp-debug.apk)  
+
+__Notes for usage__
+1. Login with SAP Cloud Platform Account  
+In order to use the app, you are required to login with an SAP Cloud Platform Account and the database should have the following user data.
+   - User Profile identified by SCP ID
+   - A device in User Devices table under your SCP ID
+
+2. Using ML demo control  
+After using the demo control, the sensor data card in home page will be fixated to show the demo values, in order to restore the display of real-time sensor data again, please open the demo control panel and click on the cancel button.
+
+3. Homepage does not load when launching the app for the first time.  
+This is an identified issue, please terminate the app and try again, the homepage should be visible now.
+
+4. Crashing issues  
+As this is a demo app, there are few crashing issues that was not fixed due to time constrain and impact on the flow of demo.  
+   - App crashes when phone is being rotated, lock phone rotation if possible.  
+   - App some time crashes when app is restored from background, restart the app will do.  
+
 ## Software Architecture of SmartBackpackApp
 ![software architecture](https://github.com/c0j0s/SmartBackpack/blob/master/Documentations/3_android_structure.jpeg)
 

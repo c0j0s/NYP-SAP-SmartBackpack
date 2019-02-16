@@ -15,11 +15,11 @@ Daemon Services written in Python for Raspberry Pi to handle sensor data and com
 
 ### SmartBackpackApp
 An Android companion app that is responsible for user interactions with SmartBackpackIOT, and SAP Services as well.  
-[Details](https://github.com/c0j0s/SmartBackpack/blob/master/SmartBackpackApp/README.MD)  
+[Details](https://github.com/c0j0s/SmartBackpack/blob/master/SmartBackpackApp/README.MD) | [Download Demo App](https://raw.githubusercontent.com/c0j0s/SmartBackpack/master/SmartBackpackApp/release/SmartBackpackApp-debug.apk)  
 
 ### SmartBackpackML
 A simple tensorflow keras model trained on generated data to demonstrate the complete Smart Backpack solution  
-[Details](https://github.com/c0j0s/SmartBackpack/blob/master/SmartBackpackML/README.md)
+[Details](https://github.com/c0j0s/SmartBackpack/blob/master/SmartBackpackML/README.md) 
 
 ### SAP Cloud Platform
 Utilises SAP Cloud Platform Services to power IOT Solution.
